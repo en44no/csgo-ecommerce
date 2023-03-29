@@ -1,11 +1,25 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
+import { Box, Container, Text } from "@chakra-ui/react";
+import Head from "next/head";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import Steam from '../../public/images/steam.png'
+import api from "./api/api";
+import { HiLockClosed } from 'react-icons/hi';
 
-const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+
+  const [skins, setSkins] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setSkins(await api.skins.get());
+    };
+    fetchData();
+  }, []);
+
+
   return (
     <>
       <Head>
@@ -14,109 +28,143 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>src/pages/index.js</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
+      <main>
+
+        <Container
+          as="section"
+          w="100%"
+          maxW="container.xl"
+          position="relative"
+          display="flex"
+          flexDirection="column"
+        >
+
+          <Box display='flex' justifyContent='center' mt='3rem' fontSize={{ sm: '4xl', md: '3xl', lg: '5xl' }} fontWeight="semibold">
+            <Text
+              as="h1"
+              lineHeight="normal"
+              fontWeight="bold"
+              mt="-2"
+              mr='0.5rem'
+              fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
             >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
+              ¡Cambia tus
+            </Text>
+            <Text
+              as="h1"
+              fontWeight="800"
+              lineHeight="normal"
+              bgGradient="linear(to-r, red.500, red.600, red.500)"
+              bgClip="text"
+              mt="-2"
+              mr='0.5rem'
+              fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
+            >
+              Cajas
+            </Text>
+            <Text
+              as="h1"
+              lineHeight="normal"
+              fontWeight="bold"
+              mt="-2"
+              mr='0.5rem'
+              fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
+            >
+              por
+            </Text>
+            <Text
+              as="h1"
+              fontWeight="800"
+              lineHeight="normal"
+              bgGradient="linear(to-r, red.500, red.600, red.500)"
+              bgClip="text"
+              mt="-2"
+              fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
+            >
+              Skins
+            </Text>
+            <Text
+              as="h1"
+              lineHeight="normal"
+              fontWeight="bold"
+              mt="-2"
+              fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
+            >
+              !
+            </Text>
+          </Box>
 
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Box
+            as="section"
+            textAlign="center"
+            position="relative"
+            w="100%"
+            mb={'1rem'}
+            mt={'2rem'}
           >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
+            <Box display='flex' flexDir='column' alignItems='center' gap={2}>
+              <Box>
+                <Image width={90} height={90} style={{ 'borderRadius': '50%' }} src='https://avatars.cloudflare.steamstatic.com/2bea4a86cf468c8721266e0c756afcba4073110e_full.jpg'></Image>
+              </Box>
 
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
+              <Box display='flex' flexDir='column' alignItems='center' gap='0.5rem'>
+                <Text fontWeight="bold" w='100%' fontSize='xl' borderBottom='1px solid #d13535' pb={2}>FireWolf</Text>
 
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
+                <Text color="grey" fontWeight="normal" fontSize='md'>Puedes contactarme mediante</Text>
+                <Link title="Contáctame por Steam" href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
+                  <Image alt='FireWolf Steam Image' width={25} height={25} style={{ 'borderRadius': '50%' }} src={Steam}></Image>
+                </Link>
+              </Box>
+            </Box>
+          </Box>
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Box
+            display="flex"
+            flexDirection="column"
+            width="100%"
           >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
+
+            <Text
+              fontWeight="800"
+              lineHeight="normal"
+              bgGradient="linear(to-r, red.500, red.600, red.500)"
+              bgClip="text"
+              mr='0.5rem'
+              fontSize={'3xl'}>Skins disponibles</Text>
+            <Box display='flex' flexWrap='wrap' alignItems='center' mt='1rem' gap={5} bg='#23272e' p={4} borderRadius='9px'>
+
+              {skins.map((skin) => (
+                <Box className="skin-image-container" w='13rem' key={skin.Nombre} display='flex' flexDir='column' alignItems='center' gap={2} bg='#1e2227' _hover={{ 'bg': '#3f3f45' }} py={3} px={1} borderRadius='9px'>
+                  <Box>
+                    <Image alt={skin.Nombre} width={120} height={120} style={{ 'borderRadius': '50%' }} src={skin.ImagenURL}></Image>
+                  </Box>
+
+                  <Box w='100%' px={3} display='flex' flexDir='column'>
+                    <Text fontWeight="semibold" fontSize='lg'>{skin.Nombre?.slice(0, 20)} </Text>
+
+                    <Box display='flex' justifyContent='space-between' w='100%'>
+
+                      <Box display='flex' flexDir='column' justifyContent='start'>
+                        <Text color="grey" fontWeight="normal" fontSize='md'>{skin.Estado}</Text>
+                        <Text color="grey" fontWeight="normal" fontSize='sm'>{skin.Float?.slice(0, 6)}</Text>
+                      </Box>
+
+                      <Box display='flex' alignItems='center' title="Este artículo tiene un bloqueo de intercambio por parte de Steam">
+                        {skin.TradeLock == 'TRUE' && (
+                          <HiLockClosed color="grey" style={{ 'marginRight': '-0.4rem' }} fontSize='1.4rem' />
+                        )}
+                      </Box>
+
+                    </Box>
+                  </Box>
+                </Box>
+              ))}
+
+            </Box>
+
+          </Box>
+
+        </Container>
       </main>
     </>
   )
