@@ -1,4 +1,4 @@
-import { Box, Container, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Container, SkeletonCircle, Spinner, Stack, Text, useDisclosure } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,19 +7,35 @@ import api from "./api/api";
 import { HiLockClosed } from 'react-icons/hi';
 import { BsDiscord, BsSteam } from 'react-icons/bs';
 import { Skeleton } from '@chakra-ui/react'
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react'
 
 export default function Home() {
 
   const [skins, setSkins] = useState([]);
+  const [selectedSkin, setSelectedSkin] = useState({});
   const [contactLinks, setContactLinks] = useState([]);
   const [info, setInfo] = useState([]);
   const [loading, setLoading] = useState([]);
+  const [skinsAreLoading, setSkinsAreLoading] = useState([]);
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {
     setLoading(true);
+    setSkinsAreLoading(true);
 
     const fetchData = async () => {
       setSkins(await api.skins.get());
+      setSkinsAreLoading(false);
+
       setContactLinks(await api.contact.get());
       setInfo(await api.info.get());
       setLoading(false);
@@ -27,6 +43,15 @@ export default function Home() {
     fetchData();
   }, []);
 
+  function onOpenModal(skin) {
+    setSelectedSkin(skin);
+    onOpen();
+  }
+
+  function onCloseModal() {
+    setSelectedSkin({});
+    onClose();
+  }
 
   return (
     <>
@@ -47,197 +72,305 @@ export default function Home() {
           flexDirection="column"
         >
 
-          <Box display='flex' justifyContent='center' mt='3rem' fontSize={{ sm: '4xl', md: '3xl', lg: '5xl' }} fontWeight="semibold">
-            <Text
-              as="h1"
-              lineHeight="normal"
-              fontWeight="bold"
-              mt="-2"
-              mr='0.5rem'
-              fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
-            >
-              ¡Cambia tus
-            </Text>
-            <Text
-              as="h1"
-              fontWeight="800"
-              lineHeight="normal"
-              bgGradient="linear(to-r, red.500, red.600, red.500)"
-              bgClip="text"
-              mt="-2"
-              mr='0.5rem'
-              fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
-            >
-              Cajas
-            </Text>
-            <Text
-              as="h1"
-              lineHeight="normal"
-              fontWeight="bold"
-              mt="-2"
-              mr='0.5rem'
-              fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
-            >
-              por
-            </Text>
-            <Text
-              as="h1"
-              fontWeight="800"
-              lineHeight="normal"
-              bgGradient="linear(to-r, red.500, red.600, red.500)"
-              bgClip="text"
-              mt="-2"
-              fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
-            >
-              Skins
-            </Text>
-            <Text
-              as="h1"
-              lineHeight="normal"
-              fontWeight="bold"
-              mt="-2"
-              fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
-            >
-              !
-            </Text>
-          </Box>
-
-          <Box
-            as="section"
-            textAlign="center"
-            position="relative"
-            w="100%"
-            mb={'1rem'}
-            mt={'2rem'}
-          >
-            <Box display='flex' flexDir='column' alignItems='center' gap={2}>
-              <Box className="scale-image">
-                {info?.FotoSteam && (
-                  <Image width={90} height={90} style={{ 'borderRadius': '50%' }} src={info.FotoSteam}></Image>
-                )}
+          {!loading && (
+            <Box>
+              <Box display='flex' justifyContent='center' mt='3rem' fontSize={{ sm: '4xl', md: '3xl', lg: '5xl' }} fontWeight="semibold">
+                <Text
+                  as="h1"
+                  lineHeight="normal"
+                  fontWeight="bold"
+                  mt="-2"
+                  mr='0.5rem'
+                  fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
+                >
+                  ¡Cambia tus
+                </Text>
+                <Text
+                  as="h1"
+                  fontWeight="800"
+                  lineHeight="normal"
+                  bgGradient="linear(to-r, red.500, red.600, red.500)"
+                  bgClip="text"
+                  mt="-2"
+                  mr='0.5rem'
+                  fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
+                >
+                  Cajas
+                </Text>
+                <Text
+                  as="h1"
+                  lineHeight="normal"
+                  fontWeight="bold"
+                  mt="-2"
+                  mr='0.5rem'
+                  fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
+                >
+                  por
+                </Text>
+                <Text
+                  as="h1"
+                  fontWeight="800"
+                  lineHeight="normal"
+                  bgGradient="linear(to-r, red.500, red.600, red.500)"
+                  bgClip="text"
+                  mt="-2"
+                  fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
+                >
+                  Skins
+                </Text>
+                <Text
+                  as="h1"
+                  lineHeight="normal"
+                  fontWeight="bold"
+                  mt="-2"
+                  fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
+                >
+                  !
+                </Text>
               </Box>
 
-              <Box display='flex' flexDir='column' alignItems='center' gap='0.5rem'>
-                <Text fontWeight="bold" w='100%' fontSize='xl' borderBottom='1px solid #d13535' pb={2}>{info.NombreSteam}</Text>
+              <Box
+                as="section"
+                textAlign="center"
+                position="relative"
+                w="100%"
+                mb={'1rem'}
+                mt={'2rem'}
+              >
+                <Box display='flex' flexDir='column' alignItems='center' gap={2}>
+                  <Box className="scale-image">
+                    {info?.FotoURL && (
+                      <Image className="shadow-for-skin-image" width={90} height={90} style={{ 'borderRadius': '50%' }} src={info.FotoURL}></Image>
+                    )}
+                  </Box>
 
-                <Text color="grey" fontWeight="normal" fontSize='md'>Puedes contactarme mediante</Text>
+                  <Box display='flex' flexDir='column' alignItems='center' gap='0.5rem'>
+                    <Text fontWeight="bold" w='100%' fontSize='xl' borderBottom='1px solid #d13535' pb={2}>{info.Nombre}</Text>
 
-                <Box display='flex' gap={3}>
+                    <Text color="grey" fontWeight="normal" fontSize='md'>Puedes contactarme mediante</Text>
 
-                  {contactLinks.map((contact) => (
-                    <Box key={contact.Nombre} _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+                    <Box display='flex' gap={3}>
 
-                      {contact.Nombre == 'Steam' && contact.Ocultar == 'FALSE' && (
-                        <Box _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
-                          <Link title="Contáctame por Steam" href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
-                            <BsSteam fontSize='1.5rem' />
-                          </Link>
+                      {contactLinks.map((contact) => (
+                        <Box key={contact.Nombre} _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+
+                          {contact.Nombre == 'Steam' && contact.Ocultar == 'FALSE' && (
+                            <Box boxShadow='md' _hover={{ 'transform': 'scale(1.1)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+                              <Link title="Contáctame por Steam" href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
+                                <BsSteam fontSize='1.5rem' />
+                              </Link>
+                            </Box>
+                          )}
+
+                          {contact.Nombre == 'Discord' && contact.Ocultar == 'FALSE' && (
+                            <Box boxShadow='md' _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+                              <Link title="Contáctame por Discord" href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
+                                <BsDiscord fontSize='1.5rem' />
+                              </Link>
+                            </Box>
+                          )}
+
                         </Box>
-                      )}
-
-                      {contact.Nombre == 'Discord' && contact.Ocultar == 'FALSE' && (
-                        <Box _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
-                          <Link title="Contáctame por Discord" href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
-                            <BsDiscord fontSize='1.5rem' />
-                          </Link>
-                        </Box>
-                      )}
+                      ))}
 
                     </Box>
-                  ))}
-
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          </Box>
 
-          <Box
-            display="flex"
-            flexDirection="column"
-            width="100%"
-          >
+              <Box
+                display="flex"
+                flexDirection="column"
+                width="100%" boxShadow='md'
+              >
 
-            <Text
-              fontWeight="800"
-              lineHeight="normal"
-              bgGradient="linear(to-r, red.500, red.600, red.500)"
-              bgClip="text"
-              mr='0.5rem'
-              fontSize={'3xl'}>Skins disponibles</Text>
-            <Box display='flex' flexWrap='wrap' alignItems='center' mt='1rem' gap={5} bg='#23272e' p={4} borderRadius='9px'>
+                <Text
+                  fontWeight="800"
+                  lineHeight="normal"
+                  bgGradient="linear(to-r, red.500, red.600, red.500)"
+                  bgClip="text"
+                  mr='0.5rem'
+                  fontSize={'3xl'}>Skins disponibles</Text>
+                <Box display='flex' flexWrap='wrap' alignItems='center' mt='1rem' gap={5} bg='#23272e' p={4} borderRadius='9px'>
 
-              {!loading && skins.map((skin) => (
-                <Box className="skin-image-container" position='relative' w='13rem' key={skin.Nombre} display='flex' flexDir='column' alignItems='center' gap={2} bg='#1e2227' _hover={{ 'bg': '#3f3f45' }} cursor='pointer' py={3} px={1} borderRadius='9px'>
-                  <Box h='5.5rem' mt='-0.5rem'>
-                    <Image alt={skin.Nombre} width='120' height='120' style={{ 'borderRadius': '50%', 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
-                  </Box>
+                  {!skinsAreLoading && skins.map((skin) => (
+                    <Box onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre} position='relative' bg='#1e2227' _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
+                      <Box className="skin-image-container" position='relative' w='13rem' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
+                        <Box h='5.5rem' mt='-0.5rem'>
+                          <Image className="shadow-for-skin-image" alt={skin.Nombre} width='120' height='120' style={{ 'borderRadius': '50%', 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
+                        </Box>
 
-                  <Box position='absolute' top='0.5rem' right='0.4rem'>
-                    {skin.Sticker1 && (
-                      <Box title={skin.Sticker1Nombre}>
-                        <Image alt={skin.Nombre + 'sticker 1'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker1}></Image>
-                      </Box>
-                    )}
-                  </Box>
+                        <Box w='100%' px={3} display='flex' flexDir='column'>
+                          <Text fontWeight="semibold" fontSize='md' whiteSpace='nowrap' overflow='hidden' textOverflow='ellipsis' borderBottom='1px solid #d13535' pb={2}>{skin.Nombre} </Text>
 
-                  <Box position='absolute' top='2rem' right='0.4rem'>
-                    {skin.Sticker2 && (
-                      <Box title={skin.Sticker2Nombre}>
-                        <Image alt={skin.Nombre + 'sticker 2'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker2}></Image>
-                      </Box>
-                    )}
-                  </Box>
+                          <Box display='flex' justifyContent='space-between' w='100%' pt={1}>
 
-                  <Box position='absolute' top='3.5rem' right='0.4rem'>
-                    {skin.Sticker3 && (
-                      <Box title={skin.Sticker3Nombre}>
-                        <Image alt={skin.Nombre + 'sticker 3'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker3}></Image>
-                      </Box>
-                    )}
-                  </Box>
+                            <Box display='flex' flexDir='column' justifyContent='start'>
+                              <Text color="grey" fontWeight="normal" fontSize='md'>{skin.Estado}</Text>
+                              <Text color="grey" fontWeight="normal" fontSize='sm'>{skin.Float?.slice(0, 6)}</Text>
+                            </Box>
 
-                  <Box position='absolute' top='5rem' right='0.4rem'>
-                    {skin.Sticker4 && (
-                      <Box title={skin.Sticker4Nombre}>
-                        <Image alt={skin.Nombre + 'sticker 4'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker4}></Image>
-                      </Box>
-                    )}
-                  </Box>
+                            <Box display='flex' alignItems='center' title="Este artículo tiene un bloqueo de intercambio por parte de Steam">
+                              {skin.TradeLock == 'TRUE' && (
+                                <HiLockClosed color="grey" style={{ 'marginRight': '-0.4rem' }} fontSize='1.4rem' />
+                              )}
+                            </Box>
 
-                  <Box w='100%' px={3} display='flex' flexDir='column'>
-                    <Text fontWeight="semibold" fontSize='md' whiteSpace='nowrap' overflow='hidden' textOverflow='ellipsis' borderBottom='1px solid #d13535' pb={2}>{skin.Nombre} </Text>
-
-                    <Box display='flex' justifyContent='space-between' w='100%' pt={1}>
-
-                      <Box display='flex' flexDir='column' justifyContent='start'>
-                        <Text color="grey" fontWeight="normal" fontSize='md'>{skin.Estado}</Text>
-                        <Text color="grey" fontWeight="normal" fontSize='sm'>{skin.Float?.slice(0, 6)}</Text>
+                          </Box>
+                        </Box>
                       </Box>
 
-                      <Box display='flex' alignItems='center' title="Este artículo tiene un bloqueo de intercambio por parte de Steam">
-                        {skin.TradeLock == 'TRUE' && (
-                          <HiLockClosed color="grey" style={{ 'marginRight': '-0.4rem' }} fontSize='1.4rem' />
+                      <Box position='absolute' top='0.5rem' right='0.4rem'>
+                        {skin.Sticker1 && (
+                          <Box title={skin.Sticker1Nombre}>
+                            <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 1'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker1}></Image>
+                          </Box>
                         )}
                       </Box>
 
-                    </Box>
-                  </Box>
-                </Box>
-              ))}
+                      <Box position='absolute' top='2rem' right='0.4rem'>
+                        {skin.Sticker2 && (
+                          <Box title={skin.Sticker2Nombre}>
+                            <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 2'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker2}></Image>
+                          </Box>
+                        )}
+                      </Box>
 
-              {loading && (
-                <Box minH='13rem' w='100%' display='flex' alignItems='center' flexWrap='wrap' gap={6}>
-                  <Skeleton borderRadius='9px' height='12rem' w='13rem' />
-                  <Skeleton borderRadius='9px' height='12rem' w='13rem' />
-                  <Skeleton borderRadius='9px' height='12rem' w='13rem' />
-                  <Skeleton borderRadius='9px' height='12rem' w='13rem' />
-                  <Skeleton borderRadius='9px' height='12rem' w='13rem' />
+                      <Box position='absolute' top='3.5rem' right='0.4rem'>
+                        {skin.Sticker3 && (
+                          <Box title={skin.Sticker3Nombre}>
+                            <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 3'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker3}></Image>
+                          </Box>
+                        )}
+                      </Box>
+
+                      <Box position='absolute' top='5rem' right='0.4rem'>
+                        {skin.Sticker4 && (
+                          <Box title={skin.Sticker4Nombre}>
+                            <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 4'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker4}></Image>
+                          </Box>
+                        )}
+                      </Box>
+                    </Box>
+                  ))}
+
+                  {skinsAreLoading && (
+                    <Box minH='13rem' w='100%' display='flex' alignItems='center' flexWrap='wrap' gap={6}>
+                      <Skeleton borderRadius='9px' height='12rem' w='13rem' />
+                      <Skeleton borderRadius='9px' height='12rem' w='13rem' />
+                      <Skeleton borderRadius='9px' height='12rem' w='13rem' />
+                      <Skeleton borderRadius='9px' height='12rem' w='13rem' />
+                      <Skeleton borderRadius='9px' height='12rem' w='13rem' />
+                    </Box>
+                  )}
+
+                  {loading && (
+                    <Box minH='13rem' w='100%' display='flex' alignItems='center' flexWrap='wrap' gap={6}>
+                      <Skeleton borderRadius='9px' height='12rem' w='13rem' />
+                      <Skeleton borderRadius='9px' height='12rem' w='13rem' />
+                      <Skeleton borderRadius='9px' height='12rem' w='13rem' />
+                      <Skeleton borderRadius='9px' height='12rem' w='13rem' />
+                      <Skeleton borderRadius='9px' height='12rem' w='13rem' />
+                    </Box>
+                  )}
+
                 </Box>
-              )}
+
+              </Box>
+
+              <Text
+                fontWeight="normal"
+                mt='0.5rem'
+                color='gray.600'
+                lineHeight="normal"
+                fontSize={'sm'}>* Todas las imágenes son meramente ilustrativas</Text>
+
+              <Modal isOpen={isOpen} onClose={onCloseModal} isCentered>
+                <ModalOverlay backdropFilter='auto'
+                  backdropBlur='2px' />
+                <ModalContent bg='#1e2227'>
+                  <ModalHeader>{selectedSkin.Nombre}</ModalHeader>
+                  <ModalCloseButton mt='0.5rem' />
+
+                  <Box borderBottom='1px solid #d13535' mr='1.6rem' ml='1.6rem'></Box>
+
+                  <ModalBody pb='1.5rem' mt='2rem' >
+                    <Box boxShadow='md' key={selectedSkin.Nombre} position='relative' bg='#23272e' cursor='pointer' borderRadius='9px' mt='-1rem'>
+                      <Box className="skin-image-container" position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
+                        <Box h='5.5rem' mt='-0.5rem'>
+                          <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre} width='120' height='120' style={{ 'borderRadius': '50%', 'objectFit': "cover" }} src={selectedSkin.ImagenURL}></Image>
+                        </Box>
+
+                        <Box w='100%' px={3} display='flex' flexDir='column'>
+                          <Text fontWeight="semibold" fontSize='md' whiteSpace='nowrap' overflow='hidden' textOverflow='ellipsis' borderBottom='1px solid #d13535' pb={2}>{selectedSkin.Nombre} </Text>
+
+                          <Box display='flex' justifyContent='space-b' w='100%' pt={1}>
+
+                            <Box display='flex' flexDir='column' justifyContent='start'>
+                              <Text color="grey" fontWeight="normal" fontSize='md'>{selectedSkin.Estado}</Text>
+                              <Text color="grey" fontWeight="normal" fontSize='sm'>{selectedSkin.Float?.slice(0, 6)}</Text>
+                            </Box>
+
+                            <Box display='flex' alignItems='center' title="Este artículo tiene un bloqueo de intercambio por parte de Steam">
+                              {selectedSkin.TradeLock == 'TRUE' && (
+                                <HiLockClosed color="grey" style={{ 'marginRight': '-0.4rem' }} fontSize='1.4rem' />
+                              )}
+                            </Box>
+
+                          </Box>
+                        </Box>
+                      </Box>
+
+                      <Box position='absolute' top='0.5rem' right='0.4rem'>
+                        {selectedSkin.Sticker1 && (
+                          <Box title={selectedSkin.Sticker1Nombre}>
+                            <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 1'} width='28' height='28' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker1}></Image>
+                          </Box>
+                        )}
+                      </Box>
+
+                      <Box position='absolute' top='2rem' right='0.4rem'>
+                        {selectedSkin.Sticker2 && (
+                          <Box title={selectedSkin.Sticker2Nombre}>
+                            <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 2'} width='28' height='28' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker2}></Image>
+                          </Box>
+                        )}
+                      </Box>
+
+                      <Box position='absolute' top='3.5rem' right='0.4rem'>
+                        {selectedSkin.Sticker3 && (
+                          <Box title={selectedSkin.Sticker3Nombre}>
+                            <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 3'} width='28' height='28' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker3}></Image>
+                          </Box>
+                        )}
+                      </Box>
+
+                      <Box position='absolute' top='5rem' right='0.4rem'>
+                        {selectedSkin.Sticker4 && (
+                          <Box title={selectedSkin.Sticker4Nombre}>
+                            <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 4'} width='28' height='28' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker4}></Image>
+                          </Box>
+                        )}
+                      </Box>
+                    </Box>
+                  </ModalBody>
+
+                </ModalContent>
+              </Modal>
 
             </Box>
+          )}
 
-          </Box>
+          {loading && (
+            <Box h='100vh' w='100%' display='flex' justifyContent='center' alignItems='center'>
+              <Spinner
+                thickness='4px'
+                speed='0.65s'
+                emptyColor='gray.700'
+                size='xl'
+              />
+            </Box>
+          )}
 
         </Container>
       </main>
