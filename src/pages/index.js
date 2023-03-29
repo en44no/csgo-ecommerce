@@ -1,20 +1,28 @@
-import { Box, Container, Text } from "@chakra-ui/react";
+import { Box, Container, Stack, Text } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Steam from '../../public/images/steam.png'
 import api from "./api/api";
 import { HiLockClosed } from 'react-icons/hi';
-
+import { BsDiscord, BsSteam } from 'react-icons/bs';
+import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
 
 export default function Home() {
 
   const [skins, setSkins] = useState([]);
+  const [loading, setLoading] = useState([]);
 
   useEffect(() => {
+    setLoading(true);
+
     const fetchData = async () => {
       setSkins(await api.skins.get());
+
+      setTimeout(() => {
+        setLoading(false);
+
+      }, 2000);
     };
     fetchData();
   }, []);
@@ -111,9 +119,22 @@ export default function Home() {
                 <Text fontWeight="bold" w='100%' fontSize='xl' borderBottom='1px solid #d13535' pb={2}>FireWolf</Text>
 
                 <Text color="grey" fontWeight="normal" fontSize='md'>Puedes contactarme mediante</Text>
-                <Link title="Contáctame por Steam" href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
-                  <Image alt='FireWolf Steam Image' width={25} height={25} style={{ 'borderRadius': '50%' }} src={Steam}></Image>
-                </Link>
+
+                <Box display='flex' gap={3}>
+
+                  <Box _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+                    <Link title="Contáctame por Steam" href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
+                      <BsSteam fontSize='1.5rem' />
+                    </Link>
+                  </Box>
+
+                  <Box _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+                    <Link title="Contáctame por Discord" href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
+                      <BsDiscord fontSize='1.5rem' />
+                    </Link>
+                  </Box>
+
+                </Box>
               </Box>
             </Box>
           </Box>
@@ -133,16 +154,16 @@ export default function Home() {
               fontSize={'3xl'}>Skins disponibles</Text>
             <Box display='flex' flexWrap='wrap' alignItems='center' mt='1rem' gap={5} bg='#23272e' p={4} borderRadius='9px'>
 
-              {skins.map((skin) => (
-                <Box className="skin-image-container" w='13rem' key={skin.Nombre} display='flex' flexDir='column' alignItems='center' gap={2} bg='#1e2227' _hover={{ 'bg': '#3f3f45' }} py={3} px={1} borderRadius='9px'>
-                  <Box>
-                    <Image alt={skin.Nombre} width={120} height={120} style={{ 'borderRadius': '50%' }} src={skin.ImagenURL}></Image>
+              {!loading && skins.map((skin) => (
+                <Box className="skin-image-container" w='13rem' key={skin.Nombre} display='flex' flexDir='column' alignItems='center' gap={2} bg='#1e2227' _hover={{ 'bg': '#3f3f45' }} cursor='pointer' py={3} px={1} borderRadius='9px'>
+                  <Box h='5.5rem' mt='-0.5rem'>
+                    <Image alt={skin.Nombre} width='120' height='120' style={{ 'borderRadius': '50%', 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
                   </Box>
 
                   <Box w='100%' px={3} display='flex' flexDir='column'>
-                    <Text fontWeight="semibold" fontSize='lg'>{skin.Nombre?.slice(0, 20)} </Text>
+                    <Text fontWeight="semibold" fontSize='md' whiteSpace='nowrap' overflow='hidden' textOverflow='ellipsis' borderBottom='1px solid #d13535' pb={2}>{skin.Nombre} </Text>
 
-                    <Box display='flex' justifyContent='space-between' w='100%'>
+                    <Box display='flex' justifyContent='space-between' w='100%' pt={1}>
 
                       <Box display='flex' flexDir='column' justifyContent='start'>
                         <Text color="grey" fontWeight="normal" fontSize='md'>{skin.Estado}</Text>
@@ -159,6 +180,14 @@ export default function Home() {
                   </Box>
                 </Box>
               ))}
+
+              {loading && (
+                <Box minH='13rem' w='100%' display='flex' alignItems='center' flexWrap='wrap' gap={6}>
+                  <Skeleton borderRadius='9px' height='12rem' w='13rem' />
+                  <Skeleton borderRadius='9px' height='12rem' w='13rem' />
+                  <Skeleton borderRadius='9px' height='12rem' w='13rem' />
+                </Box>
+              )}
 
             </Box>
 
