@@ -155,9 +155,41 @@ export default function Home() {
             <Box display='flex' flexWrap='wrap' alignItems='center' mt='1rem' gap={5} bg='#23272e' p={4} borderRadius='9px'>
 
               {!loading && skins.map((skin) => (
-                <Box className="skin-image-container" w='13rem' key={skin.Nombre} display='flex' flexDir='column' alignItems='center' gap={2} bg='#1e2227' _hover={{ 'bg': '#3f3f45' }} cursor='pointer' py={3} px={1} borderRadius='9px'>
+                <Box className="skin-image-container" position='relative' w='13rem' key={skin.Nombre} display='flex' flexDir='column' alignItems='center' gap={2} bg='#1e2227' _hover={{ 'bg': '#3f3f45' }} cursor='pointer' py={3} px={1} borderRadius='9px'>
                   <Box h='5.5rem' mt='-0.5rem'>
                     <Image alt={skin.Nombre} width='120' height='120' style={{ 'borderRadius': '50%', 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
+                  </Box>
+
+                  <Box position='absolute' top='0.5rem' right='0.4rem'>
+                    {skin.Sticker1 && (
+                      <Box>
+                        <Image alt={skin.Nombre + 'sticker 1'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker1}></Image>
+                      </Box>
+                    )}
+                  </Box>
+
+                  <Box position='absolute' top='2rem' right='0.4rem'>
+                    {skin.Sticker2 && (
+                      <Box>
+                        <Image alt={skin.Nombre + 'sticker 2'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker2}></Image>
+                      </Box>
+                    )}
+                  </Box>
+
+                  <Box position='absolute' top='3.5rem' right='0.4rem'>
+                    {skin.Sticker3 && (
+                      <Box>
+                        <Image alt={skin.Nombre + 'sticker 3'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker3}></Image>
+                      </Box>
+                    )}
+                  </Box>
+
+                  <Box position='absolute' top='5rem' right='0.4rem'>
+                    {skin.Sticker4 && (
+                      <Box>
+                        <Image alt={skin.Nombre + 'sticker 4'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker4}></Image>
+                      </Box>
+                    )}
                   </Box>
 
                   <Box w='100%' px={3} display='flex' flexDir='column'>
@@ -183,6 +215,8 @@ export default function Home() {
 
               {loading && (
                 <Box minH='13rem' w='100%' display='flex' alignItems='center' flexWrap='wrap' gap={6}>
+                  <Skeleton borderRadius='9px' height='12rem' w='13rem' />
+                  <Skeleton borderRadius='9px' height='12rem' w='13rem' />
                   <Skeleton borderRadius='9px' height='12rem' w='13rem' />
                   <Skeleton borderRadius='9px' height='12rem' w='13rem' />
                   <Skeleton borderRadius='9px' height='12rem' w='13rem' />
