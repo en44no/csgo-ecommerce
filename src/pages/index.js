@@ -162,7 +162,7 @@ export default function Home() {
 
                   <Box position='absolute' top='0.5rem' right='0.4rem'>
                     {skin.Sticker1 && (
-                      <Box>
+                      <Box title={skin.Sticker1Nombre}>
                         <Image alt={skin.Nombre + 'sticker 1'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker1}></Image>
                       </Box>
                     )}
@@ -170,7 +170,7 @@ export default function Home() {
 
                   <Box position='absolute' top='2rem' right='0.4rem'>
                     {skin.Sticker2 && (
-                      <Box>
+                      <Box title={skin.Sticker2Nombre}>
                         <Image alt={skin.Nombre + 'sticker 2'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker2}></Image>
                       </Box>
                     )}
@@ -178,7 +178,7 @@ export default function Home() {
 
                   <Box position='absolute' top='3.5rem' right='0.4rem'>
                     {skin.Sticker3 && (
-                      <Box>
+                      <Box title={skin.Sticker3Nombre}>
                         <Image alt={skin.Nombre + 'sticker 3'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker3}></Image>
                       </Box>
                     )}
@@ -186,7 +186,7 @@ export default function Home() {
 
                   <Box position='absolute' top='5rem' right='0.4rem'>
                     {skin.Sticker4 && (
-                      <Box>
+                      <Box title={skin.Sticker4Nombre}>
                         <Image alt={skin.Nombre + 'sticker 4'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker4}></Image>
                       </Box>
                     )}
