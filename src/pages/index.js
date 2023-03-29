@@ -1,4 +1,4 @@
-import { Box, Button, Container, SkeletonCircle, Spinner, Stack, Text, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Container, Divider, SkeletonCircle, Spinner, Stack, Text, useDisclosure } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -195,7 +195,7 @@ export default function Home() {
 
                   {!skinsAreLoading && skins.map((skin) => (
                     <Box onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre} position='relative' bg='#1e2227' _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
-                      <Box className="skin-image-container" position='relative' w='13rem' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
+                      <Box className="skin-image-container" position='relative' minW='13rem' w='13rem' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
                         <Box h='5.5rem' mt='-0.5rem'>
                           <Image className="shadow-for-skin-image" alt={skin.Nombre} width='120' height='120' style={{ 'borderRadius': '50%', 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
                         </Box>
@@ -296,9 +296,9 @@ export default function Home() {
 
                   <ModalBody pb='1.5rem' mt='2rem' >
                     <Box boxShadow='md' key={selectedSkin.Nombre} position='relative' bg='#23272e' cursor='pointer' borderRadius='9px' mt='-1rem'>
-                      <Box className="skin-image-container" position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
-                        <Box h='5.5rem' mt='-0.5rem'>
-                          <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre} width='120' height='120' style={{ 'borderRadius': '50%', 'objectFit': "cover" }} src={selectedSkin.ImagenURL}></Image>
+                      <Box position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
+                        <Box className="skin-image-container">
+                          <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre} width='300' height='300' style={{ 'borderRadius': '50%', 'objectFit': "cover" }} src={selectedSkin.ImagenURL}></Image>
                         </Box>
 
                         <Box w='100%' px={3} display='flex' flexDir='column'>
@@ -319,38 +319,35 @@ export default function Home() {
 
                           </Box>
                         </Box>
-                      </Box>
 
-                      <Box position='absolute' top='0.5rem' right='0.4rem'>
-                        {selectedSkin.Sticker1 && (
-                          <Box title={selectedSkin.Sticker1Nombre}>
-                            <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 1'} width='28' height='28' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker1}></Image>
-                          </Box>
-                        )}
-                      </Box>
+                        <Divider w='94%' bg='#d13535' h='1px' borderBottomWidth={0} opacity={1} />
 
-                      <Box position='absolute' top='2rem' right='0.4rem'>
-                        {selectedSkin.Sticker2 && (
-                          <Box title={selectedSkin.Sticker2Nombre}>
-                            <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 2'} width='28' height='28' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker2}></Image>
-                          </Box>
-                        )}
-                      </Box>
+                        <Box display='flex' py='0.5rem'>
+                          {selectedSkin.Sticker1 && (
+                            <Box title={selectedSkin.Sticker1Nombre}>
+                              <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 1'} width='90' height='90' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker1}></Image>
+                            </Box>
+                          )}
 
-                      <Box position='absolute' top='3.5rem' right='0.4rem'>
-                        {selectedSkin.Sticker3 && (
-                          <Box title={selectedSkin.Sticker3Nombre}>
-                            <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 3'} width='28' height='28' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker3}></Image>
-                          </Box>
-                        )}
-                      </Box>
+                          {selectedSkin.Sticker2 && (
+                            <Box title={selectedSkin.Sticker2Nombre}>
+                              <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 2'} width='90' height='90' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker2}></Image>
+                            </Box>
+                          )}
 
-                      <Box position='absolute' top='5rem' right='0.4rem'>
-                        {selectedSkin.Sticker4 && (
-                          <Box title={selectedSkin.Sticker4Nombre}>
-                            <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 4'} width='28' height='28' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker4}></Image>
-                          </Box>
-                        )}
+                          {selectedSkin.Sticker3 && (
+                            <Box title={selectedSkin.Sticker3Nombre}>
+                              <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 3'} width='90' height='90' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker3}></Image>
+                            </Box>
+                          )}
+
+                          {selectedSkin.Sticker4 && (
+                            <Box title={selectedSkin.Sticker4Nombre}>
+                              <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 4'} width='90' height='90' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker4}></Image>
+                            </Box>
+                          )}
+                        </Box>
+
                       </Box>
                     </Box>
                   </ModalBody>
