@@ -14,17 +14,17 @@
   transform-origin: 50% 50%;
 }
 
-.steam-image-container {
+.scale-image {
   display: inline-block;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
 
-.steam-image-container img {
+.scale-image img {
   transition: transform .4s;
 }
 
-.steam-image-container:hover img {
+.scale-image:hover img {
   transform: scale(1.1);
   transform-origin: 50% 50%;
 }
