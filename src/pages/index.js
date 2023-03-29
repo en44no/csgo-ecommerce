@@ -6,11 +6,13 @@ import { useEffect, useState } from "react";
 import api from "./api/api";
 import { HiLockClosed } from 'react-icons/hi';
 import { BsDiscord, BsSteam } from 'react-icons/bs';
-import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
+import { Skeleton } from '@chakra-ui/react'
 
 export default function Home() {
 
   const [skins, setSkins] = useState([]);
+  const [contactLinks, setContactLinks] = useState([]);
+  const [info, setInfo] = useState([]);
   const [loading, setLoading] = useState([]);
 
   useEffect(() => {
@@ -18,11 +20,9 @@ export default function Home() {
 
     const fetchData = async () => {
       setSkins(await api.skins.get());
-
-      setTimeout(() => {
-        setLoading(false);
-
-      }, 2000);
+      setContactLinks(await api.contact.get());
+      setInfo(await api.info.get());
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -112,27 +112,39 @@ export default function Home() {
           >
             <Box display='flex' flexDir='column' alignItems='center' gap={2}>
               <Box className="scale-image">
-                <Image width={90} height={90} style={{ 'borderRadius': '50%' }} src='https://avatars.cloudflare.steamstatic.com/2bea4a86cf468c8721266e0c756afcba4073110e_full.jpg'></Image>
+                {info?.FotoSteam && (
+                  <Image width={90} height={90} style={{ 'borderRadius': '50%' }} src={info.FotoSteam}></Image>
+                )}
               </Box>
 
               <Box display='flex' flexDir='column' alignItems='center' gap='0.5rem'>
-                <Text fontWeight="bold" w='100%' fontSize='xl' borderBottom='1px solid #d13535' pb={2}>FireWolf</Text>
+                <Text fontWeight="bold" w='100%' fontSize='xl' borderBottom='1px solid #d13535' pb={2}>{info.NombreSteam}</Text>
 
                 <Text color="grey" fontWeight="normal" fontSize='md'>Puedes contactarme mediante</Text>
 
                 <Box display='flex' gap={3}>
 
-                  <Box _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
-                    <Link title="Contáctame por Steam" href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
-                      <BsSteam fontSize='1.5rem' />
-                    </Link>
-                  </Box>
+                  {contactLinks.map((contact) => (
+                    <Box key={contact.Nombre} _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
 
-                  <Box _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
-                    <Link title="Contáctame por Discord" href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
-                      <BsDiscord fontSize='1.5rem' />
-                    </Link>
-                  </Box>
+                      {contact.Nombre == 'Steam' && contact.Ocultar == 'FALSE' && (
+                        <Box _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+                          <Link title="Contáctame por Steam" href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
+                            <BsSteam fontSize='1.5rem' />
+                          </Link>
+                        </Box>
+                      )}
+
+                      {contact.Nombre == 'Discord' && contact.Ocultar == 'FALSE' && (
+                        <Box _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+                          <Link title="Contáctame por Discord" href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
+                            <BsDiscord fontSize='1.5rem' />
+                          </Link>
+                        </Box>
+                      )}
+
+                    </Box>
+                  ))}
 
                 </Box>
               </Box>
