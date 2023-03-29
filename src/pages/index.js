@@ -103,7 +103,7 @@ export default function Home() {
             mt={'2rem'}
           >
             <Box display='flex' flexDir='column' alignItems='center' gap={2}>
-              <Box>
+              <Box className="steam-image-container">
                 <Image width={90} height={90} style={{ 'borderRadius': '50%' }} src='https://avatars.cloudflare.steamstatic.com/2bea4a86cf468c8721266e0c756afcba4073110e_full.jpg'></Image>
               </Box>
 
