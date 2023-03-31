@@ -7,6 +7,7 @@ import api from "./api/api";
 import { HiLockClosed } from 'react-icons/hi';
 import { BsDiscord, BsSteam } from 'react-icons/bs';
 import { TiArrowSortedDown } from 'react-icons/ti';
+import { TbNumbers } from 'react-icons/tb';
 import { Skeleton } from '@chakra-ui/react'
 import { Tooltip } from '@chakra-ui/react'
 import {
@@ -34,16 +35,19 @@ export default function Home() {
     setLoading(true);
     setSkinsAreLoading(true);
 
-    const fetchData = async () => {
-      setSkins(await api.skins.get());
-      setSkinsAreLoading(false);
 
-      setContactLinks(await api.contact.get());
-      setInfo(await api.info.get());
-      setLoading(false);
-    };
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    setSkins(await api.skins.get());
+
+    setSkinsAreLoading(false);
+
+    setContactLinks(await api.contact.get());
+    setInfo(await api.info.get());
+    setLoading(false);
+  };
 
   function onOpenModal(skin) {
     setSelectedSkin(skin);
@@ -53,30 +57,6 @@ export default function Home() {
   function onCloseModal() {
     setSelectedSkin({});
     onClose();
-  }
-
-  function getSkinWear(float, isShorter = false) {
-    let skinWear;
-    let skinWearShorter;
-
-    if (float < 0.15) {
-      skinWear = 'Factory New';
-      skinWearShorter = 'FN';
-    } else if (float < 0.38) {
-      skinWear = 'Minimal Wear';
-      skinWearShorter = 'MW';
-    } else if (float < 0.45) {
-      skinWear = 'Field-Tested';
-      skinWearShorter = 'FT';
-    } else if (float < 0.55) {
-      skinWear = 'Well-Worn';
-      skinWearShorter = 'WW';
-    } else {
-      skinWear = 'Battle-Scarred';
-      skinWearShorter = 'BS';
-    }
-
-    return isShorter ? skinWearShorter : skinWear;
   }
 
   return (
@@ -181,19 +161,23 @@ export default function Home() {
                         <Box key={contact.Nombre} _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
 
                           {contact.Nombre == 'Steam' && contact.Ocultar == 'FALSE' && (
-                            <Box boxShadow='md' _hover={{ 'transform': 'scale(1.1)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
-                              <Link title="Contáctame por Steam" href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
-                                <BsSteam fontSize='1.5rem' />
-                              </Link>
-                            </Box>
+                            <Tooltip borderRadius='9px' placement='top' label="Contáctame por Steam" aria-label="Contáctame por Steam">
+                              <Box boxShadow='md' _hover={{ 'transform': 'scale(1.1)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+                                <Link href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
+                                  <BsSteam fontSize='1.5rem' />
+                                </Link>
+                              </Box>
+                            </Tooltip>
                           )}
 
                           {contact.Nombre == 'Discord' && contact.Ocultar == 'FALSE' && (
-                            <Box boxShadow='md' _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
-                              <Link title="Contáctame por Discord" href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
-                                <BsDiscord fontSize='1.5rem' />
-                              </Link>
-                            </Box>
+                            <Tooltip borderRadius='9px' placement='top' label="Contáctame por Discord" aria-label="Contáctame por Discord">
+                              <Box boxShadow='md' _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+                                <Link href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
+                                  <BsDiscord fontSize='1.5rem' />
+                                </Link>
+                              </Box>
+                            </Tooltip>
                           )}
 
                         </Box>
@@ -222,25 +206,39 @@ export default function Home() {
                   {!skinsAreLoading && skins.map((skin) => (
                     <Box onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre} position='relative' bg='#1e2227' _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
                       <Box className="skin-image-container" position='relative' minW='13rem' w='13rem' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
-                        <Box h='5.5rem' mt='-0.5rem'>
-                          <Image className="shadow-for-skin-image" alt={skin.Nombre} width='120' height='120' style={{ 'borderRadius': '50%', 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
+                        <Box h='5.5rem' mt='-0.7rem'>
+                          <Image className="shadow-for-skin-image" alt={skin.Nombre} width={130} height={130} style={{ 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
                         </Box>
 
                         <Box w='100%' px={3} display='flex' flexDir='column'>
-                          <Text fontWeight="semibold" fontSize='md' whiteSpace='nowrap' overflow='hidden' textOverflow='ellipsis' borderBottom='1px solid #d13535' pb={2}>{skin.Nombre} </Text>
+                          <Text fontWeight="semibold" fontSize='sm' whiteSpace='nowrap' overflow='hidden' textOverflow='ellipsis' borderBottom='1px solid #d13535' pb={2}>{skin.Nombre} </Text>
 
                           <Box display='flex' justifyContent='space-between' w='100%' pt={1}>
 
-                            <Box display='flex' flexDir='column' justifyContent='start'>
-                              <Text color="grey" fontWeight="normal" fontSize='md'>{getSkinWear(skin.Float, true)}</Text>
-                              <Text color="grey" fontWeight="normal" fontSize='sm'>{skin.Float?.slice(0, 6)}</Text>
+                            <Box display='flex' justifyContent='start' gap={1}>
+                              {skin.StatTrak == 'TRUE' && (
+                                <Tooltip borderRadius='9px' placement='bottom' label="Este artículo registra el número de víctimas" aria-label="Este artículo registra el número de víctimas">
+                                  <Box display='flex' alignItems='center' gap={1}>
+                                    <Text color="#bc734f" fontWeight="500" fontSize='sm'>ST</Text>
+                                    <Divider orientation="vertical" h='70%' alignSelf='center' borderLeftWidth='2px' borderColor='#808080' />
+                                  </Box>
+                                </Tooltip>
+                              )}
+                              <Text color="grey" fontWeight="500" fontSize='sm'>{skin.WearShorter}</Text>
+                              <Divider orientation="vertical" h='70%' alignSelf='center' borderLeftWidth='2px' borderColor='#808080' />
+                              <Text color="grey" fontWeight="500" fontSize='sm'>{skin.Float?.slice(0, 6)}</Text>
                             </Box>
 
-                            <Box display='flex' alignItems='center' title="Este artículo tiene un bloqueo de intercambio por parte de Steam">
-                              {skin.TradeLock == 'TRUE' && (
-                                <HiLockClosed color="grey" style={{ 'marginRight': '-0.4rem' }} fontSize='1.4rem' />
-                              )}
-                            </Box>
+                            <Tooltip borderRadius='9px' placement='bottom' label="Este artículo tiene un bloqueo de intercambio por parte de Steam" aria-label="Este artículo tiene un bloqueo de intercambio por parte de Steam">
+                              <Box display='flex' alignItems='center'>
+                                {skin.TradeLock && (
+                                  <Box display='flex' alignItems='center' gap={2}>
+                                    <HiLockClosed color="grey" style={{ 'marginRight': '-0.4rem' }} fontSize='1.3rem' />
+                                    <Text color="grey" fontWeight="500" fontSize='sm'>{skin.TradeLock}</Text>
+                                  </Box>
+                                )}
+                              </Box>
+                            </Tooltip>
 
                           </Box>
                         </Box>
@@ -248,33 +246,41 @@ export default function Home() {
 
                       <Box position='absolute' top='0.5rem' right='0.4rem'>
                         {skin.Sticker1 && (
-                          <Box title={skin.Sticker1Nombre}>
-                            <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 1'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker1}></Image>
-                          </Box>
+                          <Tooltip borderRadius='9px' placement='right' label={skin.Sticker1Nombre} aria-label={skin.Sticker1Nombre}>
+                            <Box>
+                              <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 1'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker1}></Image>
+                            </Box>
+                          </Tooltip>
                         )}
                       </Box>
 
                       <Box position='absolute' top='2rem' right='0.4rem'>
                         {skin.Sticker2 && (
-                          <Box title={skin.Sticker2Nombre}>
-                            <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 2'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker2}></Image>
-                          </Box>
+                          <Tooltip borderRadius='9px' placement='right' label={skin.Sticker2Nombre} aria-label={skin.Sticker2Nombre}>
+                            <Box >
+                              <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 2'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker2}></Image>
+                            </Box>
+                          </Tooltip>
                         )}
                       </Box>
 
                       <Box position='absolute' top='3.5rem' right='0.4rem'>
                         {skin.Sticker3 && (
-                          <Box title={skin.Sticker3Nombre}>
-                            <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 3'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker3}></Image>
-                          </Box>
+                          <Tooltip borderRadius='9px' placement='right' label={skin.Sticker3Nombre} aria-label={skin.Sticker3Nombre}>
+                            <Box >
+                              <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 3'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker3}></Image>
+                            </Box>
+                          </Tooltip>
                         )}
                       </Box>
 
                       <Box position='absolute' top='5rem' right='0.4rem'>
                         {skin.Sticker4 && (
-                          <Box title={skin.Sticker4Nombre}>
-                            <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 4'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker4}></Image>
-                          </Box>
+                          <Tooltip borderRadius='9px' placement='right' label={skin.Sticker4Nombre} aria-label={skin.Sticker4Nombre}>
+                            <Box >
+                              <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 4'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker4}></Image>
+                            </Box>
+                          </Tooltip>
                         )}
                       </Box>
                     </Box>
@@ -325,8 +331,8 @@ export default function Home() {
 
                     <Box key={selectedSkin.Nombre} position='relative' mt='-0.2rem' p='0.5rem' bg='#23272e' borderRadius='9px' boxShadow='md'>
                       <Box position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
-                        <Box className="skin-image-container">
-                          <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre} width='300' height='300' style={{ 'borderRadius': '50%', 'objectFit': "cover" }} src={selectedSkin.ImagenURL}></Image>
+                        <Box className="skin-image-container" display='flex' justifyContent='center' w='100%'>
+                          <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre} width='300' height='300' style={{ 'objectFit': "cover" }} src={selectedSkin.ImagenURL}></Image>
                         </Box>
 
                         {/* <Divider w='95%' bg='#d13535' h='1px' borderBottomWidth={0} opacity={1} /> */}
@@ -378,34 +384,60 @@ export default function Home() {
                               <TiArrowSortedDown fontSize='1.3rem' />
                             </Box>
 
-                            <Box w='7%' bg='#3d818f' borderRadius='50px 0 0 50px' title='Factory New'></Box>
+                            <Tooltip borderRadius='9px' placement='top' label='Factory New' aria-label='Factory New'>
+                              <Box w='7%' bg='#3d818f' borderRadius='50px 0 0 50px'></Box>
+                            </Tooltip>
 
-                            <Box w='8%' bg='#84b235' title='Minimal Wear'></Box>
+                            <Tooltip borderRadius='9px' placement='top' label='Minimal Wear' aria-label='Minimal Wear'>
+                              <Box w='8%' bg='#84b235'></Box>
+                            </Tooltip>
 
-                            <Box w='23%' bg='#dfc04a' title='Field Tested'></Box>
+                            <Tooltip borderRadius='9px' placement='top' label='Field Tested' aria-label='Field Tested'>
+                              <Box w='23%' bg='#dfc04a'></Box>
+                            </Tooltip>
 
-                            <Box w='7%' bg='#ef8641' title='Well Worn'></Box>
+                            <Tooltip borderRadius='9px' placement='top' label='Well Worn' aria-label='Well Worn'>
+                              <Box w='7%' bg='#ef8641'></Box>
+                            </Tooltip>
 
-                            <Box w='55%' bg='#eb5757' borderRadius='0 50px 50px 0' title='Battle Scarred'></Box>
+                            <Tooltip borderRadius='9px' placement='top' label='Battle Scarred' aria-label='Battle Scarred'>
+                              <Box w='55%' bg='#eb5757' borderRadius='0 50px 50px 0'></Box>
+                            </Tooltip>
 
                           </Box>
 
                           <Box display='flex' justifyContent='space-between' pt={1}>
-                            <Text color='grey' fontWeight="500" fontSize='md'>Float | {selectedSkin.Float?.slice(0, 6)}</Text>
-                            <Text color='grey' fontWeight="500" fontSize='md'>{getSkinWear(selectedSkin.Float)}</Text>
+
+                            <Box display='flex' alignItems='center' gap={1}>
+                              <Text color='grey' fontWeight="500" fontSize='sm'>Float</Text>
+                              <Divider orientation="vertical" h='70%' alignSelf='center' borderLeftWidth='2px' borderColor='#808080' />
+                              <Text color='grey' fontWeight="500" fontSize='sm'>{selectedSkin.Float?.slice(0, 6)}</Text>
+                            </Box>
+
+                            <Text color='grey' fontWeight="500" fontSize='sm'>{selectedSkin.Wear}</Text>
                           </Box>
 
                         </Box>
 
-                        {selectedSkin.TradeLock == 'TRUE' && (
-                          <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' right='0.6rem' title="Este artículo tiene un bloqueo de intercambio por parte de Steam">
-
-                            <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(208, 56, 56, .15)' borderRadius='9px'>
-                              <Text color='#cd6060' fontWeight='bold' fontSize='sm'>TradeLock</Text>
-
-                              <HiLockClosed color='#cd6060' fontSize='1.2rem' />
+                        {selectedSkin.StatTrak && (
+                          <Tooltip borderRadius='9px' placement='left' label="Este artículo registra el número de víctimas" aria-label="Este artículo registra el número de víctimas">
+                            <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' left='0.6rem'>
+                              <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(188, 115, 77, .15)' borderRadius='9px'>
+                                <Text color='#bc734d' fontWeight='semibold' fontSize='sm'>StatTrack</Text>
+                              </Box>
                             </Box>
-                          </Box>
+                          </Tooltip>
+                        )}
+
+                        {selectedSkin.TradeLock && (
+                          <Tooltip borderRadius='9px' placement='right' label="Este artículo tiene un bloqueo de intercambio por parte de Steam" aria-label="Este artículo tiene un bloqueo de intercambio por parte de Steam">
+                            <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' right='0.6rem'>
+                              <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(208, 56, 56, .15)' borderRadius='9px'>
+                                <Text color='#cd6060' fontWeight='semibold' fontSize='sm'>TradeLock {selectedSkin.TradeLock}</Text>
+                                <HiLockClosed color='#cd6060' fontSize='1.2rem' />
+                              </Box>
+                            </Box>
+                          </Tooltip>
                         )}
                       </Box>
                     </Box>
