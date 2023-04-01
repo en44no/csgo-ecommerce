@@ -62,16 +62,16 @@ const api = {
 
 function setSkinWear(skins) {
   skins.forEach(skin => {
-    if (skin.Float < 0.15) {
+    if (skin.Float < 0.07) {
       skin.Wear = 'Factory New';
       skin.WearShorter = 'FN';
-    } else if (skin.Float < 0.38) {
+    } else if (skin.Float < 0.15) {
       skin.Wear = 'Minimal Wear';
       skin.WearShorter = 'MW';
-    } else if (skin.Float < 0.45) {
+    } else if (skin.Float < 0.38) {
       skin.Wear = 'Field-Tested';
       skin.WearShorter = 'FT';
-    } else if (skin.Float < 0.55) {
+    } else if (skin.Float < 0.45) {
       skin.Wear = 'Well-Worn';
       skin.WearShorter = 'WW';
     } else {
