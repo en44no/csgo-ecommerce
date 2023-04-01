@@ -1,4 +1,4 @@
-import { Box, Button, Container, Divider, SkeletonCircle, Spinner, Stack, Text, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Container, Divider, Input, InputGroup, InputLeftElement, InputRightElement, SkeletonCircle, Spinner, Stack, Text, useDisclosure } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,6 +8,7 @@ import { HiLockClosed } from 'react-icons/hi';
 import { BsDiscord, BsSteam } from 'react-icons/bs';
 import { TiArrowSortedDown } from 'react-icons/ti';
 import { FiExternalLink } from 'react-icons/fi';
+import { IoSearch } from 'react-icons/io5';
 import { Skeleton } from '@chakra-ui/react'
 import { Tooltip } from '@chakra-ui/react'
 import {
@@ -28,19 +29,24 @@ export default function Home() {
   const [info, setInfo] = useState([]);
   const [loading, setLoading] = useState([]);
   const [skinsAreLoading, setSkinsAreLoading] = useState([]);
+  const [filteredSkins, setFilteredSkins] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [searchInputIsLoading, setSearchInputIsLoading] = useState(false);
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {
+    setSearchText('');
     setLoading(true);
     setSkinsAreLoading(true);
-
 
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    setSkins(await api.skins.get());
+    const skins = await api.skins.get();
+    setSkins(skins);
+    setFilteredSkins(skins);
 
     setSkinsAreLoading(false);
 
@@ -57,6 +63,13 @@ export default function Home() {
   function onCloseModal() {
     setSelectedSkin({});
     onClose();
+  }
+
+  function onChangeSearchText(text) {
+    setSearchInputIsLoading(true);
+    setSearchText(text);
+    setFilteredSkins(skins.filter(skin => skin?.Nombre.toLowerCase().includes(text.toLowerCase())));
+    setSearchInputIsLoading(false);
   }
 
   return (
@@ -79,7 +92,7 @@ export default function Home() {
         >
 
           {!loading && (
-            <Box pb='2rem'>
+            <Box pb='4rem'>
               <Box display='flex' justifyContent='center' mt='3rem' fontSize={{ sm: '4xl', md: '3xl', lg: '5xl' }} fontWeight="semibold">
                 <Text
                   as="h1"
@@ -194,17 +207,40 @@ export default function Home() {
                 width="100%" boxShadow='md'
               >
 
-                <Text
-                  fontWeight="800"
-                  lineHeight="normal"
-                  bgGradient="linear(to-r, red.500, red.600, red.500)"
-                  bgClip="text"
-                  mr='0.5rem'
-                  fontSize={'3xl'}>Skins disponibles</Text>
-                <Box display='flex' flexWrap='wrap' alignItems='center' mt='1rem' gap={5} bg='#23272e' p={4} borderRadius='9px'>
+                <Box w='100%' display='flex' alignItems='center' justifyContent='space-between'>
+                  <Text
+                    fontWeight="800"
+                    lineHeight="normal"
+                    bgGradient="linear(to-r, red.500, red.600, red.500)"
+                    bgClip="text"
+                    mr='0.5rem'
+                    fontSize={'3xl'}>Skins disponibles</Text>
 
-                  {!skinsAreLoading && skins.map((skin) => (
-                    <Box onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre} position='relative' bg='#1e2227' _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
+
+                  <Box>
+                    <InputGroup>
+                      {!searchInputIsLoading && (
+                        <InputRightElement
+                          pointerEvents='none'
+                          children={<IoSearch fontSize='1.1rem' color='#718096' />}
+                        />
+                      )}
+                      <Input className="input-search" value={searchText}
+                        onChange={(e) => onChangeSearchText(e.target.value)} w='17rem' fontSize='sm' bg='transparent' border='1px solid #d13535' _hover={{ 'border': '1px solid #d13535' }} _focusVisible={{ 'border': '1px solid #d13535' }} _focus={{ 'border': '1px solid #d13535' }} borderRadius='9px' placeholder="Busca una skin..." />
+                      {searchInputIsLoading && (
+                        <InputRightElement
+                          pointerEvents='none'
+                          children={<Spinner size='sm' speed='0.65s' />}
+                        />
+                      )}
+                    </InputGroup>
+                  </Box>
+
+                </Box>
+                <Box display='flex' flexWrap='wrap' alignContent='flex-start' mt='1rem' gap={5} bg='#23272e' p={4} borderRadius='9px' minH='24rem'>
+
+                  {!skinsAreLoading && filteredSkins.map((skin) => (
+                    <Box onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre + skin.Float} position='relative' bg='#1e2227' h='10.5rem' _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
                       <Box className="skin-image-container" position='relative' minW='13rem' w='13rem' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
                         <Box h='5.5rem' mt='-0.7rem'>
                           <Image className="shadow-for-skin-image" alt={skin.Nombre} width={130} height={130} style={{ 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
@@ -312,6 +348,15 @@ export default function Home() {
                     </Box>
                   ))}
 
+                  {!skinsAreLoading && searchText.length > 0 && filteredSkins.length == 0 && (
+                    <Box display='flex' justifyContent='center' alignItems='center' flexDirection='col' w='100%' h='24rem'>
+                      <Box display='flex' flexDirection='column' alignItems='center' gap={2}>
+                        <IoSearch color='#cd6060' fontSize='3rem' />
+                        <Text>No se encontraron artículos con ese criterio de búsqueda</Text>
+                      </Box>
+                    </Box>
+                  )}
+
                   {skinsAreLoading && (
                     <Box minH='13rem' w='100%' display='flex' alignItems='center' flexWrap='wrap' gap={6}>
                       <Skeleton borderRadius='9px' height='12rem' w='13rem' />
@@ -348,16 +393,15 @@ export default function Home() {
                   backdropBlur='2px' />
                 <ModalContent bg='#1e2227'>
                   <ModalHeader>{selectedSkin.Nombre}</ModalHeader>
-                  <ModalCloseButton mt='0.5rem' />
+                  <ModalCloseButton _focus={{ 'boxShadow': 'none' }} _focusVisible={{ 'boxShadow': 'none' }} mt='0.5rem' />
 
                   <Box borderBottom='1px solid #d13535' mr='1.6rem' ml='1.6rem'></Box>
 
                   <ModalBody pb='1.5rem' mt='1rem' >
 
-
                     <Box key={selectedSkin.Nombre} position='relative' mt='-0.2rem' p='0.5rem' bg='#23272e' borderRadius='9px' boxShadow='md'>
                       <Box position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
-                        <Box className="skin-image-container" display='flex' justifyContent='center' w='100%' h='15rem'>
+                        <Box className="skin-image-container" display='flex' justifyContent='center' w='100%' maxH='15rem' h='auto'>
                           <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre} width='300' height='300' style={{ 'objectFit': "cover" }} src={selectedSkin.ImagenURL}></Image>
                         </Box>
 
@@ -447,7 +491,7 @@ export default function Home() {
 
                         {selectedSkin.StatTrak && (
                           <Tooltip borderRadius='9px' placement='left' label="Este artículo registra el número de víctimas" aria-label="Este artículo registra el número de víctimas">
-                            <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' left='0.6rem'>
+                            <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' left='1.1rem'>
                               <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(188, 115, 77, .15)' borderRadius='9px'>
                                 <Text color='#bc734d' fontWeight='semibold' fontSize='sm'>StatTrack</Text>
                               </Box>
@@ -457,7 +501,7 @@ export default function Home() {
 
                         {selectedSkin.TradeLock && (
                           <Tooltip borderRadius='9px' placement='right' label="Este artículo tiene un bloqueo de intercambio por parte de Steam" aria-label="Este artículo tiene un bloqueo de intercambio por parte de Steam">
-                            <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' right='0.6rem'>
+                            <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' right='1.1rem'>
                               <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(208, 56, 56, .15)' borderRadius='9px'>
                                 <Text color='#cd6060' fontWeight='semibold' fontSize='sm'>TradeLock {selectedSkin.TradeLock}</Text>
                                 <HiLockClosed color='#cd6060' fontSize='1.2rem' />
@@ -486,9 +530,6 @@ export default function Home() {
           {loading && (
             <Box h='100vh' w='100%' display='flex' justifyContent='center' alignItems='center'>
               <Spinner
-                thickness='4px'
-                speed='0.65s'
-                emptyColor='gray.700'
                 size='xl'
               />
             </Box>
