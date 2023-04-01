@@ -7,7 +7,7 @@ import api from "./api/api";
 import { HiLockClosed } from 'react-icons/hi';
 import { BsDiscord, BsSteam } from 'react-icons/bs';
 import { TiArrowSortedDown } from 'react-icons/ti';
-import { TbNumbers } from 'react-icons/tb';
+import { FiExternalLink } from 'react-icons/fi';
 import { Skeleton } from '@chakra-ui/react'
 import { Tooltip } from '@chakra-ui/react'
 import {
@@ -357,7 +357,7 @@ export default function Home() {
 
                     <Box key={selectedSkin.Nombre} position='relative' mt='-0.2rem' p='0.5rem' bg='#23272e' borderRadius='9px' boxShadow='md'>
                       <Box position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
-                        <Box className="skin-image-container" display='flex' justifyContent='center' w='100%'>
+                        <Box className="skin-image-container" display='flex' justifyContent='center' w='100%' h='15rem'>
                           <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre} width='300' height='300' style={{ 'objectFit': "cover" }} src={selectedSkin.ImagenURL}></Image>
                         </Box>
 
@@ -465,7 +465,14 @@ export default function Home() {
                             </Box>
                           </Tooltip>
                         )}
+
+                        {selectedSkin.InspeccionarLink && (
+                          <Link w='100%' href={selectedSkin.InspeccionarLink} rel="noopener noreferrer" target="_blank">
+                            <Button w='100%' leftIcon={<FiExternalLink fontSize='1.1rem' />} fontSize='sm' mt='1rem' mb='0.5rem' bg='transparent' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} borderRadius='9px'>Inspeccionar en el juego</Button>
+                          </Link>
+                        )}
                       </Box>
+
                     </Box>
 
                   </ModalBody>
