@@ -79,7 +79,7 @@ export default function Home() {
         >
 
           {!loading && (
-            <Box>
+            <Box pb='2rem'>
               <Box display='flex' justifyContent='center' mt='3rem' fontSize={{ sm: '4xl', md: '3xl', lg: '5xl' }} fontWeight="semibold">
                 <Text
                   as="h1"
@@ -162,7 +162,7 @@ export default function Home() {
 
                           {contact.Nombre == 'Steam' && contact.Ocultar == 'FALSE' && (
                             <Tooltip borderRadius='9px' placement='top' label="Contáctame por Steam" aria-label="Contáctame por Steam">
-                              <Box boxShadow='md' _hover={{ 'transform': 'scale(1.1)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+                              <Box boxShadow='md' _hover={{ 'transform': 'scale(1.05)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
                                 <Link href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
                                   <BsSteam fontSize='1.5rem' />
                                 </Link>
@@ -172,7 +172,7 @@ export default function Home() {
 
                           {contact.Nombre == 'Discord' && contact.Ocultar == 'FALSE' && (
                             <Tooltip borderRadius='9px' placement='top' label="Contáctame por Discord" aria-label="Contáctame por Discord">
-                              <Box boxShadow='md' _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+                              <Box boxShadow='md' _hover={{ 'transform': 'scale(1.05)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
                                 <Link href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
                                   <BsDiscord fontSize='1.5rem' />
                                 </Link>
@@ -211,7 +211,32 @@ export default function Home() {
                         </Box>
 
                         <Box w='100%' px={3} display='flex' flexDir='column'>
-                          <Text fontWeight="semibold" fontSize='sm' whiteSpace='nowrap' overflow='hidden' textOverflow='ellipsis' borderBottom='1px solid #d13535' pb={2}>{skin.Nombre} </Text>
+                          <Text fontWeight="semibold" fontSize='sm' whiteSpace='nowrap' overflow='hidden' textOverflow='ellipsis' pb={2}>{skin.Nombre} </Text>
+
+
+                          <Box display='flex' w='100%' h='4px'>
+
+                            <Tooltip borderRadius='9px' placement='top' label='Factory New' aria-label='Factory New'>
+                              <Box w={(skin.Float * 100) > 7 ? '7%' : `${skin.Float * 100}%`} bg='#3d818f' borderRadius='50px 0 0 50px'></Box>
+                            </Tooltip>
+
+                            <Tooltip borderRadius='9px' placement='top' label='Minimal Wear' aria-label='Minimal Wear'>
+                              <Box w={(skin.Float * 100) <= 7 ? '0%' : (skin.Float * 100) > 8 ? '8%' : `${skin.Float * 100}%`} bg='#84b235'></Box>
+                            </Tooltip>
+
+                            <Tooltip borderRadius='9px' placement='top' label='Field Tested' aria-label='Field Tested'>
+                              <Box w={(skin.Float * 100) <= 15 ? '0%' : (skin.Float * 100) > 23 ? '23%' : `${skin.Float * 100}%`} bg='#dfc04a'></Box>
+                            </Tooltip>
+
+                            <Tooltip borderRadius='9px' placement='top' label='Well Worn' aria-label='Well Worn'>
+                              <Box w={(skin.Float * 100) <= 38 ? '0%' : (skin.Float * 100) > 7 ? '7%' : `${skin.Float * 100}%`} bg='#ef8641'></Box>
+                            </Tooltip>
+
+                            <Tooltip borderRadius='9px' placement='top' label='Battle Scarred' aria-label='Battle Scarred'>
+                              <Box w={(skin.Float * 100) <= 45 ? '0%' : `${(skin.Float * 100) - 45}%`} bg='#eb5757' borderRadius='0 50px 50px 0'></Box>
+                            </Tooltip>
+
+                          </Box>
 
                           <Box display='flex' justifyContent='space-between' w='100%' pt={1}>
 
@@ -226,7 +251,7 @@ export default function Home() {
                               )}
                               <Text color="grey" fontWeight="500" fontSize='sm'>{skin.WearShorter}</Text>
                               <Divider orientation="vertical" h='70%' alignSelf='center' borderLeftWidth='2px' borderColor='#808080' />
-                              <Text color="grey" fontWeight="500" fontSize='sm'>{skin.Float?.slice(0, 6)}</Text>
+                              <Text color="grey" fontWeight="500" fontSize='sm'>{skin.Float?.slice(0, 4)}</Text>
                             </Box>
 
                             <Tooltip borderRadius='9px' placement='bottom' label="Este artículo tiene un bloqueo de intercambio por parte de Steam" aria-label="Este artículo tiene un bloqueo de intercambio por parte de Steam">
@@ -283,6 +308,7 @@ export default function Home() {
                           </Tooltip>
                         )}
                       </Box>
+
                     </Box>
                   ))}
 
@@ -376,7 +402,7 @@ export default function Home() {
 
                       <Box w='100%' px={3} display='flex' flexDir='column'>
 
-                        <Box display='flex' flexDir='column' justifyContent='space-b' w='100%' pt={1}>
+                        <Box display='flex' flexDir='column' justifyContent='space-between' w='100%' pt={1}>
 
                           <Box display='flex' w='100%' h='8px' position='relative'>
 
@@ -411,7 +437,7 @@ export default function Home() {
                             <Box display='flex' alignItems='center' gap={1}>
                               <Text color='grey' fontWeight="500" fontSize='sm'>Float</Text>
                               <Divider orientation="vertical" h='70%' alignSelf='center' borderLeftWidth='2px' borderColor='#808080' />
-                              <Text color='grey' fontWeight="500" fontSize='sm'>{selectedSkin.Float?.slice(0, 6)}</Text>
+                              <Text color='grey' fontWeight="500" fontSize='sm'>{selectedSkin.Float?.slice(0, 4)}</Text>
                             </Box>
 
                             <Text color='grey' fontWeight="500" fontSize='sm'>{selectedSkin.Wear}</Text>
