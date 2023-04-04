@@ -117,70 +117,30 @@ export default function Home() {
         >
 
           {!loading && (
-            <Box pb='4rem'>
-              <Box display='flex' justifyContent='center' mt='3rem' fontSize={{ sm: '4xl', md: '3xl', lg: '5xl' }} fontWeight="semibold">
-                <Text
-                  as="h1"
-                  lineHeight="normal"
-                  fontWeight="bold"
-                  mt="-2"
-                  mr='0.5rem'
-                  fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
-                >
-                  ¡Cambia tus
-                </Text>
-                <Text
-                  as="h1"
-                  fontWeight="800"
-                  lineHeight="normal"
-                  bgGradient="linear(to-r, red.500, red.600, red.500)"
-                  bgClip="text"
-                  mt="-2"
-                  mr='0.5rem'
-                  fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
-                >
-                  Cajas
-                </Text>
-                <Text
-                  as="h1"
-                  lineHeight="normal"
-                  fontWeight="bold"
-                  mt="-2"
-                  mr='0.5rem'
-                  fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
-                >
-                  por
-                </Text>
-                <Text
-                  as="h1"
-                  fontWeight="800"
-                  lineHeight="normal"
-                  bgGradient="linear(to-r, red.500, red.600, red.500)"
-                  bgClip="text"
-                  mt="-2"
-                  fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
-                >
-                  Skins
-                </Text>
-                <Text
-                  as="h1"
-                  lineHeight="normal"
-                  fontWeight="bold"
-                  mt="-2"
-                  fontSize={{ sm: '5xl', md: '5xl', lg: '6xl' }}
-                >
-                  !
-                </Text>
+            <Box pb='2rem'>
+              <Box display='flex' flexDir={{ sm: 'column', md: 'row', lg: 'row' }} justifyContent='center' mt='1.5rem' fontWeight="semibold">
+                <Box display='flex' alignItems='center'>
+                  <Text as="h1" lineHeight="normal" fontWeight="bold" mt="-2" mr='0.5rem' fontSize={{ sm: '3xl', md: '5xl', lg: '6xl' }} >
+                    ¡Cambia tus
+                  </Text>
+                  <Text as="h1" fontWeight="800" lineHeight="normal" bgGradient="linear(to-r, red.500, red.600, red.500)" bgClip="text" mt="-2" mr='0.5rem' fontSize={{ sm: '4xl', md: '5xl', lg: '6xl' }} >
+                    Cajas
+                  </Text>
+                </Box>
+                <Box display='flex' justifyContent='flex-end' alignItems='center'>
+                  <Text as="h1" lineHeight="normal" fontWeight="bold" mt="-2" mr='0.5rem' fontSize={{ sm: '3xl', md: '5xl', lg: '6xl' }} >
+                    por
+                  </Text>
+                  <Text as="h1" fontWeight="800" lineHeight="normal" bgGradient="linear(to-r, red.500, red.600, red.500)" bgClip="text" mt="-2" fontSize={{ sm: '4xl', md: '5xl', lg: '6xl' }} >
+                    Skins
+                  </Text>
+                  <Text as="h1" lineHeight="normal" fontWeight="bold" mt="-2" fontSize={{ sm: '4xl', md: '5xl', lg: '6xl' }} >
+                    !
+                  </Text>
+                </Box>
               </Box>
 
-              <Box
-                as="section"
-                textAlign="center"
-                position="relative"
-                w="100%"
-                mb={'1rem'}
-                mt={'2rem'}
-              >
+              <Box as="section" textAlign="center" position="relative" w="100%" mb={'1rem'} mt={'2rem'} >
                 <Box display='flex' flexDir='column' alignItems='center' gap={2}>
                   <Box className="scale-image">
                     {info?.FotoURL && (
@@ -226,48 +186,44 @@ export default function Home() {
                 </Box>
               </Box>
 
-              <Box
-                display="flex"
-                flexDirection="column"
-                width="100%" boxShadow='md'
-              >
+              <Box display="flex" flexDirection="column" width="100%" boxShadow='md' >
 
-                <Box w='100%' display='flex' alignItems='center' justifyContent='space-between'>
-                  <Text
-                    fontWeight="800"
-                    lineHeight="normal"
-                    bgGradient="linear(to-r, red.500, red.600, red.500)"
-                    bgClip="text"
-                    mr='0.5rem'
-                    fontSize={'3xl'}>Skins disponibles</Text>
+                <Box w='100%' display='flex' flexDir={{ sm: 'column', md: 'row', lg: 'row' }} alignItems='center' justifyContent='space-between'>
+                  <Text fontWeight="800" lineHeight="normal" bgGradient="linear(to-r, red.500, red.600, red.500)" bgClip="text" mr='0.5rem' fontSize={'3xl'}>Skins disponibles</Text>
 
-
-                  <Box>
+                  <Box display={{ sm: 'none', md: 'flex' }}>
                     <InputGroup>
                       {!searchInputIsLoading && (
-                        <InputRightElement
-                          pointerEvents='none'
-                          children={<IoSearch fontSize='1.1rem' color='#718096' />}
-                        />
+                        <InputRightElement pointerEvents='none' children={<IoSearch fontSize='1.1rem' color='#718096' />} />
                       )}
                       <Input className="input-search" value={searchText}
                         onChange={(e) => onChangeSearchText(e.target.value)} w='17rem' fontSize='sm' bg='transparent' border='1px solid #d13535' _hover={{ 'border': '1px solid #d13535' }} _focusVisible={{ 'border': '1px solid #d13535' }} _focus={{ 'border': '1px solid #d13535' }} borderRadius='9px' placeholder="Busca una skin..." />
                       {searchInputIsLoading && (
-                        <InputRightElement
-                          pointerEvents='none'
-                          children={<Spinner size='sm' speed='0.65s' />}
-                        />
+                        <InputRightElement pointerEvents='none' children={<Spinner size='sm' speed='0.65s' />} />
                       )}
                     </InputGroup>
                   </Box>
 
                 </Box>
-                <Box position='relative' display='flex' flexWrap='wrap' alignContent='flex-start' justifyContent='center' mt='1rem' gap={6} bg='#23272e' py={4} px={0} borderRadius='9px' minH='24rem' pb='4.5rem'>
+                <Box position='relative' display='flex' flexWrap='wrap' alignContent='flex-start' justifyContent='center' mt='1rem' gap={{ sm: 2, md: 6 }} bg='#23272e' py={4} px={0} borderRadius='9px' minH='28rem' pb='4.5rem'>
+
+                  <Box display={{ sm: 'flex', md: 'none' }} w='100%' ml='1rem' mr='1rem'>
+                    <InputGroup>
+                      {!searchInputIsLoading && (
+                        <InputRightElement pointerEvents='none' children={<IoSearch fontSize='1.1rem' color='#718096' />} />
+                      )}
+                      <Input className="input-search" value={searchText}
+                        onChange={(e) => onChangeSearchText(e.target.value)} fontSize='sm' bg='transparent' border='1px solid #d13535' _hover={{ 'border': '1px solid #d13535' }} _focusVisible={{ 'border': '1px solid #d13535' }} _focus={{ 'border': '1px solid #d13535' }} borderRadius='9px' placeholder="Busca una skin..." />
+                      {searchInputIsLoading && (
+                        <InputRightElement pointerEvents='none' children={<Spinner size='sm' speed='0.65s' />} />
+                      )}
+                    </InputGroup>
+                  </Box>
 
                   {!skinsAreLoading && filteredSkins.map((skin, index) => (
-                    <Box onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre + skin.Float + index} position='relative' bg='#1e2227' h='10.5rem' _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
-                      <Box className="skin-image-container" position='relative' minW='13rem' w='13rem' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
-                        <Box h='5.5rem' mt='-0.7rem'>
+                    <Box onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre + skin.Float + index} position='relative' bg='#1e2227' h={{ sm: 'auto', md: '10.5rem' }} minW={{ sm: '9.5rem', md: '13rem' }} w={{ sm: '9.5rem', md: '13rem' }} _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
+                      <Box className="skin-image-container" position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
+                        <Box h='5.5rem' mt={{ sm: '-1.6rem', md: '-0.7rem' }} p={{ sm: 4, md: 0 }}>
                           <Image className="shadow-for-skin-image" alt={skin.Nombre} width={130} height={130} style={{ 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
                         </Box>
 
@@ -320,7 +276,7 @@ export default function Home() {
                                 {skin.TradeLock && (
                                   <Box display='flex' alignItems='center' gap={2}>
                                     <HiLockClosed color="grey" style={{ 'marginRight': '-0.4rem' }} fontSize='1.3rem' />
-                                    <Text color="grey" fontWeight="500" fontSize='sm'>{skin.TradeLock}</Text>
+                                    <Text display={{ sm: 'none', md: 'flex' }} color="grey" fontWeight="500" fontSize='sm'>{skin.TradeLock}</Text>
                                   </Box>
                                 )}
                               </Box>
@@ -376,7 +332,7 @@ export default function Home() {
                   {paginator.length > 0 && filteredSkins != 0 && (
                     <Box display='flex' justifyContent='center' alignItems='center' w='100%' gap={3} position='absolute' bottom='1rem'>
                       <>
-                        <Text color='grey'>Mostrando {((currentPage - 1) * PAGINATOR_ITEMS) + 1}-{(currentPage * PAGINATOR_ITEMS) > skins.length ? skins.length : (currentPage * PAGINATOR_ITEMS)} de {skins.length} artículos</Text>
+                        <Text display={{ sm: 'none', md: 'flex' }} color='grey'>Mostrando {((currentPage - 1) * PAGINATOR_ITEMS) + 1}-{(currentPage * PAGINATOR_ITEMS) > skins.length ? skins.length : (currentPage * PAGINATOR_ITEMS)} de {skins.length} artículos</Text>
                         {paginator.map((page, index) => (
                           <Button fontSize='sm' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} bg={currentPage == page ? '#d13535' : 'transparent'}
                             borderRadius='9px' key={index} onClick={() => onPageChange(page, skins)}>{page}</Button>
@@ -387,7 +343,7 @@ export default function Home() {
 
                   {!skinsAreLoading && searchText.length > 0 && filteredSkins.length == 0 && (
                     <Box display='flex' justifyContent='center' alignItems='center' flexDirection='col' w='100%' h='22.25rem'>
-                      <Box display='flex' flexDirection='column' alignItems='center' gap={2}>
+                      <Box display='flex' flexDirection='column' alignItems='center' gap={2} px={{ sm: 8, md: 0 }} textAlign={{ sm: 'center', md: 'left' }}>
                         <IoSearch color='#c73131' fontSize='3rem' />
                         <Text>No se encontraron artículos con ese criterio de búsqueda</Text>
                       </Box>
@@ -407,14 +363,10 @@ export default function Home() {
                 </Box>
               </Box>
 
-              <Text
-                fontWeight="normal"
-                mt='0.5rem'
-                color='gray.600'
-                lineHeight="normal"
-                fontSize={'sm'}>* Todas las imágenes son meramente ilustrativas</Text>
+              <Text fontWeight="normal" mt='0.5rem' color='gray.600' lineHeight="normal" fontSize={'sm'}>
+                * Todas las imágenes son meramente ilustrativas</Text>
 
-              <Modal isOpen={isOpen} onClose={onCloseModal} isCentered>
+              <Modal isOpen={isOpen} size={{ sm: 'full', md: 'md' }} onClose={onCloseModal} isCentered>
                 <ModalOverlay backdropFilter='auto'
                   backdropBlur='2px' />
                 <ModalContent bg='#1e2227'>
@@ -423,7 +375,7 @@ export default function Home() {
 
                   <Box borderBottom='1px solid #d13535' mr='1.6rem' ml='1.6rem'></Box>
 
-                  <ModalBody pb='1.5rem' mt='1rem' >
+                  <ModalBody pb='1.5rem' mt='1rem' display={{ sm: 'flex', md: 'block' }} alignItems={{ sm: 'center', md: '' }} justifyContent={{ sm: 'center', md: '' }}>
 
                     <Box key={selectedSkin.Nombre} position='relative' mt='-0.2rem' p='0.5rem' bg='#23272e' borderRadius='9px' boxShadow='md'>
                       <Box position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
@@ -519,7 +471,7 @@ export default function Home() {
                           <Tooltip borderRadius='9px' placement='left' label="Este artículo registra el número de víctimas" aria-label="Este artículo registra el número de víctimas">
                             <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' left='1.1rem'>
                               <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(188, 115, 77, .15)' borderRadius='9px'>
-                                <Text color='#bc734d' fontWeight='semibold' fontSize='sm'>StatTrack</Text>
+                                <Text color='#bc734d' fontWeight='600' fontSize='sm'>StatTrack</Text>
                               </Box>
                             </Box>
                           </Tooltip>
@@ -529,7 +481,7 @@ export default function Home() {
                           <Tooltip borderRadius='9px' placement='right' label="Este artículo tiene un bloqueo de intercambio por parte de Steam" aria-label="Este artículo tiene un bloqueo de intercambio por parte de Steam">
                             <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' right='1.1rem'>
                               <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(208, 56, 56, .15)' borderRadius='9px'>
-                                <Text color='#cd6060' fontWeight='semibold' fontSize='sm'>TradeLock {selectedSkin.TradeLock}</Text>
+                                <Text color='#cd6060' fontWeight='600' fontSize='sm'>TradeLock {selectedSkin.TradeLock}</Text>
                                 <HiLockClosed color='#cd6060' fontSize='1.2rem' />
                               </Box>
                             </Box>
