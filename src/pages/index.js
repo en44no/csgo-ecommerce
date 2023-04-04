@@ -1,8 +1,7 @@
-import { Box, Button, Container, Divider, Input, InputGroup, InputLeftElement, InputRightElement, SkeletonCircle, Spinner, Stack, Text, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Container, Divider, Input, InputGroup, Image, InputRightElement, SkeletonCircle, Spinner, Stack, Text, useDisclosure } from "@chakra-ui/react";
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import api from "./api/api";
 import { HiLockClosed } from 'react-icons/hi';
 import { BsDiscord, BsSteam } from 'react-icons/bs';
@@ -16,7 +15,6 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react'
@@ -223,8 +221,8 @@ export default function Home() {
                   {!skinsAreLoading && filteredSkins.map((skin, index) => (
                     <Box onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre + skin.Float + index} position='relative' bg='#1e2227' h={{ sm: 'auto', md: '10.5rem' }} minW={{ sm: '45%', md: '13rem' }} w={{ sm: '45%', md: '13rem' }} _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
                       <Box className="skin-image-container" position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
-                        <Box h='5.5rem' mt={{ sm: '-1.6rem', md: '-0.7rem' }} p={{ sm: 4, md: 0 }}>
-                          <Image className="shadow-for-skin-image" alt={skin.Nombre} width={130} height={130} style={{ 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
+                        <Box h='5.5rem' mt={{ sm: '-2rem', md: '-0.7rem' }} p={{ sm: 6, md: 0 }}>
+                          <Image className="shadow-for-skin-image" alt={skin.Nombre} width={{ sm: 'auto', md: '8.3rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
                         </Box>
 
                         <Box w='100%' px={3} display='flex' flexDir='column'>
@@ -286,41 +284,41 @@ export default function Home() {
                         </Box>
                       </Box>
 
-                      <Box position='absolute' top='0.5rem' right='0.4rem'>
+                      <Box position='absolute' top={{ sm: '0.5rem', md: '0.5rem' }} right='0.4rem'>
                         {skin.Sticker1 && (
                           <Tooltip borderRadius='9px' placement='right' label={skin.Sticker1Nombre} aria-label={skin.Sticker1Nombre}>
                             <Box>
-                              <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 1'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker1}></Image>
+                              <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 1'} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.Sticker1}></Image>
                             </Box>
                           </Tooltip>
                         )}
                       </Box>
 
-                      <Box position='absolute' top='2rem' right='0.4rem'>
+                      <Box position='absolute' top={{ sm: '1.6rem', md: '2rem' }} right='0.4rem'>
                         {skin.Sticker2 && (
                           <Tooltip borderRadius='9px' placement='right' label={skin.Sticker2Nombre} aria-label={skin.Sticker2Nombre}>
                             <Box >
-                              <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 2'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker2}></Image>
+                              <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 2'} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.Sticker2}></Image>
                             </Box>
                           </Tooltip>
                         )}
                       </Box>
 
-                      <Box position='absolute' top='3.5rem' right='0.4rem'>
+                      <Box position='absolute' top={{ sm: '2.7rem', md: '3.5rem' }} right='0.4rem'>
                         {skin.Sticker3 && (
                           <Tooltip borderRadius='9px' placement='right' label={skin.Sticker3Nombre} aria-label={skin.Sticker3Nombre}>
                             <Box >
-                              <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 3'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker3}></Image>
+                              <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 3'} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.Sticker3}></Image>
                             </Box>
                           </Tooltip>
                         )}
                       </Box>
 
-                      <Box position='absolute' top='5rem' right='0.4rem'>
+                      <Box position='absolute' top={{ sm: '3.8rem', md: '5rem' }} right='0.4rem'>
                         {skin.Sticker4 && (
                           <Tooltip borderRadius='9px' placement='right' label={skin.Sticker4Nombre} aria-label={skin.Sticker4Nombre}>
                             <Box >
-                              <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 4'} width='28' height='28' style={{ 'objectFit': "cover" }} src={skin.Sticker4}></Image>
+                              <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 4'} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.Sticker4}></Image>
                             </Box>
                           </Tooltip>
                         )}
@@ -366,7 +364,7 @@ export default function Home() {
               <Text fontWeight="normal" mt='0.5rem' color='gray.600' lineHeight="normal" fontSize={'sm'}>
                 * Todas las imágenes son meramente ilustrativas</Text>
 
-              <Modal isOpen={isOpen} size={{ sm: 'full', md: 'md' }} onClose={onCloseModal} isCentered>
+              <Modal isOpen={isOpen} size='md' onClose={onCloseModal} isCentered>
                 <ModalOverlay backdropFilter='auto'
                   backdropBlur='2px' />
                 <ModalContent bg='#1e2227'>
@@ -380,7 +378,7 @@ export default function Home() {
                     <Box key={selectedSkin.Nombre} position='relative' mt='-0.2rem' p='0.5rem' bg='#23272e' borderRadius='9px' boxShadow='md'>
                       <Box position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
                         <Box className="skin-image-container" display='flex' justifyContent='center' w='100%' maxH='15rem' h='auto'>
-                          <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre} width='300' height='300' style={{ 'objectFit': "cover" }} src={selectedSkin.ImagenURL}></Image>
+                          <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre} width={{ sm: '14rem', md: '18rem' }} height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.ImagenURL}></Image>
                         </Box>
 
                         {/* <Divider w='95%' bg='#d13535' h='1px' borderBottomWidth={0} opacity={1} /> */}
@@ -390,7 +388,7 @@ export default function Home() {
                           {selectedSkin.Sticker1 && (
                             <Tooltip borderRadius='9px' placement='top' label={selectedSkin.Sticker1Nombre} aria-label={selectedSkin.Sticker1Nombre}>
                               <Box className="skin-image-container">
-                                <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 1'} width='90' height='90' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker1}></Image>
+                                <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 1'} width='auto' height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker1}></Image>
                               </Box>
                             </Tooltip>
                           )}
@@ -398,7 +396,7 @@ export default function Home() {
                           {selectedSkin.Sticker2 && (
                             <Tooltip borderRadius='9px' placement='top' label={selectedSkin.Sticker2Nombre} aria-label={selectedSkin.Sticker2Nombre}>
                               <Box className="skin-image-container">
-                                <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 2'} width='90' height='90' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker2}></Image>
+                                <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 2'} width='auto' height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker2}></Image>
                               </Box>
                             </Tooltip>
                           )}
@@ -406,7 +404,7 @@ export default function Home() {
                           {selectedSkin.Sticker3 && (
                             <Tooltip borderRadius='9px' placement='top' label={selectedSkin.Sticker3Nombre} aria-label={selectedSkin.Sticker3Nombre}>
                               <Box className="skin-image-container">
-                                <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 3'} width='90' height='90' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker3}></Image>
+                                <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 3'} width='auto' height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker3}></Image>
                               </Box>
                             </Tooltip>
                           )}
@@ -414,7 +412,7 @@ export default function Home() {
                           {selectedSkin.Sticker4 && (
                             <Tooltip borderRadius='9px' placement='top' label={selectedSkin.Sticker4Nombre} aria-label={selectedSkin.Sticker4Nombre}>
                               <Box className="skin-image-container">
-                                <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 4'} width='90' height='90' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker4}></Image>
+                                <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 4'} width='auto' height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker4}></Image>
                               </Box>
                             </Tooltip>
                           )}
