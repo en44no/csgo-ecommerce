@@ -32,6 +32,9 @@ export default function Home() {
   const [filteredSkins, setFilteredSkins] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [searchInputIsLoading, setSearchInputIsLoading] = useState(false);
+  const [paginator, setPaginator] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAGINATOR_ITEMS = 10;
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -46,7 +49,8 @@ export default function Home() {
   const fetchData = async () => {
     const skins = await api.skins.get();
     setSkins(skins);
-    setFilteredSkins(skins);
+    generatePaginator(skins);
+    setSkinsBasedOnPage(currentPage, skins);
 
     setSkinsAreLoading(false);
 
@@ -68,8 +72,29 @@ export default function Home() {
   function onChangeSearchText(text) {
     setSearchInputIsLoading(true);
     setSearchText(text);
-    setFilteredSkins(skins.filter(skin => skin?.Nombre.toLowerCase().includes(text.toLowerCase())));
+    const filteredSkins = skins.filter(skin => skin.Nombre.toLowerCase().includes(text.toLowerCase()));
+    generatePaginator(filteredSkins);
+    setSkinsBasedOnPage(1, filteredSkins);
     setSearchInputIsLoading(false);
+  }
+
+  function generatePaginator(skins) {
+    const paginator = [];
+    for (let i = 0; i <= skins.length / PAGINATOR_ITEMS; i++) {
+      paginator.push(i + 1);
+    }
+    setPaginator(paginator);
+  }
+
+  function setSkinsBasedOnPage(newPage, skins) {
+    if (newPage == 1) setCurrentPage(1);
+    const skinsToSet = skins.slice((newPage - 1) * PAGINATOR_ITEMS, newPage * PAGINATOR_ITEMS);
+    setFilteredSkins(skinsToSet);
+  }
+
+  function onPageChange(newPage, skins) {
+    setCurrentPage(newPage);
+    setSkinsBasedOnPage(newPage, skins);
   }
 
   return (
@@ -174,7 +199,7 @@ export default function Home() {
                         <Box key={contact.Nombre} _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
 
                           {contact.Nombre == 'Steam' && contact.Ocultar == 'FALSE' && (
-                            <Tooltip borderRadius='9px' placement='top' label="Contáctame por Steam" aria-label="Contáctame por Steam">
+                            <Tooltip borderRadius='9px' placement='bottom' label="Contáctame por Steam" aria-label="Contáctame por Steam">
                               <Box boxShadow='md' _hover={{ 'transform': 'scale(1.05)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
                                 <Link href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
                                   <BsSteam fontSize='1.5rem' />
@@ -184,7 +209,7 @@ export default function Home() {
                           )}
 
                           {contact.Nombre == 'Discord' && contact.Ocultar == 'FALSE' && (
-                            <Tooltip borderRadius='9px' placement='top' label="Contáctame por Discord" aria-label="Contáctame por Discord">
+                            <Tooltip borderRadius='9px' placement='bottom' label="Contáctame por Discord" aria-label="Contáctame por Discord">
                               <Box boxShadow='md' _hover={{ 'transform': 'scale(1.05)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
                                 <Link href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
                                   <BsDiscord fontSize='1.5rem' />
@@ -237,10 +262,10 @@ export default function Home() {
                   </Box>
 
                 </Box>
-                <Box display='flex' flexWrap='wrap' alignContent='flex-start' mt='1rem' gap={5} bg='#23272e' p={4} borderRadius='9px' minH='24rem'>
+                <Box position='relative' display='flex' flexWrap='wrap' alignContent='flex-start' mt='1rem' gap={5} bg='#23272e' p={4} borderRadius='9px' minH='24rem' pb='4.5rem'>
 
-                  {!skinsAreLoading && filteredSkins.map((skin) => (
-                    <Box onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre + skin.Float} position='relative' bg='#1e2227' h='10.5rem' _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
+                  {!skinsAreLoading && filteredSkins.map((skin, index) => (
+                    <Box onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre + skin.Float + index} position='relative' bg='#1e2227' h='10.5rem' _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
                       <Box className="skin-image-container" position='relative' minW='13rem' w='13rem' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
                         <Box h='5.5rem' mt='-0.7rem'>
                           <Image className="shadow-for-skin-image" alt={skin.Nombre} width={130} height={130} style={{ 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
@@ -348,10 +373,22 @@ export default function Home() {
                     </Box>
                   ))}
 
+                  {paginator.length > 0 && filteredSkins != 0 && (
+                    <Box display='flex' justifyContent='center' alignItems='center' w='100%' gap={3} position='absolute' bottom='1rem'>
+                      <>
+                        <Text color='grey'>Mostrando {((currentPage - 1) * PAGINATOR_ITEMS) + 1}-{(currentPage * PAGINATOR_ITEMS) > skins.length ? skins.length : (currentPage * PAGINATOR_ITEMS)} de {skins.length} artículos</Text>
+                        {paginator.map((page, index) => (
+                          <Button fontSize='sm' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} bg={currentPage == page ? '#d13535' : 'transparent'}
+                            borderRadius='9px' key={index} onClick={() => onPageChange(page, skins)}>{page}</Button>
+                        ))}
+                      </>
+                    </Box>
+                  )}
+
                   {!skinsAreLoading && searchText.length > 0 && filteredSkins.length == 0 && (
-                    <Box display='flex' justifyContent='center' alignItems='center' flexDirection='col' w='100%' h='24rem'>
+                    <Box display='flex' justifyContent='center' alignItems='center' flexDirection='col' w='100%' h='22.25rem'>
                       <Box display='flex' flexDirection='column' alignItems='center' gap={2}>
-                        <IoSearch color='#cd6060' fontSize='3rem' />
+                        <IoSearch color='#c73131' fontSize='3rem' />
                         <Text>No se encontraron artículos con ese criterio de búsqueda</Text>
                       </Box>
                     </Box>
@@ -367,18 +404,7 @@ export default function Home() {
                     </Box>
                   )}
 
-                  {loading && (
-                    <Box minH='13rem' w='100%' display='flex' alignItems='center' flexWrap='wrap' gap={6}>
-                      <Skeleton borderRadius='9px' height='12rem' w='13rem' />
-                      <Skeleton borderRadius='9px' height='12rem' w='13rem' />
-                      <Skeleton borderRadius='9px' height='12rem' w='13rem' />
-                      <Skeleton borderRadius='9px' height='12rem' w='13rem' />
-                      <Skeleton borderRadius='9px' height='12rem' w='13rem' />
-                    </Box>
-                  )}
-
                 </Box>
-
               </Box>
 
               <Text
