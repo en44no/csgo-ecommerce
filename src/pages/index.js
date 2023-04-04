@@ -262,7 +262,7 @@ export default function Home() {
                   </Box>
 
                 </Box>
-                <Box position='relative' display='flex' flexWrap='wrap' alignContent='flex-start' mt='1rem' gap={5} bg='#23272e' p={4} borderRadius='9px' minH='24rem' pb='4.5rem'>
+                <Box position='relative' display='flex' flexWrap='wrap' alignContent='flex-start' justifyContent='center' mt='1rem' gap={6} bg='#23272e' py={4} px={0} borderRadius='9px' minH='24rem' pb='4.5rem'>
 
                   {!skinsAreLoading && filteredSkins.map((skin, index) => (
                     <Box onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre + skin.Float + index} position='relative' bg='#1e2227' h='10.5rem' _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
