@@ -140,7 +140,7 @@ export default function Home() {
                 </Box>
               </Box>
 
-              <Box as="section" textAlign="center" position="relative" w="100%" mb={'1rem'} mt={'2rem'} >
+              <Box as="section" textAlign="center" position="relative" w="100%" mb={'1rem'} mt={{ sm: '1rem', md: '2rem' }} >
                 <Box display='flex' flexDir='column' alignItems='center' gap={2}>
                   <Box className="scale-image">
                     {info?.FotoURL && (
@@ -221,7 +221,7 @@ export default function Home() {
                   </Box>
 
                   {!skinsAreLoading && filteredSkins.map((skin, index) => (
-                    <Box onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre + skin.Float + index} position='relative' bg='#1e2227' h={{ sm: 'auto', md: '10.5rem' }} minW={{ sm: '9.5rem', md: '13rem' }} w={{ sm: '9.5rem', md: '13rem' }} _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
+                    <Box onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre + skin.Float + index} position='relative' bg='#1e2227' h={{ sm: 'auto', md: '10.5rem' }} minW={{ sm: '45%', md: '13rem' }} w={{ sm: '45%', md: '13rem' }} _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
                       <Box className="skin-image-container" position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
                         <Box h='5.5rem' mt={{ sm: '-1.6rem', md: '-0.7rem' }} p={{ sm: 4, md: 0 }}>
                           <Image className="shadow-for-skin-image" alt={skin.Nombre} width={130} height={130} style={{ 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
