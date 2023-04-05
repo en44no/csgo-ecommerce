@@ -28,7 +28,7 @@ const Info = (props) => {
                 {contact.Nombre == 'Steam' && contact.Ocultar == 'FALSE' && (
                   <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='bottom' label="Contáctame por Steam" aria-label="Contáctame por Steam">
                     <Box boxShadow='md' _hover={{ 'transform': isMobile ? '' : 'scale(1.05)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
-                      <Link href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
+                      <Link href={contact.Link} rel="noopener noreferrer" target="_blank">
                         <BsSteam fontSize='1.5rem' />
                       </Link>
                     </Box>
@@ -38,7 +38,7 @@ const Info = (props) => {
                 {contact.Nombre == 'Discord' && contact.Ocultar == 'FALSE' && (
                   <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='bottom' label="Contáctame por Discord" aria-label="Contáctame por Discord">
                     <Box boxShadow='md' _hover={{ 'transform': isMobile ? '' : 'scale(1.05)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
-                      <Link href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
+                      <Link href={contact.Link} rel="noopener noreferrer" target="_blank">
                         <BsDiscord fontSize='1.5rem' />
                       </Link>
                     </Box>
