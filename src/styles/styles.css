@@ -1,17 +1,7 @@
 .skin-image-container {
   display: inline-block;
-  overflow: hidden;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-}
-
-.skin-image-container img {
-  transition: transform .4s;
-}
-
-.skin-image-container:hover img {
-  transform: scale(1.1);
-  transform-origin: 50% 50%;
 }
 
 .scale-image {

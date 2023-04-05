@@ -1,4 +1,4 @@
-import { Box, Button, Container, Divider, Input, InputGroup, Image, InputRightElement, SkeletonCircle, Spinner, Stack, Text, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Container, Divider, Input, InputGroup, Image, InputRightElement, SkeletonCircle, Spinner, Stack, Text, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -35,6 +35,7 @@ export default function Home() {
   const PAGINATOR_ITEMS = 10;
 
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [isMobile] = useMediaQuery('(max-width: 479px)');
 
   useEffect(() => {
     setSearchText('');
@@ -140,7 +141,7 @@ export default function Home() {
 
               <Box as="section" textAlign="center" position="relative" w="100%" mb={'1rem'} mt={{ sm: '1rem', md: '2rem' }} >
                 <Box display='flex' flexDir='column' alignItems='center' gap={2}>
-                  <Box className="scale-image">
+                  <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
                     {info?.FotoURL && (
                       <Image className="shadow-for-skin-image" width={90} height={90} style={{ 'borderRadius': '50%' }} src={info.FotoURL}></Image>
                     )}
@@ -158,7 +159,7 @@ export default function Home() {
 
                           {contact.Nombre == 'Steam' && contact.Ocultar == 'FALSE' && (
                             <Tooltip borderRadius='9px' placement='bottom' label="Contáctame por Steam" aria-label="Contáctame por Steam">
-                              <Box boxShadow='md' _hover={{ 'transform': 'scale(1.05)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+                              <Box boxShadow='md' _hover={{ 'transform': isMobile ? '' : 'scale(1.05)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
                                 <Link href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
                                   <BsSteam fontSize='1.5rem' />
                                 </Link>
@@ -168,7 +169,7 @@ export default function Home() {
 
                           {contact.Nombre == 'Discord' && contact.Ocultar == 'FALSE' && (
                             <Tooltip borderRadius='9px' placement='bottom' label="Contáctame por Discord" aria-label="Contáctame por Discord">
-                              <Box boxShadow='md' _hover={{ 'transform': 'scale(1.05)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+                              <Box boxShadow='md' _hover={{ 'transform': isMobile ? '' : 'scale(1.05)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
                                 <Link href="https://steamcommunity.com/id/FireWolf__CSGO" rel="noopener noreferrer" target="_blank">
                                   <BsDiscord fontSize='1.5rem' />
                                 </Link>
@@ -220,7 +221,7 @@ export default function Home() {
 
                   {!skinsAreLoading && filteredSkins.map((skin, index) => (
                     <Box onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre + skin.Float + index} position='relative' bg='#1e2227' h={{ sm: 'auto', md: '10.5rem' }} minW={{ sm: '45%', md: '13rem' }} w={{ sm: '45%', md: '13rem' }} _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
-                      <Box className="skin-image-container" position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
+                      <Box className={isMobile ? 'skin-image-container' : 'scale-image'} position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
                         <Box h={{ sm: '6.5rem', md: '5.5rem' }} mt={{ sm: '-2rem', md: '-0.7rem' }} p={{ sm: 6, md: 0 }}>
                           <Image className="shadow-for-skin-image" alt={skin.Nombre} width={{ sm: 'auto', md: '8.3rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
                         </Box>
@@ -287,8 +288,8 @@ export default function Home() {
                       <Box position='absolute' top={{ sm: '0.5rem', md: '0.5rem' }} right='0.4rem'>
                         {skin.Sticker1 && (
                           <Tooltip borderRadius='9px' placement='right' label={skin.Sticker1Nombre} aria-label={skin.Sticker1Nombre}>
-                            <Box>
-                              <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 1'} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.Sticker1}></Image>
+                            <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
+                              <Image alt={skin.Nombre + 'sticker 1'} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.Sticker1}></Image>
                             </Box>
                           </Tooltip>
                         )}
@@ -297,8 +298,8 @@ export default function Home() {
                       <Box position='absolute' top={{ sm: '1.6rem', md: '2rem' }} right='0.4rem'>
                         {skin.Sticker2 && (
                           <Tooltip borderRadius='9px' placement='right' label={skin.Sticker2Nombre} aria-label={skin.Sticker2Nombre}>
-                            <Box >
-                              <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 2'} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.Sticker2}></Image>
+                            <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
+                              <Image alt={skin.Nombre + 'sticker 2'} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.Sticker2}></Image>
                             </Box>
                           </Tooltip>
                         )}
@@ -307,8 +308,8 @@ export default function Home() {
                       <Box position='absolute' top={{ sm: '2.7rem', md: '3.5rem' }} right='0.4rem'>
                         {skin.Sticker3 && (
                           <Tooltip borderRadius='9px' placement='right' label={skin.Sticker3Nombre} aria-label={skin.Sticker3Nombre}>
-                            <Box >
-                              <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 3'} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.Sticker3}></Image>
+                            <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
+                              <Image alt={skin.Nombre + 'sticker 3'} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.Sticker3}></Image>
                             </Box>
                           </Tooltip>
                         )}
@@ -317,8 +318,8 @@ export default function Home() {
                       <Box position='absolute' top={{ sm: '3.8rem', md: '5rem' }} right='0.4rem'>
                         {skin.Sticker4 && (
                           <Tooltip borderRadius='9px' placement='right' label={skin.Sticker4Nombre} aria-label={skin.Sticker4Nombre}>
-                            <Box >
-                              <Image className="shadow-for-skin-image" alt={skin.Nombre + 'sticker 4'} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.Sticker4}></Image>
+                            <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
+                              <Image alt={skin.Nombre + 'sticker 4'} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.Sticker4}></Image>
                             </Box>
                           </Tooltip>
                         )}
@@ -375,9 +376,9 @@ export default function Home() {
 
                   <ModalBody pb='1.5rem' mt='1rem' display={{ sm: 'flex', md: 'block' }} alignItems={{ sm: 'center', md: '' }} justifyContent={{ sm: 'center', md: '' }}>
 
-                    <Box key={selectedSkin.Nombre} position='relative' mt='-0.2rem' p='0.5rem' bg='#23272e' borderRadius='9px' boxShadow='md'>
+                    <Box key={selectedSkin.Nombre} w='100%' position='relative' mt='-0.2rem' p='0.5rem' bg='#23272e' borderRadius='9px' boxShadow='md'>
                       <Box position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
-                        <Box className="skin-image-container" display='flex' justifyContent='center' w='100%' maxH='15rem' h='auto'>
+                        <Box className={isMobile ? 'skin-image-container' : 'scale-image'} display='flex' justifyContent='center' w='100%' maxH='15rem' h='auto'>
                           <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre} width={{ sm: '14rem', md: '18rem' }} height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.ImagenURL}></Image>
                         </Box>
 
@@ -387,7 +388,7 @@ export default function Home() {
 
                           {selectedSkin.Sticker1 && (
                             <Tooltip borderRadius='9px' placement='top' label={selectedSkin.Sticker1Nombre} aria-label={selectedSkin.Sticker1Nombre}>
-                              <Box className="skin-image-container">
+                              <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
                                 <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 1'} width='auto' height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker1}></Image>
                               </Box>
                             </Tooltip>
@@ -395,7 +396,7 @@ export default function Home() {
 
                           {selectedSkin.Sticker2 && (
                             <Tooltip borderRadius='9px' placement='top' label={selectedSkin.Sticker2Nombre} aria-label={selectedSkin.Sticker2Nombre}>
-                              <Box className="skin-image-container">
+                              <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
                                 <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 2'} width='auto' height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker2}></Image>
                               </Box>
                             </Tooltip>
@@ -403,7 +404,7 @@ export default function Home() {
 
                           {selectedSkin.Sticker3 && (
                             <Tooltip borderRadius='9px' placement='top' label={selectedSkin.Sticker3Nombre} aria-label={selectedSkin.Sticker3Nombre}>
-                              <Box className="skin-image-container">
+                              <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
                                 <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 3'} width='auto' height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker3}></Image>
                               </Box>
                             </Tooltip>
@@ -411,7 +412,7 @@ export default function Home() {
 
                           {selectedSkin.Sticker4 && (
                             <Tooltip borderRadius='9px' placement='top' label={selectedSkin.Sticker4Nombre} aria-label={selectedSkin.Sticker4Nombre}>
-                              <Box className="skin-image-container">
+                              <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
                                 <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 4'} width='auto' height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker4}></Image>
                               </Box>
                             </Tooltip>
