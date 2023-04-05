@@ -173,7 +173,6 @@ export default function Home() {
                         <Box w='100%' px={3} display='flex' flexDir='column'>
                           <Text fontWeight="semibold" fontSize='sm' whiteSpace='nowrap' overflow='hidden' textOverflow='ellipsis' pb={2}>{skin.Nombre} </Text>
 
-
                           <Box display='flex' w='100%' h='4px'>
 
                             <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Factory New'>
@@ -228,45 +227,15 @@ export default function Home() {
                         </Box>
                       </Box>
 
-                      <Box position='absolute' top={{ sm: '0.5rem', md: '0.5rem' }} right='0.4rem'>
-                        {skin.Sticker1 && (
-                          <TooltipP placement='right' label={skin.Sticker1Nombre} >
+                      {skin.Stickers?.map((sticker, index) => (
+                        <Box position='absolute' top={{ sm: index == 0 ? '0.5rem' : index == 1 ? '1.6rem' : index == 2 ? '2.7rem' : index == 3 ? '3.8rem' : 0, md: index == 0 ? '0.5rem' : index == 1 ? '2rem' : index == 2 ? '3.5rem' : index == 3 ? '5rem' : 0 }} right='0.4rem'>
+                          <TooltipP key={sticker.Nombre + `sticker ${index}`} placement='right' label={sticker.Nombre} >
                             <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
-                              <Image alt={skin.Nombre + 'sticker 1'} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.Sticker1}></Image>
+                              <Image alt={sticker.Nombre + `sticker ${index}`} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={sticker.Link}></Image>
                             </Box>
                           </TooltipP>
-                        )}
-                      </Box>
-
-                      <Box position='absolute' top={{ sm: '1.6rem', md: '2rem' }} right='0.4rem'>
-                        {skin.Sticker2 && (
-                          <TooltipP placement='right' label={skin.Sticker2Nombre}>
-                            <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
-                              <Image alt={skin.Nombre + 'sticker 2'} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.Sticker2}></Image>
-                            </Box>
-                          </TooltipP>
-                        )}
-                      </Box>
-
-                      <Box position='absolute' top={{ sm: '2.7rem', md: '3.5rem' }} right='0.4rem'>
-                        {skin.Sticker3 && (
-                          <TooltipP placement='right' label={skin.Sticker3Nombre}>
-                            <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
-                              <Image alt={skin.Nombre + 'sticker 3'} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.Sticker3}></Image>
-                            </Box>
-                          </TooltipP>
-                        )}
-                      </Box>
-
-                      <Box position='absolute' top={{ sm: '3.8rem', md: '5rem' }} right='0.4rem'>
-                        {skin.Sticker4 && (
-                          <TooltipP placement='right' label={skin.Sticker4Nombre} aria-label={skin.Sticker4Nombre}>
-                            <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
-                              <Image alt={skin.Nombre + 'sticker 4'} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.Sticker4}></Image>
-                            </Box>
-                          </TooltipP>
-                        )}
-                      </Box>
+                        </Box>
+                      ))}
 
                     </Box>
                   ))}
@@ -309,7 +278,7 @@ export default function Home() {
                 <Text fontWeight="normal" mt='0.5rem' color='gray.600' lineHeight="normal" fontSize={'sm'}>
                   * Todas las imágenes son meramente ilustrativas</Text>
                 <Text fontWeight="normal" mt='0.5rem' color='gray.600' lineHeight="normal" fontSize={'sm'}>
-                  Desarrollado por <a href="https://github.com/en44no/" target="_blank" style={{ 'color': '#778eda' }}>en44no</a></Text>
+                  Desarrollado por <a href="https://github.com/en44no/" target="_blank" style={{ color: '#778eda', textDecoration: 'underline' }}>en44no</a></Text>
               </Box>
 
               <Modal isOpen={isOpen} size='md' onClose={onCloseModal} isCentered>
@@ -329,41 +298,16 @@ export default function Home() {
                           <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre} width={{ sm: '14rem', md: '18rem' }} height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.ImagenURL}></Image>
                         </Box>
 
-                        {/* <Divider w='95%' bg='#d13535' h='1px' borderBottomWidth={0} opacity={1} /> */}
-
                         <Box display='flex' pb='0.5rem' mt='-0.5rem'>
 
-                          {selectedSkin.Sticker1 && (
-                            <TooltipP label={selectedSkin.Sticker1Nombre}>
+                          {selectedSkin.Stickers?.map((sticker, index) => (
+                            <TooltipP key={sticker.Nombre + `sticker ${index}`} label={sticker.Nombre}>
                               <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
-                                <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 1'} width='auto' height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker1}></Image>
+                                <Image className="shadow-for-skin-image" alt={sticker.Nombre + `sticker ${index}`} width='auto' height='auto' style={{ 'objectFit': "cover" }} src={sticker.Link}></Image>
                               </Box>
                             </TooltipP>
-                          )}
+                          ))}
 
-                          {selectedSkin.Sticker2 && (
-                            <TooltipP label={selectedSkin.Sticker2Nombre}>
-                              <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
-                                <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 2'} width='auto' height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker2}></Image>
-                              </Box>
-                            </TooltipP>
-                          )}
-
-                          {selectedSkin.Sticker3 && (
-                            <TooltipP label={selectedSkin.Sticker3Nombre}>
-                              <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
-                                <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 3'} width='auto' height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker3}></Image>
-                              </Box>
-                            </TooltipP>
-                          )}
-
-                          {selectedSkin.Sticker4 && (
-                            <TooltipP label={selectedSkin.Sticker4Nombre}>
-                              <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
-                                <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre + 'sticker 4'} width='auto' height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.Sticker4}></Image>
-                              </Box>
-                            </TooltipP>
-                          )}
                         </Box>
 
                       </Box>

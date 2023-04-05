@@ -18,6 +18,7 @@ const api = {
 
       setSkinWear(parsed.data);
       setTradeLockDays(parsed.data);
+      setStickers(parsed.data);
 
       return parsed.data;
     }
@@ -99,6 +100,52 @@ function setTradeLockDays(skins) {
 
     skin.TradeLock = (diffDays == 1 ? '<1d' : `${diffDays}d`);
   })
+}
+
+function setStickers(skins) {
+
+  skins.forEach((skin) => {
+    let stickers = [];
+
+    if (skin.Sticker1) {
+      stickers.push({
+        Link: skin.Sticker1,
+        Nombre: skin.Sticker1Nombre,
+      });
+    }
+
+    if (skin.Sticker2) {
+      stickers.push({
+        Link: skin.Sticker2,
+        Nombre: skin.Sticker2Nombre,
+      });
+    }
+
+    if (skin.Sticker3) {
+      stickers.push({
+        Link: skin.Sticker3,
+        Nombre: skin.Sticker3Nombre,
+      });
+    }
+
+    if (skin.Sticker4) {
+      stickers.push({
+        Link: skin.Sticker4,
+        Nombre: skin.Sticker4Nombre,
+      });
+    }
+
+    delete skin.Sticker1;
+    delete skin.Sticker1Nombre;
+    delete skin.Sticker2;
+    delete skin.Sticker2Nombre;
+    delete skin.Sticker3;
+    delete skin.Sticker3Nombre;
+    delete skin.Sticker4;
+    delete skin.Sticker4Nombre;
+
+    skin.Stickers = stickers;
+  });
 }
 
 export default api;
