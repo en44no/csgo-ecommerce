@@ -1,10 +1,9 @@
-import { Box, Button, Container, Divider, Input, InputGroup, Image, InputRightElement, SkeletonCircle, Spinner, Stack, Text, useDisclosure, useMediaQuery } from "@chakra-ui/react";
+import { Box, Button, Container, Divider, Input, InputGroup, Image, InputRightElement, Spinner, Text, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import api from "./api/api";
 import { HiLockClosed } from 'react-icons/hi';
-import { BsDiscord, BsSteam } from 'react-icons/bs';
 import { TiArrowSortedDown } from 'react-icons/ti';
 import { FiExternalLink } from 'react-icons/fi';
 import { IoSearch, IoClose } from 'react-icons/io5';
@@ -41,6 +40,9 @@ export default function Home() {
   const [isMobile] = useMediaQuery('(max-width: 479px)');
 
   useEffect(() => {
+    setAwpScopeAudio(new Audio('/sounds/awp-zoom.mp3'));
+    setAwpShootAudio(new Audio('/sounds/awp-shoot.mp3'));
+    setGoGoGoAudio(new Audio('/sounds/go-go-go.mp3'));
     setSearchText('');
     setLoading(true);
     setSkinsAreLoading(true);
@@ -62,6 +64,7 @@ export default function Home() {
   };
 
   function onOpenModal(skin) {
+    playShootSound();
     setSelectedSkin(skin);
     onOpen();
   }
@@ -102,6 +105,46 @@ export default function Home() {
   function clearSearchText() {
     onChangeSearchText('');
   }
+
+  const [awpScopeAudio, setAwpScopeAudio] = useState(null);
+  const [awpShootAudio, setAwpShootAudio] = useState(null);
+  const [goGoGoAudio, setGoGoGoAudio] = useState(null);
+
+  const playGoGoGoSound = () => {
+    if (goGoGoAudio) {
+      goGoGoAudio.volume = 0.1;
+      goGoGoAudio.play();
+      setTimeout(() => {
+        awpShootAudio.pause();
+        awpShootAudio.currentTime = 0;
+      }, 1000);
+    }
+  };
+
+  const playScopeSound = () => {
+    if (awpScopeAudio) {
+      awpScopeAudio.volume = 0.1;
+      awpScopeAudio.play();
+    }
+  };
+
+  const playShootSound = () => {
+    if (awpShootAudio) {
+      awpShootAudio.volume = 0.1;
+      awpShootAudio.play();
+      setTimeout(() => {
+        awpShootAudio.pause();
+        awpShootAudio.currentTime = 0;
+      }, 1000);
+    }
+  };
+
+  const pauseScopeSound = () => {
+    if (awpScopeAudio) {
+      awpScopeAudio.pause();
+      awpScopeAudio.currentTime = 0;
+    }
+  };
 
   return (
     <>
@@ -164,10 +207,10 @@ export default function Home() {
                   </Box>
 
                   {!skinsAreLoading && filteredSkins.map((skin, index) => (
-                    <Box onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre + skin.Float + index} position='relative' bg='#1e2227' h={{ sm: 'auto', md: '10.5rem' }} minW={{ sm: '45%', md: '13rem' }} w={{ sm: '45%', md: '13rem' }} _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
+                    <Box onMouseOver={playScopeSound} onMouseLeave={pauseScopeSound} onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre + skin.Float + index} position='relative' bg='#1e2227' h={{ sm: 'auto', md: '10.5rem' }} minW={{ sm: '45%', md: '13rem' }} w={{ sm: '45%', md: '13rem' }} _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
                       <Box className={isMobile ? 'skin-image-container' : 'scale-image'} position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
                         <Box h={{ sm: '6.5rem', md: '5.5rem' }} mt={{ sm: '-2rem', md: '-0.7rem' }} p={{ sm: 6, md: 0 }}>
-                          <Image className="shadow-for-skin-image" alt={skin.Nombre} width={{ sm: 'auto', md: '8.3rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
+                          <Image layout='responsive' className="shadow-for-skin-image" alt={skin.Nombre} width={{ sm: 'auto', md: '8.3rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
                         </Box>
 
                         <Box w='100%' px={3} display='flex' flexDir='column'>
@@ -228,10 +271,10 @@ export default function Home() {
                       </Box>
 
                       {skin.Stickers?.map((sticker, index) => (
-                        <Box position='absolute' top={{ sm: index == 0 ? '0.5rem' : index == 1 ? '1.6rem' : index == 2 ? '2.7rem' : index == 3 ? '3.8rem' : 0, md: index == 0 ? '0.5rem' : index == 1 ? '2rem' : index == 2 ? '3.5rem' : index == 3 ? '5rem' : 0 }} right='0.4rem'>
-                          <TooltipP key={sticker.Nombre + `sticker ${index}`} placement='right' label={sticker.Nombre} >
+                        <Box key={sticker.Nombre + `sticker ${index}`} position='absolute' top={{ sm: index == 0 ? '0.5rem' : index == 1 ? '1.6rem' : index == 2 ? '2.7rem' : index == 3 ? '3.8rem' : 0, md: index == 0 ? '0.5rem' : index == 1 ? '2rem' : index == 2 ? '3.5rem' : index == 3 ? '5rem' : 0 }} right='0.4rem'>
+                          <TooltipP placement='right' label={sticker.Nombre} >
                             <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
-                              <Image alt={sticker.Nombre + `sticker ${index}`} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={sticker.Link}></Image>
+                              <Image layout='responsive' alt={sticker.Nombre + `sticker ${index}`} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={sticker.Link}></Image>
                             </Box>
                           </TooltipP>
                         </Box>
@@ -295,7 +338,7 @@ export default function Home() {
                     <Box key={selectedSkin.Nombre} w='100%' position='relative' mt='-0.2rem' p='0.5rem' bg='#23272e' borderRadius='9px' boxShadow='md'>
                       <Box position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
                         <Box className={isMobile ? 'skin-image-container' : 'scale-image'} display='flex' justifyContent='center' w='100%' maxH='15rem' h='auto'>
-                          <Image className="shadow-for-skin-image" alt={selectedSkin.Nombre} width={{ sm: '14rem', md: '18rem' }} height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.ImagenURL}></Image>
+                          <Image layout='responsive' className="shadow-for-skin-image" alt={selectedSkin.Nombre} width={{ sm: '14rem', md: '18rem' }} height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.ImagenURL}></Image>
                         </Box>
 
                         <Box display='flex' pb='0.5rem' mt='-0.5rem'>
@@ -303,7 +346,7 @@ export default function Home() {
                           {selectedSkin.Stickers?.map((sticker, index) => (
                             <TooltipP key={sticker.Nombre + `sticker ${index}`} label={sticker.Nombre}>
                               <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
-                                <Image className="shadow-for-skin-image" alt={sticker.Nombre + `sticker ${index}`} width='auto' height='auto' style={{ 'objectFit': "cover" }} src={sticker.Link}></Image>
+                                <Image layout='responsive' className="shadow-for-skin-image" alt={sticker.Nombre + `sticker ${index}`} width='auto' height='auto' style={{ 'objectFit': "cover" }} src={sticker.Link}></Image>
                               </Box>
                             </TooltipP>
                           ))}
@@ -379,7 +422,7 @@ export default function Home() {
                         )}
 
                         {selectedSkin.InspeccionarLink && (
-                          <Link w='100%' href={selectedSkin.InspeccionarLink} rel="noopener noreferrer" target="_blank">
+                          <Link onClick={() => playGoGoGoSound()} w='100%' href={selectedSkin.InspeccionarLink} rel="noopener noreferrer" target="_blank">
                             <Button w='100%' leftIcon={<FiExternalLink fontSize='1.1rem' />} fontSize='sm' mt='1rem' mb='0.5rem' bg='transparent' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} borderRadius='9px'>Inspeccionar en el juego</Button>
                           </Link>
                         )}
