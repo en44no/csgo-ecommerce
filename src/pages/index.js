@@ -114,7 +114,7 @@ export default function Home() {
   const [goGoGoAudio, setGoGoGoAudio] = useState(null);
 
   const playGoGoGoSound = () => {
-    if (soundIsEnabled) {
+    if (soundIsEnabled && !isMobile) {
       if (goGoGoAudio) {
         goGoGoAudio.volume = 0.1;
         goGoGoAudio.play();
@@ -127,7 +127,7 @@ export default function Home() {
   };
 
   const playScopeSound = () => {
-    if (soundIsEnabled) {
+    if (soundIsEnabled && !isMobile) {
       const audios = document.querySelectorAll('audio');
 
       if (awpScopeAudio) {
@@ -147,7 +147,7 @@ export default function Home() {
   };
 
   const playShootSound = () => {
-    if (soundIsEnabled) {
+    if (soundIsEnabled && !isMobile) {
       if (awpShootAudio) {
         awpShootAudio.volume = 0.1;
         awpShootAudio.play();
@@ -160,7 +160,7 @@ export default function Home() {
   };
 
   const pauseScopeSound = () => {
-    if (soundIsEnabled) {
+    if (soundIsEnabled && !isMobile) {
       if (awpScopeAudio) {
         awpScopeAudio.pause();
         awpScopeAudio.currentTime = 0;
