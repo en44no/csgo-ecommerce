@@ -122,7 +122,19 @@ export default function Home() {
   };
 
   const playScopeSound = () => {
+    const audios = document.querySelectorAll('audio');
+
     if (awpScopeAudio) {
+      // detener cualquier reproducción anterior
+      audios.forEach(a => {
+        if (!a.paused) {
+          a.pause();
+          a.currentTime = 0;
+        }
+      });
+
+      // reproducir el nuevo audio
+
       awpScopeAudio.volume = 0.1;
       awpScopeAudio.play();
     }
