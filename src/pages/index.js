@@ -264,19 +264,19 @@ export default function Home() {
                               <Box w={(skin.Float * 100) > 7 ? '7%' : `${skin.Float * 100}%`} bg='#3d818f' borderRadius='50px 0 0 50px'></Box>
                             </TooltipP>
 
-                            <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Factory New'>
+                            <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Minimal Wear'>
                               <Box w={(skin.Float * 100) <= 7 ? '0%' : (skin.Float * 100) > 8 ? '8%' : `${skin.Float * 100}%`} bg='#84b235'></Box>
                             </TooltipP>
 
-                            <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Factory New'>
+                            <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Field Tested'>
                               <Box w={(skin.Float * 100) <= 15 ? '0%' : (skin.Float * 100) > 23 ? '23%' : `${skin.Float * 100}%`} bg='#dfc04a'></Box>
                             </TooltipP>
 
-                            <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Factory New'>
+                            <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Well Worn'>
                               <Box w={(skin.Float * 100) <= 38 ? '0%' : (skin.Float * 100) > 7 ? '7%' : `${skin.Float * 100}%`} bg='#ef8641'></Box>
                             </TooltipP>
 
-                            <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Factory New'>
+                            <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Battle Scarred'>
                               <Box w={(skin.Float * 100) <= 45 ? '0%' : `${(skin.Float * 100) - 45}%`} bg='#eb5757' borderRadius='0 50px 50px 0'></Box>
                             </TooltipP>
 
