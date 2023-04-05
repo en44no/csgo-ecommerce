@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import api from "./api/api";
 import { HiLockClosed } from 'react-icons/hi';
 import { TiArrowSortedDown } from 'react-icons/ti';
+import { RiVolumeUpLine, RiVolumeMuteLine } from 'react-icons/ri';
 import { FiExternalLink } from 'react-icons/fi';
 import { IoSearch, IoClose } from 'react-icons/io5';
 import { Skeleton } from '@chakra-ui/react'
@@ -34,6 +35,7 @@ export default function Home() {
   const [searchInputIsLoading, setSearchInputIsLoading] = useState(false);
   const [paginator, setPaginator] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [soundIsEnabled, setSoundIsEnabled] = useState(false);
   const PAGINATOR_ITEMS = 10;
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -43,6 +45,7 @@ export default function Home() {
     setAwpScopeAudio(new Audio('/sounds/awp-zoom.mp3'));
     setAwpShootAudio(new Audio('/sounds/awp-shoot.mp3'));
     setGoGoGoAudio(new Audio('/sounds/go-go-go.mp3'));
+    setSoundIsEnabled(false);
     setSearchText('');
     setLoading(true);
     setSkinsAreLoading(true);
@@ -111,51 +114,62 @@ export default function Home() {
   const [goGoGoAudio, setGoGoGoAudio] = useState(null);
 
   const playGoGoGoSound = () => {
-    if (goGoGoAudio) {
-      goGoGoAudio.volume = 0.1;
-      goGoGoAudio.play();
-      setTimeout(() => {
-        goGoGoAudio.pause();
-        goGoGoAudio.currentTime = 0;
-      }, 1000);
+    if (soundIsEnabled) {
+      if (goGoGoAudio) {
+        goGoGoAudio.volume = 0.1;
+        goGoGoAudio.play();
+        setTimeout(() => {
+          goGoGoAudio.pause();
+          goGoGoAudio.currentTime = 0;
+        }, 1000);
+      }
     }
   };
 
   const playScopeSound = () => {
-    const audios = document.querySelectorAll('audio');
+    if (soundIsEnabled) {
+      const audios = document.querySelectorAll('audio');
 
-    if (awpScopeAudio) {
-      // detener cualquier reproducción anterior
-      audios.forEach(a => {
-        if (!a.paused) {
-          a.pause();
-          a.currentTime = 0;
-        }
-      });
+      if (awpScopeAudio) {
+        // detener cualquier reproducción anterior
+        audios.forEach(a => {
+          if (!a.paused) {
+            a.pause();
+            a.currentTime = 0;
+          }
+        });
 
-      // reproducir el nuevo audio
-
-      awpScopeAudio.volume = 0.1;
-      awpScopeAudio.play();
+        // reproducir el nuevo audio
+        awpScopeAudio.volume = 0.1;
+        awpScopeAudio.play();
+      }
     }
   };
 
   const playShootSound = () => {
-    if (awpShootAudio) {
-      awpShootAudio.volume = 0.1;
-      awpShootAudio.play();
-      setTimeout(() => {
-        awpShootAudio.pause();
-        awpShootAudio.currentTime = 0;
-      }, 1000);
+    if (soundIsEnabled) {
+      if (awpShootAudio) {
+        awpShootAudio.volume = 0.1;
+        awpShootAudio.play();
+        setTimeout(() => {
+          awpShootAudio.pause();
+          awpShootAudio.currentTime = 0;
+        }, 1000);
+      }
     }
   };
 
   const pauseScopeSound = () => {
-    if (awpScopeAudio) {
-      awpScopeAudio.pause();
-      awpScopeAudio.currentTime = 0;
+    if (soundIsEnabled) {
+      if (awpScopeAudio) {
+        awpScopeAudio.pause();
+        awpScopeAudio.currentTime = 0;
+      }
     }
+  };
+
+  const toggleSound = () => {
+    setSoundIsEnabled(!soundIsEnabled);
   };
 
   return (
@@ -189,7 +203,23 @@ export default function Home() {
                 <Box w='100%' display='flex' flexDir={{ sm: 'column', md: 'row', lg: 'row' }} alignItems='center' justifyContent='space-between'>
                   <Text fontWeight="800" lineHeight="normal" bgGradient="linear(to-r, red.500, red.600, red.500)" bgClip="text" mr='0.5rem' fontSize={'3xl'}>Skins disponibles</Text>
 
-                  <Box display={{ sm: 'none', md: 'flex' }}>
+                  <Box display={{ sm: 'none', md: 'flex' }} alignItems='center'>
+                    <Box mr='0.8rem'>
+                      {soundIsEnabled && (
+                        <TooltipP placement='left' label='Los efectos de sonido están activados, haz click para desactivarlos'>
+                          <Box>
+                            <RiVolumeUpLine onClick={() => toggleSound()} fontSize='1.6rem' color='#718096' cursor='pointer' />
+                          </Box>
+                        </TooltipP>
+                      )}
+                      {!soundIsEnabled && (
+                        <TooltipP placement='left' label='Los efectos de sonido están desactivados, haz click para activarlos'>
+                          <Box>
+                            <RiVolumeMuteLine onClick={() => toggleSound()} fontSize='1.6rem' color='#718096' cursor='pointer' />
+                          </Box>
+                        </TooltipP>
+                      )}
+                    </Box>
                     <InputGroup>
                       {searchText.length == 0 && (
                         <InputRightElement pointerEvents='none' children={<IoSearch fontSize='1.1rem' color='#718096' />} />
@@ -433,7 +463,7 @@ export default function Home() {
                           </Tooltip>
                         )}
 
-                        {selectedSkin.InspeccionarLink && (
+                        {selectedSkin.InspeccionarLink && !isMobile && (
                           <Link onClick={() => playGoGoGoSound()} w='100%' href={selectedSkin.InspeccionarLink} rel="noopener noreferrer" target="_blank">
                             <Button w='100%' leftIcon={<FiExternalLink fontSize='1.1rem' />} fontSize='sm' mt='1rem' mb='0.5rem' bg='transparent' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} borderRadius='9px'>Inspeccionar en el juego</Button>
                           </Link>
