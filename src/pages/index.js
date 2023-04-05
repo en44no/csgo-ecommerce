@@ -7,7 +7,7 @@ import { HiLockClosed } from 'react-icons/hi';
 import { BsDiscord, BsSteam } from 'react-icons/bs';
 import { TiArrowSortedDown } from 'react-icons/ti';
 import { FiExternalLink } from 'react-icons/fi';
-import { IoSearch } from 'react-icons/io5';
+import { IoSearch, IoClose } from 'react-icons/io5';
 import { Skeleton } from '@chakra-ui/react'
 import { Tooltip } from '@chakra-ui/react'
 import {
@@ -94,6 +94,10 @@ export default function Home() {
   function onPageChange(newPage, skins) {
     setCurrentPage(newPage);
     setSkinsBasedOnPage(newPage, skins);
+  }
+
+  function clearSearchText() {
+    onChangeSearchText('');
   }
 
   return (
@@ -192,13 +196,13 @@ export default function Home() {
 
                   <Box display={{ sm: 'none', md: 'flex' }}>
                     <InputGroup>
-                      {!searchInputIsLoading && (
+                      {searchText.length == 0 && (
                         <InputRightElement pointerEvents='none' children={<IoSearch fontSize='1.1rem' color='#718096' />} />
                       )}
-                      <Input className="input-search" value={searchText}
+                      <Input value={searchText}
                         onChange={(e) => onChangeSearchText(e.target.value)} w='17rem' fontSize='sm' bg='transparent' border='1px solid #d13535' _hover={{ 'border': '1px solid #d13535' }} _focusVisible={{ 'border': '1px solid #d13535' }} _focus={{ 'border': '1px solid #d13535' }} borderRadius='9px' placeholder="Busca una skin..." />
-                      {searchInputIsLoading && (
-                        <InputRightElement pointerEvents='none' children={<Spinner size='sm' speed='0.65s' />} />
+                      {searchText.length > 0 && (
+                        <InputRightElement onClick={(e) => clearSearchText()} children={<IoClose fontSize='1.4rem' color='#718096' cursor='pointer' />} />
                       )}
                     </InputGroup>
                   </Box>
