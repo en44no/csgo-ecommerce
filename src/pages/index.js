@@ -3,7 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import api from "./api/api";
-import { HiLockClosed } from 'react-icons/hi';
+import { HiLockClosed, HiLockOpen } from 'react-icons/hi';
 import { TiArrowSortedDown } from 'react-icons/ti';
 import { RiVolumeUpLine, RiVolumeMuteLine } from 'react-icons/ri';
 import { FiExternalLink } from 'react-icons/fi';
@@ -307,12 +307,20 @@ export default function Home() {
 
                             </Box>
 
-                            {skin.TradeLock && (
+                            {skin.TradeLock ? (
                               <TooltipP placement='bottom' label="Este artículo tiene un bloqueo de intercambio por parte de Steam" aria-label="Este artículo tiene un bloqueo de intercambio por parte de Steam">
                                 <Box display='flex' alignItems='center'>
                                   <Box display='flex' alignItems='center' gap={2}>
                                     <HiLockClosed color="grey" style={{ 'marginRight': '-0.4rem' }} fontSize='1.3rem' />
                                     <Text display={{ sm: 'none', md: 'flex' }} color="grey" fontWeight="500" fontSize='sm'>{skin.TradeLock}</Text>
+                                  </Box>
+                                </Box>
+                              </TooltipP>
+                            ) : (
+                              <TooltipP placement='bottom' label="Este artículo está disponible para ser enviado inmediatamente">
+                                <Box display='flex' alignItems='center'>
+                                  <Box display='flex' alignItems='center' gap={2}>
+                                    <HiLockOpen color="#66966c" style={{ 'marginRight': '-0.4rem' }} fontSize='1.3rem' />
                                   </Box>
                                 </Box>
                               </TooltipP>
