@@ -320,7 +320,7 @@ export default function Home() {
                               <TooltipP placement='bottom' label="Este artículo está disponible para ser enviado inmediatamente">
                                 <Box display='flex' alignItems='center'>
                                   <Box display='flex' alignItems='center' gap={2}>
-                                    <HiLockOpen color="#66966c" style={{ 'marginRight': '-0.4rem' }} fontSize='1.3rem' />
+                                    <HiLockOpen color="#5fad68" style={{ 'marginRight': '-0.4rem' }} fontSize='1.3rem' />
                                   </Box>
                                 </Box>
                               </TooltipP>
@@ -406,7 +406,7 @@ export default function Home() {
                           {selectedSkin.Stickers?.map((sticker, index) => (
                             <TooltipP key={sticker.Nombre + `sticker ${index}`} label={sticker.Nombre}>
                               <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
-                                <Image layout='responsive' className="shadow-for-skin-image" alt={sticker.Nombre + `sticker ${index}`} width='auto' height='auto' style={{ 'objectFit': "cover" }} src={sticker.Link}></Image>
+                                <Image layout='responsive' className="shadow-for-skin-image" alt={sticker.Nombre + `sticker ${index}`} width='7rem' height='7rem' style={{ 'objectFit': "cover" }} src={sticker.Link}></Image>
                               </Box>
                             </TooltipP>
                           ))}
@@ -485,8 +485,8 @@ export default function Home() {
                           <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='right' label="Este artículo está disponible para ser enviado inmediatamente">
                             <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' right={isMobile ? '0.7rem' : '1.1rem'}>
                               <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(81, 161, 81, .15)' borderRadius='9px'>
-                                <Text color='#66966c' fontWeight='600' fontSize='sm'>Desbloqueado</Text>
-                                <HiLockOpen color="#66966c" fontSize='1.2rem' />
+                                <Text color='#5fad68' fontWeight='600' fontSize='sm'>Desbloqueado</Text>
+                                <HiLockOpen color="#5fad68" fontSize='1.2rem' />
                               </Box>
                             </Box>
                           </Tooltip>
