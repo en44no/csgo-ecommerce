@@ -19,6 +19,21 @@
   transform-origin: 50% 50%;
 }
 
+.scale-image-sticker-home {
+  display: inline-block;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.scale-image-sticker-home img {
+  transition: transform .4s;
+}
+
+.scale-image-sticker-home:hover img {
+  transform: scale(2);
+  transform-origin: 50% 50%;
+}
+
 .shadow-for-skin-image {
   -webkit-filter: drop-shadow(0px 0px 7px #131619);
   filter: drop-shadow(0px 0px 7px #131619);

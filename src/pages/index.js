@@ -333,7 +333,7 @@ export default function Home() {
                       {skin.Stickers?.map((sticker, index) => (
                         <Box key={sticker.Nombre + `sticker ${index}`} position='absolute' top={{ sm: index == 0 ? '0.5rem' : index == 1 ? '1.6rem' : index == 2 ? '2.7rem' : index == 3 ? '3.8rem' : 0, md: index == 0 ? '0.5rem' : index == 1 ? '2rem' : index == 2 ? '3.5rem' : index == 3 ? '5rem' : 0 }} right='0.4rem'>
                           <TooltipP placement='right' label={sticker.Nombre} >
-                            <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
+                            <Box className={isMobile ? 'skin-image-container' : 'scale-image-sticker-home'}>
                               <Image layout='responsive' alt={sticker.Nombre + `sticker ${index}`} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={sticker.Link}></Image>
                             </Box>
                           </TooltipP>
