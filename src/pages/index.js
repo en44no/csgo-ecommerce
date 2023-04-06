@@ -251,36 +251,39 @@ export default function Home() {
                   {!skinsAreLoading && filteredSkins.map((skin, index) => (
                     <Box onMouseOver={playScopeSound} onMouseLeave={pauseScopeSound} onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre + skin.Float + index} position='relative' bg='#1e2227' h={{ sm: 'auto', md: '10.5rem' }} minW={{ sm: '45%', md: '13rem' }} w={{ sm: '45%', md: '13rem' }} _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
                       <Box className={isMobile ? 'skin-image-container' : 'scale-image'} position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
-                        <Box h={{ sm: '6.5rem', md: '5.5rem' }} mt={{ sm: '-2rem', md: '-0.7rem' }} p={{ sm: 6, md: 0 }}>
-                          <Image layout='responsive' className="shadow-for-skin-image" alt={skin.Nombre} width={{ sm: 'auto', md: '8.3rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
+                        <Box h={{ sm: '6.5rem', md: '5.5rem' }} mt={{ sm: '-2rem', md: (skin.Float && skin.Wear) ? '-0.7rem' : '0rem' }} p={{ sm: 6, md: 0 }}>
+                          <Image layout='responsive' className="shadow-for-skin-image" alt={skin.Nombre} width={{ sm: 'auto', md: (skin.Float && skin.Wear) ? '8.3rem' : '7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={skin.ImagenURL}></Image>
                         </Box>
 
                         <Box w='100%' px={3} display='flex' flexDir='column'>
                           <Text fontWeight="semibold" fontSize='sm' whiteSpace='nowrap' overflow='hidden' textOverflow='ellipsis' pb={2}>{skin.Nombre} </Text>
 
-                          <Box display='flex' w='100%' h='4px'>
+                          {skin.Float && skin.Wear && (
+                            <Box display='flex' w='100%' h='4px'>
 
-                            <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Factory New'>
-                              <Box w={(skin.Float * 100) > 7 ? '7%' : `${skin.Float * 100}%`} bg='#3d818f' borderRadius='50px 0 0 50px'></Box>
-                            </TooltipP>
+                              <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Factory New'>
+                                <Box w={(skin.Float * 100) > 7 ? '7%' : `${skin.Float * 100}%`} bg='#3d818f' borderRadius='50px 0 0 50px'></Box>
+                              </TooltipP>
 
-                            <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Minimal Wear'>
-                              <Box w={(skin.Float * 100) <= 7 ? '0%' : (skin.Float * 100) > 8 ? '8%' : `${skin.Float * 100}%`} bg='#84b235'></Box>
-                            </TooltipP>
+                              <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Minimal Wear'>
+                                <Box w={(skin.Float * 100) <= 7 ? '0%' : (skin.Float * 100) > 8 ? '8%' : `${skin.Float * 100}%`} bg='#84b235'></Box>
+                              </TooltipP>
 
-                            <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Field Tested'>
-                              <Box w={(skin.Float * 100) <= 15 ? '0%' : (skin.Float * 100) > 23 ? '23%' : `${skin.Float * 100}%`} bg='#dfc04a'></Box>
-                            </TooltipP>
+                              <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Field Tested'>
+                                <Box w={(skin.Float * 100) <= 15 ? '0%' : (skin.Float * 100) > 23 ? '23%' : `${skin.Float * 100}%`} bg='#dfc04a'></Box>
+                              </TooltipP>
 
-                            <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Well Worn'>
-                              <Box w={(skin.Float * 100) <= 38 ? '0%' : (skin.Float * 100) > 7 ? '7%' : `${skin.Float * 100}%`} bg='#ef8641'></Box>
-                            </TooltipP>
+                              <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Well Worn'>
+                                <Box w={(skin.Float * 100) <= 38 ? '0%' : (skin.Float * 100) > 7 ? '7%' : `${skin.Float * 100}%`} bg='#ef8641'></Box>
+                              </TooltipP>
 
-                            <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Battle Scarred'>
-                              <Box w={(skin.Float * 100) <= 45 ? '0%' : `${(skin.Float * 100) - 45}%`} bg='#eb5757' borderRadius='0 50px 50px 0'></Box>
-                            </TooltipP>
+                              <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Battle Scarred'>
+                                <Box w={(skin.Float * 100) <= 45 ? '0%' : `${(skin.Float * 100) - 45}%`} bg='#eb5757' borderRadius='0 50px 50px 0'></Box>
+                              </TooltipP>
 
-                          </Box>
+                            </Box>
+                          )}
+
 
                           <Box display='flex' justifyContent='space-between' w='100%' pt={1}>
 
@@ -293,9 +296,15 @@ export default function Home() {
                                   </Box>
                                 </TooltipP>
                               )}
-                              <Text color="grey" fontWeight="500" fontSize='sm'>{skin.WearShorter}</Text>
-                              <Divider orientation="vertical" h='70%' alignSelf='center' borderLeftWidth='2px' borderColor='#808080' />
-                              <Text color="grey" fontWeight="500" fontSize='sm'>{skin.Float?.slice(0, 4)}</Text>
+
+                              {skin.Float && skin.Wear && (
+                                <>
+                                  <Text color="grey" fontWeight="500" fontSize='sm'>{skin.WearShorter}</Text>
+                                  <Divider orientation="vertical" h='70%' alignSelf='center' borderLeftWidth='2px' borderColor='#808080' />
+                                  <Text color="grey" fontWeight="500" fontSize='sm'>{skin.Float?.slice(0, 4)}</Text>
+                                </>
+                              )}
+
                             </Box>
 
                             <TooltipP placement='bottom' label="Este artículo tiene un bloqueo de intercambio por parte de Steam" aria-label="Este artículo tiene un bloqueo de intercambio por parte de Steam">
@@ -399,48 +408,50 @@ export default function Home() {
 
                       <Box w='100%' px={3} display='flex' flexDir='column'>
 
-                        <Box display='flex' flexDir='column' justifyContent='space-between' w='100%' pt={1}>
+                        {selectedSkin.Float && selectedSkin.Wear && (
+                          <Box display='flex' flexDir='column' justifyContent='space-between' w='100%' pt={1}>
 
-                          <Box display='flex' w='100%' h='8px' position='relative'>
+                            <Box display='flex' w='100%' h='8px' position='relative'>
 
-                            <Box position='absolute' top='-1.1rem' ml='-9px' left={`${selectedSkin.Float * 100}%`}>
-                              <TiArrowSortedDown fontSize='1.3rem' />
+                              <Box position='absolute' top='-1.1rem' ml='-9px' left={`${selectedSkin.Float * 100}%`}>
+                                <TiArrowSortedDown fontSize='1.3rem' />
+                              </Box>
+
+                              <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Factory New' aria-label='Factory New'>
+                                <Box w='7%' bg='#3d818f' borderRadius='50px 0 0 50px'></Box>
+                              </Tooltip>
+
+                              <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Minimal Wear' aria-label='Minimal Wear'>
+                                <Box w='8%' bg='#84b235'></Box>
+                              </Tooltip>
+
+                              <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Field Tested' aria-label='Field Tested'>
+                                <Box w='23%' bg='#dfc04a'></Box>
+                              </Tooltip>
+
+                              <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Well Worn' aria-label='Well Worn'>
+                                <Box w='7%' bg='#ef8641'></Box>
+                              </Tooltip>
+
+                              <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Battle Scarred' aria-label='Battle Scarred'>
+                                <Box w='55%' bg='#eb5757' borderRadius='0 50px 50px 0'></Box>
+                              </Tooltip>
+
                             </Box>
 
-                            <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Factory New' aria-label='Factory New'>
-                              <Box w='7%' bg='#3d818f' borderRadius='50px 0 0 50px'></Box>
-                            </Tooltip>
+                            <Box display='flex' justifyContent='space-between' pt={1}>
 
-                            <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Minimal Wear' aria-label='Minimal Wear'>
-                              <Box w='8%' bg='#84b235'></Box>
-                            </Tooltip>
+                              <Box display='flex' alignItems='center' gap={1}>
+                                <Text color='grey' fontWeight="500" fontSize='sm'>Float</Text>
+                                <Divider orientation="vertical" h='70%' alignSelf='center' borderLeftWidth='2px' borderColor='#808080' />
+                                <Text color='grey' fontWeight="500" fontSize='sm'>{selectedSkin.Float?.slice(0, 4)}</Text>
+                              </Box>
 
-                            <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Field Tested' aria-label='Field Tested'>
-                              <Box w='23%' bg='#dfc04a'></Box>
-                            </Tooltip>
-
-                            <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Well Worn' aria-label='Well Worn'>
-                              <Box w='7%' bg='#ef8641'></Box>
-                            </Tooltip>
-
-                            <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Battle Scarred' aria-label='Battle Scarred'>
-                              <Box w='55%' bg='#eb5757' borderRadius='0 50px 50px 0'></Box>
-                            </Tooltip>
-
-                          </Box>
-
-                          <Box display='flex' justifyContent='space-between' pt={1}>
-
-                            <Box display='flex' alignItems='center' gap={1}>
-                              <Text color='grey' fontWeight="500" fontSize='sm'>Float</Text>
-                              <Divider orientation="vertical" h='70%' alignSelf='center' borderLeftWidth='2px' borderColor='#808080' />
-                              <Text color='grey' fontWeight="500" fontSize='sm'>{selectedSkin.Float?.slice(0, 4)}</Text>
+                              <Text color='grey' fontWeight="500" fontSize='sm'>{selectedSkin.Wear}</Text>
                             </Box>
 
-                            <Text color='grey' fontWeight="500" fontSize='sm'>{selectedSkin.Wear}</Text>
                           </Box>
-
-                        </Box>
+                        )}
 
                         {selectedSkin.StatTrak == 'TRUE' && (
                           <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='left' label="Este artículo registra el número de víctimas" aria-label="Este artículo registra el número de víctimas">
