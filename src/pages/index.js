@@ -88,7 +88,7 @@ export default function Home() {
 
   function generatePaginator(skins) {
     const paginator = [];
-    for (let i = 0; i <= skins.length / PAGINATOR_ITEMS; i++) {
+    for (let i = 0; i < skins.length / PAGINATOR_ITEMS; i++) {
       paginator.push(i + 1);
     }
     setPaginator(paginator);
