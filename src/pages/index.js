@@ -252,7 +252,7 @@ export default function Home() {
                     <Box onMouseOver={playScopeSound} onMouseLeave={pauseScopeSound} onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre + skin.Float + index} position='relative' bg='#1e2227' h={{ sm: 'auto', md: '10.5rem' }} minW={{ sm: '45%', md: '13rem' }} w={{ sm: '45%', md: '13rem' }} _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
                       <Box className={isMobile ? 'skin-image-container' : 'scale-image'} position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
                         <Box h={{ sm: '6.5rem', md: '5.5rem' }} mt={{ sm: '-2rem', md: '-0.7rem' }} p={{ sm: 6, md: 0 }}>
-                          <Image layout='responsive' className="shadow-for-skin-image" alt={skin.Nombre} width={{ sm: 'auto', md: (skin.Float && skin.Wear) ? '8.3rem' : '7rem' }} height='auto' style={{ 'objectFit': "cover" }} mt={(skin.Float && skin.Wear) ? '' : '0.5rem'} src={skin.ImagenURL}></Image>
+                          <Image layout='responsive' className="shadow-for-skin-image" alt={skin.Nombre} width={{ sm: (skin.Float && skin.Wear) ? 'auto' : '6rem', md: (skin.Float && skin.Wear) ? '8.3rem' : '7rem' }} height='auto' style={{ 'objectFit': "cover" }} mt={(skin.Float && skin.Wear) ? '' : '0.5rem'} src={skin.ImagenURL}></Image>
                         </Box>
 
                         <Box w='100%' px={3} display='flex' flexDir='column'>
