@@ -258,35 +258,37 @@ export default function Home() {
                         <Box w='100%' px={3} display='flex' flexDir='column'>
                           <Text fontWeight="semibold" fontSize='sm' whiteSpace='nowrap' overflow='hidden' textOverflow='ellipsis' pb={2}>{skin.Nombre} </Text>
 
-                          {skin.Float && skin.Wear && (
-                            <Box display='flex' w='100%' h='4px' mt='0.3rem' position='relative'>
+                          <Box display='flex' w='100%' h='4px' mt='0.3rem' position='relative'>
+                            {skin.Float && skin.Wear && (
 
-                              <Box position='absolute' top='-1.1rem' ml='-9px' left={`${skin.Float * 100}%`}>
-                                <TiArrowSortedDown fontSize='1.3rem' />
-                              </Box>
+                              <>
+                                <Box position='absolute' top='-1.1rem' ml='-9px' left={`${skin.Float * 100}%`}>
+                                  <TiArrowSortedDown fontSize='1.3rem' />
+                                </Box>
 
-                              <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Factory New'>
-                                <Box w={'7%'} bg='#3d818f' borderRadius='50px 0 0 50px'></Box>
-                              </TooltipP>
+                                <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Factory New'>
+                                  <Box w={'7%'} bg='#3d818f' borderRadius='50px 0 0 50px'></Box>
+                                </TooltipP>
 
-                              <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Minimal Wear'>
-                                <Box w={'8%'} bg='#84b235'></Box>
-                              </TooltipP>
+                                <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Minimal Wear'>
+                                  <Box w={'8%'} bg='#84b235'></Box>
+                                </TooltipP>
 
-                              <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Field Tested'>
-                                <Box w={'23%'} bg='#dfc04a'></Box>
-                              </TooltipP>
+                                <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Field Tested'>
+                                  <Box w={'23%'} bg='#dfc04a'></Box>
+                                </TooltipP>
 
-                              <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Well Worn'>
-                                <Box w={'7%'} bg='#ef8641'></Box>
-                              </TooltipP>
+                                <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Well Worn'>
+                                  <Box w={'7%'} bg='#ef8641'></Box>
+                                </TooltipP>
 
-                              <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Battle Scarred'>
-                                <Box w={'55%'} bg='#eb5757' borderRadius='0 50px 50px 0'></Box>
-                              </TooltipP>
+                                <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Battle Scarred'>
+                                  <Box w={'55%'} bg='#eb5757' borderRadius='0 50px 50px 0'></Box>
+                                </TooltipP>
+                              </>
 
-                            </Box>
-                          )}
+                            )}
+                          </Box>
 
 
                           <Box display='flex' justifyContent='space-between' w='100%' pt={1}>
