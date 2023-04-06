@@ -259,26 +259,30 @@ export default function Home() {
                           <Text fontWeight="semibold" fontSize='sm' whiteSpace='nowrap' overflow='hidden' textOverflow='ellipsis' pb={2}>{skin.Nombre} </Text>
 
                           {skin.Float && skin.Wear && (
-                            <Box display='flex' w='100%' h='4px'>
+                            <Box display='flex' w='100%' h='4px' mt='0.3rem' position='relative'>
+
+                              <Box position='absolute' top='-1.1rem' ml='-9px' left={`${skin.Float * 100}%`}>
+                                <TiArrowSortedDown fontSize='1.3rem' />
+                              </Box>
 
                               <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Factory New'>
-                                <Box w={(skin.Float * 100) > 7 ? '7%' : `${skin.Float * 100}%`} bg='#3d818f' borderRadius='50px 0 0 50px'></Box>
+                                <Box w={'7%'} bg='#3d818f' borderRadius='50px 0 0 50px'></Box>
                               </TooltipP>
 
                               <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Minimal Wear'>
-                                <Box w={(skin.Float * 100) <= 7 ? '0%' : (skin.Float * 100) > 8 ? '8%' : `${skin.Float * 100}%`} bg='#84b235'></Box>
+                                <Box w={'8%'} bg='#84b235'></Box>
                               </TooltipP>
 
                               <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Field Tested'>
-                                <Box w={(skin.Float * 100) <= 15 ? '0%' : (skin.Float * 100) > 23 ? '23%' : `${skin.Float * 100}%`} bg='#dfc04a'></Box>
+                                <Box w={'23%'} bg='#dfc04a'></Box>
                               </TooltipP>
 
                               <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Well Worn'>
-                                <Box w={(skin.Float * 100) <= 38 ? '0%' : (skin.Float * 100) > 7 ? '7%' : `${skin.Float * 100}%`} bg='#ef8641'></Box>
+                                <Box w={'7%'} bg='#ef8641'></Box>
                               </TooltipP>
 
                               <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Battle Scarred'>
-                                <Box w={(skin.Float * 100) <= 45 ? '0%' : `${(skin.Float * 100) - 45}%`} bg='#eb5757' borderRadius='0 50px 50px 0'></Box>
+                                <Box w={'55%'} bg='#eb5757' borderRadius='0 50px 50px 0'></Box>
                               </TooltipP>
 
                             </Box>
@@ -311,8 +315,8 @@ export default function Home() {
                               <TooltipP placement='bottom' label="Este artículo tiene un bloqueo de intercambio por parte de Steam" aria-label="Este artículo tiene un bloqueo de intercambio por parte de Steam">
                                 <Box display='flex' alignItems='center'>
                                   <Box display='flex' alignItems='center' gap={2}>
-                                    <HiLockClosed color="#cd6060" style={{ 'marginRight': '-0.4rem' }} fontSize='1.3rem' />
-                                    <Text display={{ sm: 'none', md: 'flex' }} color="#cd6060" fontWeight="500" fontSize='sm'>{skin.TradeLock}</Text>
+                                    <HiLockClosed color="grey" style={{ 'marginRight': '-0.4rem' }} fontSize='1.3rem' />
+                                    <Text display={{ sm: 'none', md: 'flex' }} color="grey" fontWeight="500" fontSize='sm'>{skin.TradeLock}</Text>
                                   </Box>
                                 </Box>
                               </TooltipP>
@@ -320,7 +324,7 @@ export default function Home() {
                               <TooltipP placement='bottom' label="Este artículo está disponible para ser enviado inmediatamente">
                                 <Box display='flex' alignItems='center'>
                                   <Box display='flex' alignItems='center' gap={2}>
-                                    <HiLockOpen color="#5fad68" style={{ 'marginRight': '-0.4rem' }} fontSize='1.3rem' />
+                                    <HiLockOpen color="#5fad68" fontSize='1.3rem' />
                                   </Box>
                                 </Box>
                               </TooltipP>
