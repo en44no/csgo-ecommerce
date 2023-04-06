@@ -350,7 +350,7 @@ export default function Home() {
                   {paginator.length > 0 && filteredSkins != 0 && (
                     <Box display='flex' justifyContent='center' alignItems='center' w='100%' gap={3} position='absolute' bottom='1rem'>
                       <>
-                        <Text display={{ sm: 'none', md: 'flex' }} color='grey'>Mostrando {((currentPage - 1) * PAGINATOR_ITEMS) + 1}-{(currentPage * PAGINATOR_ITEMS) > skins.length ? skins.length : (currentPage * PAGINATOR_ITEMS)} de {skins.length} artículos</Text>
+                        <Text display={{ sm: 'none', md: 'flex' }} color='grey'>Mostrando {(((currentPage - 1) * PAGINATOR_ITEMS) + 1) == 1 ? '01' : ((currentPage - 1) * PAGINATOR_ITEMS) + 1}-{(currentPage * PAGINATOR_ITEMS) > skins.length ? skins.length : (currentPage * PAGINATOR_ITEMS)} de {skins.length} artículos</Text>
                         {paginator.map((page, index) => (
                           <Button fontSize='sm' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} bg={currentPage == page ? '#d13535' : 'transparent'}
                             borderRadius='9px' key={index} onClick={() => onPageChange(page, skins)}>{page}</Button>
@@ -478,7 +478,7 @@ export default function Home() {
 
                         {selectedSkin.TradeLock ? (
                           <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='right' label="Este artículo tiene un bloqueo de intercambio por parte de Steam" aria-label="Este artículo tiene un bloqueo de intercambio por parte de Steam">
-                            <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' right={isMobile ? '0.7rem' : '1.1rem'}>
+                            <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' right={isMobile ? '0.7rem' : '0.8rem'}>
                               <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(208, 56, 56, .15)' borderRadius='9px'>
                                 <Text color='#cd6060' fontWeight='600' fontSize='sm'>TradeLock {selectedSkin.TradeLock}</Text>
                                 <HiLockClosed color='#cd6060' fontSize='1.2rem' />
@@ -487,7 +487,7 @@ export default function Home() {
                           </Tooltip>
                         ) : (
                           <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='right' label="Este artículo está disponible para ser enviado inmediatamente">
-                            <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' right={isMobile ? '0.7rem' : '1.1rem'}>
+                            <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' right={isMobile ? '0.7rem' : '0.8rem'}>
                               <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(81, 161, 81, .15)' borderRadius='9px'>
                                 <Text color='#5fad68' fontWeight='600' fontSize='sm'>Desbloqueado</Text>
                                 <HiLockOpen color="#5fad68" fontSize='1.2rem' />
