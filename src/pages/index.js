@@ -442,7 +442,7 @@ export default function Home() {
 
                         </Box>
 
-                        {selectedSkin.StatTrak && (
+                        {selectedSkin.StatTrak == 'TRUE' && (
                           <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='left' label="Este artículo registra el número de víctimas" aria-label="Este artículo registra el número de víctimas">
                             <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' left='1.1rem'>
                               <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(188, 115, 77, .15)' borderRadius='9px'>
