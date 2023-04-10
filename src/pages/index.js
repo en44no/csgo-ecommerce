@@ -1,4 +1,4 @@
-import { Box, Button, Container, Divider, Input, InputGroup, Img, InputRightElement, Spinner, Text, useDisclosure, useMediaQuery } from "@chakra-ui/react";
+import { Box, Button, Container, Divider, Input, InputGroup, Img, InputRightElement, Spinner, Text, useDisclosure, useMediaQuery, Select, FormControl, FormLabel, Switch, filter } from "@chakra-ui/react";
 import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -31,11 +31,16 @@ export default function Home() {
   const [loading, setLoading] = useState([]);
   const [skinsAreLoading, setSkinsAreLoading] = useState([]);
   const [filteredSkins, setFilteredSkins] = useState([]);
+  const [skinsForCurrentPage, setSkinsForCurrentPage] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [searchInputIsLoading, setSearchInputIsLoading] = useState(false);
   const [paginator, setPaginator] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [soundIsEnabled, setSoundIsEnabled] = useState(false);
+
+  //Filters
+  const [showLockedItemsFilter, setShowLockedItemsFilter] = useState(false);
+
   const PAGINATOR_ITEMS = 10;
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -45,8 +50,11 @@ export default function Home() {
     setAwpScopeAudio(new Audio('/sounds/awp-zoom.mp3'));
     setAwpShootAudio(new Audio('/sounds/awp-shoot.mp3'));
     setGoGoGoAudio(new Audio('/sounds/go-go-go.mp3'));
+
     setSoundIsEnabled(false);
     setSearchText('');
+    setCurrentPage(1);
+
     setLoading(true);
     setSkinsAreLoading(true);
 
@@ -55,9 +63,15 @@ export default function Home() {
 
   const fetchData = async () => {
     const skins = await api.skins.get();
+
+    //reset filters
+    setShowLockedItemsFilter(true);
+    setSearchText('');
+
     setSkins(skins);
+    setFilteredSkins(skins);
     generatePaginator(skins);
-    setSkinsBasedOnPage(currentPage, skins);
+    setSkinsBasedOnPage(1, skins);
 
     setSkinsAreLoading(false);
 
@@ -80,10 +94,14 @@ export default function Home() {
   function onChangeSearchText(text) {
     setSearchInputIsLoading(true);
     setSearchText(text);
-    const filteredSkins = skins.filter(skin => skin.Nombre.toLowerCase().includes(text.toLowerCase()));
-    generatePaginator(filteredSkins);
-    setSkinsBasedOnPage(1, filteredSkins);
+    setFilters(text);
     setSearchInputIsLoading(false);
+  }
+
+  function onShowLockedItemsChange(show) {
+    debugger;
+    setShowLockedItemsFilter(show);
+    setFilters(searchText, show);
   }
 
   function generatePaginator(skins) {
@@ -94,19 +112,14 @@ export default function Home() {
     setPaginator(paginator);
   }
 
-  function setSkinsBasedOnPage(newPage, skins) {
-    if (newPage == 1) setCurrentPage(1);
-    const skinsToSet = skins.slice((newPage - 1) * PAGINATOR_ITEMS, newPage * PAGINATOR_ITEMS);
-    setFilteredSkins(skinsToSet);
-  }
-
-  function onPageChange(newPage, skins) {
+  function onPageChange(newPage) {
     setCurrentPage(newPage);
-    setSkinsBasedOnPage(newPage, skins);
+    setSkinsBasedOnPage(newPage);
   }
 
   function clearSearchText() {
     onChangeSearchText('');
+    setSkinsBasedOnPage(1, skins);
   }
 
   const [awpScopeAudio, setAwpScopeAudio] = useState(null);
@@ -172,6 +185,93 @@ export default function Home() {
     setSoundIsEnabled(!soundIsEnabled);
   };
 
+  const setFilters = (text, showLockedItems) => {
+    let textFilter = text ? text : searchText;
+    let skinsWithFilters = filteredSkins ? filteredSkins : skins;
+
+    debugger;
+    let tradeLockFilter = showLockedItems != null ? showLockedItems : showLockedItemsFilter;
+
+    if (textFilter) {
+      skinsWithFilters = skins.filter(skin => {
+        return skin.Nombre.toLowerCase().includes(textFilter.toLowerCase()) ? skin : null;
+      });
+    }
+
+    if (tradeLockFilter == false) {
+      skinsWithFilters = skinsWithFilters.filter(skin => {
+        return skin.TradeLock == null || skin.TradeLock == 'FALSE' ? skin : null;
+      });
+    } else if (tradeLockFilter == true) {
+      skinsWithFilters = skins;
+
+      if (textFilter) {
+        skinsWithFilters = skinsWithFilters.filter(skin => {
+          return skin.Nombre.toLowerCase().includes(textFilter.toLowerCase()) ? skin : null;
+        });
+      }
+    }
+
+    setFilteredSkins(skinsWithFilters);
+    setSkinsBasedOnPage(currentPage, skinsWithFilters);
+  };
+
+  // function setFiltersAndOrder(newShowLockedItemsFilter, newSearchText) {
+  //   let searchTextToCheck = newSearchText ? newSearchText : searchText;
+  //   let showLockedItemsFilterToCheck = newShowLockedItemsFilter ? newShowLockedItemsFilter : showLockedItemsFilter;
+
+  //   let skinsCopy = [...skins];
+  //   debugger;
+
+  //   const filteredSkins = skinsCopy.filter(skin => {
+  //     if (showLockedItemsFilterToCheck && searchTextToCheck) {
+  //       return (skin.Nombre.toLowerCase().includes(searchTextToCheck.toLowerCase())) ? skin : null;
+  //     }
+  //     else if (!showLockedItemsFilterToCheck && searchTextToCheck) {
+  //       return (skin.TradeLock == null || skin.TradeLock == 'FALSE') && skin.Nombre.toLowerCase().includes(searchTextToCheck.toLowerCase()) ? skin : null;
+  //     }
+  //     else if (showLockedItemsFilterToCheck) {
+  //       return skin;
+  //     }
+  //     else if (searchTextToCheck) {
+  //       return skin.Nombre.toLowerCase().includes(searchTextToCheck.toLowerCase()) ? skin : null;
+  //     } else {
+  //       return (skin.TradeLock == null || skin.TradeLock == 'FALSE') ? skin : null
+  //     }
+  //   });
+
+  //   let skinsToSet = [];
+
+  //   let currentPageToCheck = currentPage;
+  //   while (currentPageToCheck >= 0) { // mientras no lleguemos a la primera página
+  //     let skinsOnCurrentPage = setSkinsBasedOnPage(currentPageToCheck, filteredSkins);
+  //     if (skinsOnCurrentPage.length > 0) { // si hay skins en la página actual
+  //       skinsToSet = skinsOnCurrentPage;
+  //       break; // salimos del loop
+  //     } else { // si no hay skins en la página actual (estamos en una página vacía)
+  //       currentPageToCheck = currentPageToCheck - 1  // retrocedemos una página
+  //       setCurrentPage(currentPageToCheck);
+  //     }
+
+  //     if (currentPageToCheck == 0) break; // si llegamos a la primera página, salimos del loop (no hay skins en ninguna página
+  //   }
+
+  //   generatePaginator(filteredSkins);
+  //   setFilteredSkins(filteredSkins);
+  // }
+
+  function setSkinsBasedOnPage(page, skinsToFilter) {
+    let skinsForPage = [];
+    if (skinsToFilter) {
+      skinsForPage = skinsToFilter.slice((page - 1) * PAGINATOR_ITEMS, page * PAGINATOR_ITEMS);
+    } else {
+      skinsForPage = filteredSkins.slice((page - 1) * PAGINATOR_ITEMS, page * PAGINATOR_ITEMS);
+    }
+    setSkinsForCurrentPage(skinsForPage);
+    generatePaginator(skinsToFilter ? skinsToFilter : filteredSkins);
+    return skinsForPage;
+  }
+
   return (
     <>
       <Head>
@@ -220,16 +320,6 @@ export default function Home() {
                         </TooltipP>
                       )}
                     </Box>
-                    <InputGroup>
-                      {searchText.length == 0 && (
-                        <InputRightElement pointerEvents='none' children={<IoSearch fontSize='1.1rem' color='#718096' />} />
-                      )}
-                      <Input value={searchText}
-                        onChange={(e) => onChangeSearchText(e.target.value)} w='17rem' fontSize='sm' bg='transparent' border='1px solid #d13535' _hover={{ 'border': '1px solid #d13535' }} _focusVisible={{ 'border': '1px solid #d13535' }} _focus={{ 'border': '1px solid #d13535' }} borderRadius='9px' placeholder="Busca una skin..." />
-                      {searchText.length > 0 && (
-                        <InputRightElement onClick={(e) => clearSearchText()} children={<IoClose fontSize='1.4rem' color='#718096' cursor='pointer' />} />
-                      )}
-                    </InputGroup>
                   </Box>
 
                 </Box>
@@ -241,18 +331,48 @@ export default function Home() {
                         <InputRightElement pointerEvents='none' children={<IoSearch fontSize='1.1rem' color='#718096' />} />
                       )}
                       <Input className="input-search" value={searchText}
-                        onChange={(e) => onChangeSearchText(e.target.value)} fontSize='sm' bg='transparent' border='1px solid #d13535' _hover={{ 'border': '1px solid #d13535' }} _focusVisible={{ 'border': '1px solid #d13535' }} _focus={{ 'border': '1px solid #d13535' }} borderRadius='9px' placeholder="Busca una skin..." />
+                        onChange={(e) => onChangeSearchText(e.target.value)} fontSize='sm' bg='transparent' borderBottom='1px solid #d13535' _hover={{ 'borderBottom': '1px solid #d13535' }} _focusVisible={{ 'borderBottom': '1px solid #d13535' }} _focus={{ 'borderBottom': '1px solid #d13535' }} placeholder="Busca una skin..." />
                       {searchInputIsLoading && (
                         <InputRightElement pointerEvents='none' children={<Spinner size='sm' speed='0.65s' />} />
                       )}
                     </InputGroup>
                   </Box>
 
-                  {!skinsAreLoading && filteredSkins.map((skin, index) => (
+                  <Box display='flex' alignItems='center' gap={3} justifyContent='space-between' w='100%' mx='3.5rem' mb='-0.5rem'>
+
+                    <InputGroup w='fit-content'>
+                      {searchText.length == 0 && (
+                        <InputRightElement pointerEvents='none' children={<IoSearch fontSize='1.1rem' color='#718096' />} />
+                      )}
+                      <Input value={searchText}
+                        onChange={(e) => onChangeSearchText(e.target.value)} w='17rem' fontSize='sm' bg='transparent' border='none' borderRadius='0' borderBottom='1px solid #d13535' _hover={{ 'borderBottom': '1px solid #d13535' }} _focusVisible={{ 'borderBottom': '1px solid #d13535' }} _focus={{ 'borderBottom': '1px solid #d13535' }} placeholder="Busca una skin..." />
+                      {searchText.length > 0 && (
+                        <InputRightElement onClick={(e) => clearSearchText()} children={<IoClose fontSize='1.4rem' color='#718096' cursor='pointer' />} />
+                      )}
+                    </InputGroup>
+
+                    <Box display='flex' alignItems='center' gap={3}>
+                      {/* <Select onChange={(e) => onFloatOrderChange(e.target.value)} w='fit-content' fontSize='sm' bg='transparent' border='none' borderRadius='0' borderBottom='1px solid #d13535' _hover={{ 'borderBottom': '1px solid #d13535' }} _focusVisible={{ 'borderBottom': '1px solid #d13535' }} _focus={{ 'borderBottom': '1px solid #d13535' }}>
+                        <option style={{ background: '#1e2227' }} value='lower' selected>Float más bajo</option>
+                        <option style={{ background: '#1e2227' }} value='higher'>Float más alto</option>
+                      </Select> */}
+
+                      <Box border='none' borderBottom='1px solid #d13535' h='2.5rem' display='flex' px='0.5rem' alignItems='center'>
+                        <FormControl display='flex' alignItems='center'>
+                          <FormLabel fontSize='sm' fontWeight='normal' htmlFor='email-alerts' mb='0'>
+                            TradeLock
+                          </FormLabel>
+                          <Switch isChecked={showLockedItemsFilter} onChange={(e) => onShowLockedItemsChange(e.target.checked)} id='email-alerts' colorScheme="red" />
+                        </FormControl>
+                      </Box>
+                    </Box>
+                  </Box>
+
+                  {!skinsAreLoading && skinsForCurrentPage.map((skin, index) => (
                     <Box onMouseOver={playScopeSound} onMouseLeave={pauseScopeSound} onClick={() => onOpenModal(skin)} boxShadow='md' key={skin.Nombre + skin.Float + index} position='relative' bg='#1e2227' h={{ sm: 'auto', md: '10.5rem' }} minW={{ sm: '45%', md: '13rem' }} w={{ sm: '45%', md: '13rem' }} _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
                       <Box className={isMobile ? 'skin-image-container' : 'scale-image'} position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
                         <Box h={{ sm: '6.5rem', md: '5.5rem' }} mt={{ sm: '-2rem', md: '-0.7rem' }} p={{ sm: 6, md: 0 }}>
-                          <Img layout='responsive' className="shadow-for-skin-image" alt={skin.Nombre} width={{ sm: (skin.Float && skin.Wear) ? 'auto' : '6rem', md: (skin.Float && skin.Wear) ? '8.3rem' : '7rem' }} height='auto' style={{ 'objectFit': "cover" }} mt={(skin.Float && skin.Wear) ? '' : '0.5rem'} src={skin.ImagenURL}></Img >
+                          <Img layout='responsive' className="shadow-for-skin-image" alt={skin.Nombre} width={{ sm: (skin.Float && skin.Wear) ? 'auto' : '6rem', md: (skin.Float && skin.Wear) ? '8.3rem' : '7rem' }} height='auto' style={{ 'objectFit': "cover" }} mt={(skin.Float && skin.Wear) ? '' : '0.5rem'} src={skin.ImagenURL}></Img>
                         </Box>
 
                         <Box w='100%' px={3} display='flex' flexDir='column'>
@@ -307,7 +427,7 @@ export default function Home() {
                                 <>
                                   <Text color="grey" fontWeight="500" fontSize='sm'>{skin.WearShorter}</Text>
                                   <Divider orientation="vertical" h='70%' alignSelf='center' borderLeftWidth='2px' borderColor='#808080' />
-                                  <Text color="grey" fontWeight="500" fontSize='sm'>{skin.Float?.slice(0, 4)}</Text>
+                                  <Text color="grey" fontWeight="500" fontSize='sm'>{skin.Float?.slice(0, 5)}</Text>
                                 </>
                               )}
 
@@ -340,7 +460,7 @@ export default function Home() {
                         <Box key={sticker.Nombre + `sticker ${index}`} position='absolute' top={{ sm: index == 0 ? '0.5rem' : index == 1 ? '1.6rem' : index == 2 ? '2.7rem' : index == 3 ? '3.8rem' : 0, md: index == 0 ? '0.5rem' : index == 1 ? '2rem' : index == 2 ? '3.5rem' : index == 3 ? '5rem' : 0 }} right='0.4rem'>
                           <TooltipP placement='right' label={sticker.Nombre} >
                             <Box className={isMobile ? 'skin-image-container' : 'scale-image-sticker-home'}>
-                              <Img layout='responsive' alt={sticker.Nombre + `sticker ${index}`} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={sticker.Link}></Img >
+                              <Img layout='responsive' alt={sticker.Nombre + `sticker ${index}`} width={{ sm: '1rem', md: '1.7rem' }} height='auto' style={{ 'objectFit': "cover" }} src={sticker.Link}></Img>
                             </Box>
                           </TooltipP>
                         </Box>
@@ -349,23 +469,32 @@ export default function Home() {
                     </Box>
                   ))}
 
-                  {paginator.length > 0 && filteredSkins != 0 && (
+                  {paginator.length > 0 && skinsForCurrentPage != 0 && (
                     <Box display='flex' justifyContent='center' alignItems='center' w='100%' gap={3} position='absolute' bottom='1rem'>
                       <>
                         <Text display={{ sm: 'none', md: 'flex' }} color='grey'>Mostrando {(((currentPage - 1) * PAGINATOR_ITEMS) + 1) == 1 ? '01' : ((currentPage - 1) * PAGINATOR_ITEMS) + 1}-{(currentPage * PAGINATOR_ITEMS) > skins.length ? skins.length : (currentPage * PAGINATOR_ITEMS)} de {skins.length} artículos</Text>
                         {paginator.map((page, index) => (
-                          <Button fontSize='sm' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} bg={currentPage == page ? '#d13535' : 'transparent'}
-                            borderRadius='9px' key={index} onClick={() => onPageChange(page, skins)}>{page}</Button>
+                          <Button fontSize='sm' fontWeight={currentPage == page ? 'bold' : 'normal'} _hover={{ 'bg': '#d13535', 'color': '#fff' }} bg={currentPage == page ? '#d13535' : 'transparent'}
+                            borderRadius='9px' key={index} onClick={() => onPageChange(page)}>{page}</Button>
                         ))}
                       </>
                     </Box>
                   )}
 
-                  {!skinsAreLoading && searchText.length > 0 && filteredSkins.length == 0 && (
+                  {!skinsAreLoading && searchText.length > 0 && skinsForCurrentPage.length == 0 && (
                     <Box display='flex' justifyContent='center' alignItems='center' flexDirection='col' w='100%' h='22.25rem'>
                       <Box display='flex' flexDirection='column' alignItems='center' gap={2} px={{ sm: 8, md: 0 }} textAlign={{ sm: 'center', md: 'left' }}>
                         <IoSearch color='#c73131' fontSize='3rem' />
                         <Text>No se encontraron artículos con ese criterio de búsqueda</Text>
+                      </Box>
+                    </Box>
+                  )}
+
+                  {!skinsAreLoading && searchText.length == 0 && skinsForCurrentPage.length == 0 && (
+                    <Box display='flex' justifyContent='center' alignItems='center' flexDirection='col' w='100%' h='22.25rem'>
+                      <Box display='flex' flexDirection='column' alignItems='center' gap={2} px={{ sm: 8, md: 0 }} textAlign={{ sm: 'center', md: 'left' }}>
+                        <IoSearch color='#c73131' fontSize='3rem' />
+                        <Text>No se encontraron artículos</Text>
                       </Box>
                     </Box>
                   )}
@@ -404,7 +533,7 @@ export default function Home() {
                     <Box key={selectedSkin.Nombre} w='100%' position='relative' mt='-0.2rem' p='0.5rem' bg='#23272e' borderRadius='9px' boxShadow='md'>
                       <Box position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
                         <Box className={isMobile ? 'skin-image-container' : 'scale-image'} display='flex' justifyContent='center' w='100%' maxH='15rem' h='auto'>
-                          <Img layout='responsive' className="shadow-for-skin-image" alt={selectedSkin.Nombre} width={{ sm: '14rem', md: '18rem' }} height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.ImagenURL}></Img >
+                          <Img layout='responsive' className="shadow-for-skin-image" alt={selectedSkin.Nombre} width={{ sm: '14rem', md: '18rem' }} height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.ImagenURL}></Img>
                         </Box>
 
                         <Box display='flex' pb='0.5rem' mt='-0.5rem'>
@@ -412,7 +541,7 @@ export default function Home() {
                           {selectedSkin.Stickers?.map((sticker, index) => (
                             <TooltipP key={sticker.Nombre + `sticker ${index}`} label={sticker.Nombre}>
                               <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
-                                <Img layout='responsive' className="shadow-for-skin-image" alt={sticker.Nombre + `sticker ${index}`} width='7rem' height='7rem' style={{ 'objectFit': "cover" }} src={sticker.Link}></Img >
+                                <Img layout='responsive' className="shadow-for-skin-image" alt={sticker.Nombre + `sticker ${index}`} width='7rem' height='7rem' style={{ 'objectFit': "cover" }} src={sticker.Link}></Img>
                               </Box>
                             </TooltipP>
                           ))}
@@ -459,7 +588,7 @@ export default function Home() {
                               <Box display='flex' alignItems='center' gap={1}>
                                 <Text color='grey' fontWeight="500" fontSize='sm'>Float</Text>
                                 <Divider orientation="vertical" h='70%' alignSelf='center' borderLeftWidth='2px' borderColor='#808080' />
-                                <Text color='grey' fontWeight="500" fontSize='sm'>{selectedSkin.Float?.slice(0, 4)}</Text>
+                                <Text color='grey' fontWeight="500" fontSize='sm'>{selectedSkin.Float?.slice(0, 5)}</Text>
                               </Box>
 
                               <Text color='grey' fontWeight="500" fontSize='sm'>{selectedSkin.Wear}</Text>

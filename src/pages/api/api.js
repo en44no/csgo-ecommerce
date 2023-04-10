@@ -19,6 +19,7 @@ const api = {
       setSkinWear(parsed.data);
       setTradeLockDays(parsed.data);
       setStickers(parsed.data);
+      orderByLowerFloat(parsed.data);
 
       return parsed.data;
     }
@@ -146,6 +147,12 @@ function setStickers(skins) {
 
     skin.Stickers = stickers;
   });
+}
+
+function orderByLowerFloat(skins) {
+  // skins.sort((a, b) => {
+  //   return a.Float - b.Float;
+  // });
 }
 
 export default api;
