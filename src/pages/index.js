@@ -267,19 +267,26 @@ export default function Home() {
       skinsForPage = filteredSkins.slice((page - 1) * PAGINATOR_ITEMS, page * PAGINATOR_ITEMS);
     }
 
-    // let currentPageToCheck = currentPage;
-    // while (currentPageToCheck >= 0) { // mientras no lleguemos a la primera página
-    //   let skinsOnCurrentPage = skinsForPage;
-    //   if (skinsOnCurrentPage.length > 0) { // si hay skins en la página actual
-    //     skinsForPage = skinsOnCurrentPage;
-    //     break; // salimos del loop
-    //   } else { // si no hay skins en la página actual (estamos en una página vacía)
-    //     currentPageToCheck = currentPageToCheck - 1  // retrocedemos una página
-    //     setCurrentPage(currentPageToCheck);
-    //   }
+    if (skinsForPage.length == 0) {
+      let currentPageToCheck = currentPage;
+      while (currentPageToCheck >= 0) { // mientras no lleguemos a la primera página
+        let skinsOnCurrentPage = [];
+        if (skinsToFilter) {
+          skinsOnCurrentPage = skinsToFilter.slice((currentPageToCheck - 1) * PAGINATOR_ITEMS, currentPageToCheck * PAGINATOR_ITEMS);
+        } else {
+          skinsOnCurrentPage = filteredSkins.slice((currentPageToCheck - 1) * PAGINATOR_ITEMS, currentPageToCheck * PAGINATOR_ITEMS);
+        }
+        if (skinsOnCurrentPage.length > 0) { // si hay skins en la página actual
+          skinsForPage = skinsOnCurrentPage;
+          break; // salimos del loop
+        } else { // si no hay skins en la página actual (estamos en una página vacía)
+          currentPageToCheck = currentPageToCheck - 1  // retrocedemos una página
+          setCurrentPage(currentPageToCheck);
+        }
 
-    //   if (currentPageToCheck == 0) break; // si llegamos a la primera página, salimos del loop (no hay skins en ninguna página
-    // }
+        if (currentPageToCheck == 0) break; // si llegamos a la primera página, salimos del loop (no hay skins en ninguna página
+      }
+    }
 
     setSkinsForCurrentPage(skinsForPage);
     generatePaginator(skinsToFilter ? skinsToFilter : filteredSkins);
