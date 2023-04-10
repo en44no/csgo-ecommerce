@@ -344,22 +344,9 @@ export default function Home() {
                   </Box>
 
                 </Box>
-                <Box position='relative' display='flex' flexWrap='wrap' alignContent='flex-start' justifyContent='center' mt='1rem' gap={{ sm: 2, md: 6 }} bg='#23272e' py={4} px={0} borderRadius='9px' minH='28rem' pb='4.5rem'>
+                <Box position='relative' display='flex' flexWrap='wrap' alignContent='flex-start' justifyContent='center' mt='1rem' gap={{ sm: 2, md: 6 }} bg='#23272e' py={4} px={0} borderRadius='9px' minH='32rem' pb='4.5rem'>
 
-                  <Box display={{ sm: 'flex', md: 'none' }} w='100%' ml='1rem' mr='1rem'>
-                    <InputGroup>
-                      {!searchInputIsLoading && (
-                        <InputRightElement pointerEvents='none' children={<IoSearch fontSize='1.1rem' color='#718096' />} />
-                      )}
-                      <Input className="input-search" value={searchText}
-                        onChange={(e) => onChangeSearchText(e.target.value)} fontSize='sm' bg='transparent' borderBottom='1px solid #d13535' _hover={{ 'borderBottom': '1px solid #d13535' }} _focusVisible={{ 'borderBottom': '1px solid #d13535' }} _focus={{ 'borderBottom': '1px solid #d13535' }} placeholder="Busca una skin..." />
-                      {searchInputIsLoading && (
-                        <InputRightElement pointerEvents='none' children={<Spinner size='sm' speed='0.65s' />} />
-                      )}
-                    </InputGroup>
-                  </Box>
-
-                  <Box display='flex' alignItems='center' gap={3} justifyContent='space-between' w='100%' mx='3.5rem' mb='-0.5rem'>
+                  <Box display='flex' flexDirection={{ sm: 'column', md: 'row' }} alignItems='center' gap={{ sm: 0, md: 3 }} justifyContent={{ sm: '', md: 'space-between' }} w='100%' mx='3.5rem' mb='-0.5rem'>
 
                     <InputGroup w='fit-content'>
                       {searchText.length == 0 && (
@@ -372,7 +359,7 @@ export default function Home() {
                       )}
                     </InputGroup>
 
-                    <Box display='flex' alignItems='center' gap={3}>
+                    <Box display='flex' alignItems='center' gap={3} mb={{ sm: '0.8rem', md: 0 }}>
                       {/* <Select onChange={(e) => onFloatOrderChange(e.target.value)} w='fit-content' fontSize='sm' bg='transparent' border='none' borderRadius='0' borderBottom='1px solid #d13535' _hover={{ 'borderBottom': '1px solid #d13535' }} _focusVisible={{ 'borderBottom': '1px solid #d13535' }} _focus={{ 'borderBottom': '1px solid #d13535' }}>
                         <option style={{ background: '#1e2227' }} value='lower' selected>Float más bajo</option>
                         <option style={{ background: '#1e2227' }} value='higher'>Float más alto</option>
@@ -494,10 +481,61 @@ export default function Home() {
                     <Box display='flex' justifyContent='center' alignItems='center' w='100%' gap={3} position='absolute' bottom='1rem'>
                       <>
                         <Text display={{ sm: 'none', md: 'flex' }} color='grey'>Mostrando {(((currentPage - 1) * PAGINATOR_ITEMS) + 1) == 1 ? '01' : ((currentPage - 1) * PAGINATOR_ITEMS) + 1}-{(currentPage * PAGINATOR_ITEMS) > skins.length ? skins.length : (currentPage * PAGINATOR_ITEMS)} de {skins.length} artículos</Text>
-                        {paginator.map((page, index) => (
-                          <Button fontSize='sm' fontWeight={currentPage == page ? 'bold' : 'normal'} _hover={{ 'bg': '#d13535', 'color': '#fff' }} bg={currentPage == page ? '#d13535' : 'transparent'}
-                            borderRadius='9px' key={index} onClick={() => onPageChange(page)}>{page}</Button>
-                        ))}
+                        {currentPage > 3 && (
+                          <Button
+                            fontSize='sm'
+                            fontWeight='normal'
+                            _hover={{ 'bg': '#d13535', 'color': '#fff' }}
+                            bg={'transparent'}
+                            borderRadius='9px'
+                            key={'first'}
+                            onClick={() => onPageChange(1)}
+                          >
+                            1{currentPage > 3 ? '...' : ''}
+                          </Button>
+                        )}
+                        {paginator.map((page, index) => {
+                          if (isMobile && page > currentPage + 1) {
+                            return null;
+                          }
+                          if (isMobile && page < currentPage - 1) {
+                            return null;
+                          }
+                          if (!isMobile && page > currentPage + 2) {
+                            return null;
+                          }
+                          if (!isMobile && page < currentPage - 2) {
+                            return null;
+                          }
+                          return (
+                            <Button
+                              fontSize='sm'
+                              fontWeight={currentPage == page ? 'bold' : 'normal'}
+                              _hover={{ 'bg': '#d13535', 'color': '#fff' }}
+                              bg={currentPage == page ? '#d13535' : 'transparent'}
+                              borderRadius='9px'
+                              key={index}
+                              onClick={() => onPageChange(page)}
+                            >
+                              {page}
+                            </Button>
+                          )
+                        })}
+                        {currentPage < paginator[paginator.length - 1] - 2 && (
+                          <Button
+                            fontSize='sm'
+                            fontWeight='normal'
+                            _hover={{ 'bg': '#d13535', 'color': '#fff' }}
+                            bg={'transparent'}
+                            borderRadius='9px'
+                            key={'last'}
+                            onClick={() => onPageChange(paginator[paginator.length - 1])}
+                            disabled={currentPage === paginator[paginator.length - 1]}
+                          >
+                            {paginator[paginator.length - 1] - currentPage > 3 ? '...' : ''}
+                            {paginator[paginator.length - 1]}
+                          </Button>
+                        )}
                       </>
                     </Box>
                   )}
@@ -562,7 +600,7 @@ export default function Home() {
                           {selectedSkin.Stickers?.map((sticker, index) => (
                             <TooltipP key={sticker.Nombre + `sticker ${index}`} label={sticker.Nombre}>
                               <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
-                                <Img layout='responsive' className="shadow-for-skin-image" alt={sticker.Nombre + `sticker ${index}`} width='7rem' height='7rem' style={{ 'objectFit': "cover" }} src={sticker.Link}></Img>
+                                <Img layout='responsive' className="shadow-for-skin-image" alt={sticker.Nombre + `sticker ${index}`} width='6rem' height='6rem' style={{ objectFit: "cover", scale: isMobile ? '1.3' : '1.4' }} src={sticker.Link}></Img>
                               </Box>
                             </TooltipP>
                           ))}
