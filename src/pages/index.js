@@ -92,6 +92,7 @@ export default function Home() {
   }
 
   function onChangeSearchText(text) {
+    debugger;
     setSearchInputIsLoading(true);
     setSearchText(text);
     setFilters(text);
@@ -99,7 +100,6 @@ export default function Home() {
   }
 
   function onShowLockedItemsChange(show) {
-    debugger;
     setShowLockedItemsFilter(show);
     setFilters(searchText, show);
   }
@@ -186,10 +186,9 @@ export default function Home() {
   };
 
   const setFilters = (text, showLockedItems) => {
-    let textFilter = text ? text : searchText;
+    let textFilter = text != null ? text : searchText;
     let skinsWithFilters = filteredSkins ? filteredSkins : skins;
 
-    debugger;
     let tradeLockFilter = showLockedItems != null ? showLockedItems : showLockedItemsFilter;
 
     if (textFilter) {
@@ -267,6 +266,21 @@ export default function Home() {
     } else {
       skinsForPage = filteredSkins.slice((page - 1) * PAGINATOR_ITEMS, page * PAGINATOR_ITEMS);
     }
+
+    // let currentPageToCheck = currentPage;
+    // while (currentPageToCheck >= 0) { // mientras no lleguemos a la primera página
+    //   let skinsOnCurrentPage = skinsForPage;
+    //   if (skinsOnCurrentPage.length > 0) { // si hay skins en la página actual
+    //     skinsForPage = skinsOnCurrentPage;
+    //     break; // salimos del loop
+    //   } else { // si no hay skins en la página actual (estamos en una página vacía)
+    //     currentPageToCheck = currentPageToCheck - 1  // retrocedemos una página
+    //     setCurrentPage(currentPageToCheck);
+    //   }
+
+    //   if (currentPageToCheck == 0) break; // si llegamos a la primera página, salimos del loop (no hay skins en ninguna página
+    // }
+
     setSkinsForCurrentPage(skinsForPage);
     generatePaginator(skinsToFilter ? skinsToFilter : filteredSkins);
     return skinsForPage;
