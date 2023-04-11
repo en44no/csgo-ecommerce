@@ -10,14 +10,7 @@ import { FiExternalLink } from 'react-icons/fi';
 import { IoSearch, IoClose } from 'react-icons/io5';
 import { Skeleton } from '@chakra-ui/react'
 import { Tooltip } from '@chakra-ui/react'
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
-} from '@chakra-ui/react'
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react'
 import Info from "../components/Info";
 import HeaderText from "../components/HeaderText";
 import TooltipP from "../components/Tooltip";
@@ -122,7 +115,6 @@ export default function Home() {
   }
 
   function onPageChange(newPage) {
-    debugger;
     setCurrentPage(newPage);
     setSkinsBasedOnPage(newPage);
   }
@@ -203,7 +195,6 @@ export default function Home() {
     let tradeLockFilterPrivate = showLockedItems != null ? showLockedItems : showLockedItemsFilter;
     let orderFilterPrivate = order != null ? order : orderFilter;
 
-    debugger;
     if (textFilterPrivate) {
       skinsWithFilters = allSkinsCopy.filter(skin => {
         return skin.Nombre.toLowerCase().includes(textFilterPrivate.toLowerCase()) ? skin : null;
@@ -233,54 +224,10 @@ export default function Home() {
       }
     }
 
-    debugger;
     setFilteredSkins(skinsWithFilters);
     setSkinsBasedOnPage(currentPage, skinsWithFilters);
   };
 
-  // function setFiltersAndOrder(newShowLockedItemsFilter, newSearchText) {
-  //   let searchTextToCheck = newSearchText ? newSearchText : searchText;
-  //   let showLockedItemsFilterToCheck = newShowLockedItemsFilter ? newShowLockedItemsFilter : showLockedItemsFilter;
-
-  //   let skinsCopy = [...skins];
-  //   debugger;
-
-  //   const filteredSkins = skinsCopy.filter(skin => {
-  //     if (showLockedItemsFilterToCheck && searchTextToCheck) {
-  //       return (skin.Nombre.toLowerCase().includes(searchTextToCheck.toLowerCase())) ? skin : null;
-  //     }
-  //     else if (!showLockedItemsFilterToCheck && searchTextToCheck) {
-  //       return (skin.TradeLock == null || skin.TradeLock == 'FALSE') && skin.Nombre.toLowerCase().includes(searchTextToCheck.toLowerCase()) ? skin : null;
-  //     }
-  //     else if (showLockedItemsFilterToCheck) {
-  //       return skin;
-  //     }
-  //     else if (searchTextToCheck) {
-  //       return skin.Nombre.toLowerCase().includes(searchTextToCheck.toLowerCase()) ? skin : null;
-  //     } else {
-  //       return (skin.TradeLock == null || skin.TradeLock == 'FALSE') ? skin : null
-  //     }
-  //   });
-
-  //   let skinsToSet = [];
-
-  //   let currentPageToCheck = currentPage;
-  //   while (currentPageToCheck >= 0) { // mientras no lleguemos a la primera página
-  //     let skinsOnCurrentPage = setSkinsBasedOnPage(currentPageToCheck, filteredSkins);
-  //     if (skinsOnCurrentPage.length > 0) { // si hay skins en la página actual
-  //       skinsToSet = skinsOnCurrentPage;
-  //       break; // salimos del loop
-  //     } else { // si no hay skins en la página actual (estamos en una página vacía)
-  //       currentPageToCheck = currentPageToCheck - 1  // retrocedemos una página
-  //       setCurrentPage(currentPageToCheck);
-  //     }
-
-  //     if (currentPageToCheck == 0) break; // si llegamos a la primera página, salimos del loop (no hay skins en ninguna página
-  //   }
-
-  //   generatePaginator(filteredSkins);
-  //   setFilteredSkins(filteredSkins);
-  // }
 
   function setSkinsBasedOnPage(page, skinsToFilter) {
     let skinsForPage = [];
@@ -390,7 +337,7 @@ export default function Home() {
 
                       <Select onChange={(e) => onOrderChange(e.target.value)} w='fit-content' fontSize='sm' bg='transparent' border='none' borderRadius='0' borderBottom='1px solid #d13535' _hover={{ 'borderBottom': '1px solid #d13535' }} _focusVisible={{ 'borderBottom': '1px solid #d13535' }} _focus={{ 'borderBottom': '1px solid #d13535' }}>
                         <option style={{ background: '#1e2227' }} value='default' selected>Defecto</option>
-                        <option style={{ background: '#1e2227' }} value='lower'>Float más bajo</option>
+                        <option style={{ background: '#1e2227' }} value='lower'> Float más bajo</option>
                         <option style={{ background: '#1e2227' }} value='higher'>Float más alto</option>
                       </Select>
 
