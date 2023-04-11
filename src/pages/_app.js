@@ -15,6 +15,20 @@ const breakpoints = {
 
 const theme = extendTheme({
   breakpoints,
+  colors: {
+    red: {
+      50: '#d83838',
+      100: '#d83838',
+      200: '#d83838',
+      300: '#d83838',
+      400: '#d83838',
+      500: '#d83838',
+      600: '#d83838',
+      700: '#d83838',
+      800: '#d83838',
+      900: '#d83838',
+    }
+  },
   styles: {
     global: () => ({
       body: {

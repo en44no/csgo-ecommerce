@@ -41,7 +41,7 @@ export default function Home() {
   //Filters
   const [showLockedItemsFilter, setShowLockedItemsFilter] = useState(false);
 
-  const PAGINATOR_ITEMS = 10;
+  const PAGINATOR_ITEMS = 25;
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isMobile] = useMediaQuery('(max-width: 479px)');
