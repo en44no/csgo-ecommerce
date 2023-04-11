@@ -41,6 +41,7 @@ export default function Home() {
 
   //Filters
   const [showLockedItemsFilter, setShowLockedItemsFilter] = useState(false);
+  const [orderFilter, setOrderFilter] = useState('default');
 
   const [isMobile] = useMediaQuery('(max-width: 479px)');
 
@@ -96,7 +97,6 @@ export default function Home() {
   }
 
   function onChangeSearchText(text) {
-    debugger;
     setSearchInputIsLoading(true);
     setSearchText(text);
     setFilters(text);
@@ -108,6 +108,11 @@ export default function Home() {
     setFilters(searchText, show);
   }
 
+  function onOrderChange(order) {
+    setOrderFilter(order);
+    setFilters(searchText, showLockedItemsFilter, order);
+  }
+
   function generatePaginator(skins) {
     const paginator = [];
     for (let i = 0; i < skins.length / paginatorItems; i++) {
@@ -117,6 +122,7 @@ export default function Home() {
   }
 
   function onPageChange(newPage) {
+    debugger;
     setCurrentPage(newPage);
     setSkinsBasedOnPage(newPage);
   }
@@ -189,32 +195,45 @@ export default function Home() {
     setSoundIsEnabled(!soundIsEnabled);
   };
 
-  const setFilters = (text, showLockedItems) => {
-    let textFilter = text != null ? text : searchText;
-    let skinsWithFilters = filteredSkins ? filteredSkins : skins;
+  const setFilters = (text, showLockedItems, order) => {
+    let skinsWithFilters = filteredSkins ? filteredSkins : [...skins];
+    let allSkinsCopy = [...skins];
 
-    let tradeLockFilter = showLockedItems != null ? showLockedItems : showLockedItemsFilter;
+    let textFilterPrivate = text != null ? text : searchText;
+    let tradeLockFilterPrivate = showLockedItems != null ? showLockedItems : showLockedItemsFilter;
+    let orderFilterPrivate = order != null ? order : orderFilter;
 
-    if (textFilter) {
-      skinsWithFilters = skins.filter(skin => {
-        return skin.Nombre.toLowerCase().includes(textFilter.toLowerCase()) ? skin : null;
+    debugger;
+    if (textFilterPrivate) {
+      skinsWithFilters = allSkinsCopy.filter(skin => {
+        return skin.Nombre.toLowerCase().includes(textFilterPrivate.toLowerCase()) ? skin : null;
       });
     }
 
-    if (tradeLockFilter == false) {
+    if (tradeLockFilterPrivate == false) {
       skinsWithFilters = skinsWithFilters.filter(skin => {
         return skin.TradeLock == null || skin.TradeLock == 'FALSE' ? skin : null;
       });
-    } else if (tradeLockFilter == true) {
-      skinsWithFilters = skins;
-
-      if (textFilter) {
-        skinsWithFilters = skinsWithFilters.filter(skin => {
-          return skin.Nombre.toLowerCase().includes(textFilter.toLowerCase()) ? skin : null;
+    } else if (tradeLockFilterPrivate == true) {
+      if (textFilterPrivate) {
+        skinsWithFilters = allSkinsCopy.filter(skin => {
+          return skin.Nombre.toLowerCase().includes(textFilterPrivate.toLowerCase()) ? skin : null;
         });
+        skinsWithFilters = skinsWithFilters;
+      } else {
+        skinsWithFilters = allSkinsCopy;
       }
     }
 
+    if (orderFilterPrivate) {
+      if (orderFilterPrivate == 'lower') {
+        skinsWithFilters = skinsWithFilters.sort((a, b) => a.Float - b.Float);
+      } else if (orderFilterPrivate == 'higher') {
+        skinsWithFilters = skinsWithFilters.sort((a, b) => b.Float - a.Float);
+      }
+    }
+
+    debugger;
     setFilteredSkins(skinsWithFilters);
     setSkinsBasedOnPage(currentPage, skinsWithFilters);
   };
@@ -286,9 +305,13 @@ export default function Home() {
         } else { // si no hay skins en la página actual (estamos en una página vacía)
           currentPageToCheck = currentPageToCheck - 1  // retrocedemos una página
           setCurrentPage(currentPageToCheck);
+          if (currentPageToCheck == 0) {
+            setCurrentPage(1);
+            break;
+          } // si llegamos a la primera página, salimos del loop (no hay skins en ninguna página
         }
-
         if (currentPageToCheck == 0) break; // si llegamos a la primera página, salimos del loop (no hay skins en ninguna página
+
       }
     }
 
@@ -364,10 +387,12 @@ export default function Home() {
                     </InputGroup>
 
                     <Box display='flex' alignItems='center' gap={3} mb={{ sm: '0.8rem', md: 0 }}>
-                      {/* <Select onChange={(e) => onFloatOrderChange(e.target.value)} w='fit-content' fontSize='sm' bg='transparent' border='none' borderRadius='0' borderBottom='1px solid #d13535' _hover={{ 'borderBottom': '1px solid #d13535' }} _focusVisible={{ 'borderBottom': '1px solid #d13535' }} _focus={{ 'borderBottom': '1px solid #d13535' }}>
-                        <option style={{ background: '#1e2227' }} value='lower' selected>Float más bajo</option>
+
+                      <Select onChange={(e) => onOrderChange(e.target.value)} w='fit-content' fontSize='sm' bg='transparent' border='none' borderRadius='0' borderBottom='1px solid #d13535' _hover={{ 'borderBottom': '1px solid #d13535' }} _focusVisible={{ 'borderBottom': '1px solid #d13535' }} _focus={{ 'borderBottom': '1px solid #d13535' }}>
+                        <option style={{ background: '#1e2227' }} value='default' selected>Defecto</option>
+                        <option style={{ background: '#1e2227' }} value='lower'>Float más bajo</option>
                         <option style={{ background: '#1e2227' }} value='higher'>Float más alto</option>
-                      </Select> */}
+                      </Select>
 
                       <Box border='none' borderBottom='1px solid #d13535' h='2.5rem' display='flex' px='0.5rem' alignItems='center'>
                         <FormControl display='flex' alignItems='center'>
@@ -484,7 +509,7 @@ export default function Home() {
                   {paginator.length > 0 && skinsForCurrentPage != 0 && (
                     <Box display='flex' justifyContent='center' alignItems='center' w='100%' gap={3} position='absolute' bottom='1rem'>
                       <>
-                        <Text display={{ sm: 'none', md: 'flex' }} color='grey'>Mostrando {(((currentPage - 1) * paginatorItems) + 1) == 1 ? '01' : ((currentPage - 1) * paginatorItems) + 1}-{(currentPage * paginatorItems) > skins.length ? skins.length : (currentPage * paginatorItems)} de {skins.length} artículos</Text>
+                        <Text display={{ sm: 'none', md: 'flex' }} color='grey'>Mostrando {(((currentPage - 1) * paginatorItems) + 1) == 1 ? '01' : ((currentPage - 1) * paginatorItems) + 1}-{(currentPage * paginatorItems) > skins.length ? skins.length : (currentPage * paginatorItems)} de {filteredSkins.length} artículos</Text>
                         {currentPage > 3 && (
                           <>
                             <Button
