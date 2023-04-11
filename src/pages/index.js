@@ -613,7 +613,7 @@ export default function Home() {
               <Modal isOpen={isOpen} size='md' onClose={onCloseModal} isCentered>
                 <ModalOverlay backdropFilter='auto'
                   backdropBlur='2px' />
-                <ModalContent bg='#1e2227'>
+                <ModalContent bg='#1e2227' m={{ sm: '1rem', md: null }}>
                   <ModalHeader>{selectedSkin.Nombre}</ModalHeader>
                   <ModalCloseButton _focus={{ 'boxShadow': 'none' }} _focusVisible={{ 'boxShadow': 'none' }} mt='0.5rem' />
 
