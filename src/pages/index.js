@@ -117,6 +117,7 @@ export default function Home() {
   function onPageChange(newPage) {
     setCurrentPage(newPage);
     setSkinsBasedOnPage(newPage);
+    //document.getElementById('skins-container').scrollIntoView();
   }
 
   function clearSearchText() {
@@ -295,7 +296,7 @@ export default function Home() {
 
               <Box display="flex" flexDirection="column" width="100%">
 
-                <Box w='100%' display='flex' flexDir={{ sm: 'column', md: 'row', lg: 'row' }} alignItems='center' justifyContent='space-between'>
+                <Box id='skins-container' w='100%' display='flex' flexDir={{ sm: 'column', md: 'row', lg: 'row' }} alignItems='center' justifyContent='space-between'>
                   <Text fontWeight="800" lineHeight="normal" bgGradient="linear(to-r, red.500, red.600, red.500)" bgClip="text" mr='0.5rem' fontSize={'3xl'}>Skins disponibles</Text>
 
                   <Box display={{ sm: 'none', md: 'flex' }} alignItems='center'>
@@ -318,7 +319,7 @@ export default function Home() {
                   </Box>
 
                 </Box>
-                <Box position='relative' display='flex' flexWrap='wrap' alignContent='flex-start' justifyContent='center' mt='1rem' gap={{ sm: 2, md: 6 }} bg='#23272e' py={4} px={0} borderRadius='9px' minH='32rem' pb='4.5rem'>
+                <Box position='relative' display='flex' flexWrap='wrap' alignContent='flex-start' justifyContent='center' mt='1rem' gap={{ sm: 2, md: 6 }} bg='#23272e' py={4} px={0} borderRadius='9px' pb='4.5rem' minH='max-content'>
 
                   <Box display='flex' flexDirection={{ sm: 'column', md: 'row' }} alignItems='center' gap={{ sm: 0, md: 3 }} justifyContent={{ sm: '', md: 'space-between' }} w='100%' mx='3.5rem' mb='-0.5rem'>
 
