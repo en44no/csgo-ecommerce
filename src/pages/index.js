@@ -41,10 +41,10 @@ export default function Home() {
   //Filters
   const [showLockedItemsFilter, setShowLockedItemsFilter] = useState(false);
 
-  const PAGINATOR_ITEMS = 25;
+  const [isMobile] = useMediaQuery('(max-width: 479px)');
+  const PAGINATOR_ITEMS = isMobile ? 20 : 25;
 
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [isMobile] = useMediaQuery('(max-width: 479px)');
 
   useEffect(() => {
     setAwpScopeAudio(new Audio('/sounds/awp-zoom.mp3'));
@@ -482,17 +482,22 @@ export default function Home() {
                       <>
                         <Text display={{ sm: 'none', md: 'flex' }} color='grey'>Mostrando {(((currentPage - 1) * PAGINATOR_ITEMS) + 1) == 1 ? '01' : ((currentPage - 1) * PAGINATOR_ITEMS) + 1}-{(currentPage * PAGINATOR_ITEMS) > skins.length ? skins.length : (currentPage * PAGINATOR_ITEMS)} de {skins.length} artículos</Text>
                         {currentPage > 3 && (
-                          <Button
-                            fontSize='sm'
-                            fontWeight='normal'
-                            _hover={{ 'bg': '#d13535', 'color': '#fff' }}
-                            bg={'transparent'}
-                            borderRadius='9px'
-                            key={'first'}
-                            onClick={() => onPageChange(1)}
-                          >
-                            1{currentPage > 3 ? '...' : ''}
-                          </Button>
+                          <>
+                            <Button
+                              fontSize='sm'
+                              fontWeight='normal'
+                              _hover={{ 'bg': '#d13535', 'color': '#fff' }}
+                              bg={'transparent'}
+                              borderRadius='9px'
+                              key={'first'}
+                              onClick={() => onPageChange(1)}
+                            >
+                              1
+                            </Button>
+                            {currentPage > 3 && (
+                              <Text>...</Text>
+                            )}
+                          </>
                         )}
                         {paginator.map((page, index) => {
                           if (isMobile && page > currentPage + 1) {
@@ -522,19 +527,23 @@ export default function Home() {
                           )
                         })}
                         {currentPage < paginator[paginator.length - 1] - 2 && (
-                          <Button
-                            fontSize='sm'
-                            fontWeight='normal'
-                            _hover={{ 'bg': '#d13535', 'color': '#fff' }}
-                            bg={'transparent'}
-                            borderRadius='9px'
-                            key={'last'}
-                            onClick={() => onPageChange(paginator[paginator.length - 1])}
-                            disabled={currentPage === paginator[paginator.length - 1]}
-                          >
-                            {paginator[paginator.length - 1] - currentPage > 3 ? '...' : ''}
-                            {paginator[paginator.length - 1]}
-                          </Button>
+                          <>
+                            {paginator[paginator.length - 1] - currentPage > 3 && (
+                              <Text>...</Text>
+                            )}
+                            <Button
+                              fontSize='sm'
+                              fontWeight='normal'
+                              _hover={{ 'bg': '#d13535', 'color': '#fff' }}
+                              bg={'transparent'}
+                              borderRadius='9px'
+                              key={'last'}
+                              onClick={() => onPageChange(paginator[paginator.length - 1])}
+                              disabled={currentPage === paginator[paginator.length - 1]}
+                            >
+                              {paginator[paginator.length - 1]}
+                            </Button>
+                          </>
                         )}
                       </>
                     </Box>
