@@ -336,7 +336,7 @@ export default function Home() {
 
                     <Box display='flex' alignItems='center' gap={3} mb={{ sm: '0.8rem', md: 0 }}>
 
-                      <Select onChange={(e) => onOrderChange(e.target.value)} w='fit-content' fontSize='sm' bg='transparent' border='none' borderRadius='0' borderBottom='1px solid #d13535' _hover={{ 'borderBottom': '1px solid #d13535' }} _focusVisible={{ 'borderBottom': '1px solid #d13535' }} _focus={{ 'borderBottom': '1px solid #d13535' }}>
+                      <Select onChange={(e) => onOrderChange(e.target.value)} w='fit-content' fontSize='sm' bg='transparent' border='none' borderRadius='0' borderBottom='1px solid #d13535' cursor='pointer' _hover={{ 'borderBottom': '1px solid #d13535' }} _focusVisible={{ 'borderBottom': '1px solid #d13535' }} _focus={{ 'borderBottom': '1px solid #d13535' }}>
                         <option style={{ background: '#1e2227' }} value='default' selected>Defecto</option>
                         <option style={{ background: '#1e2227' }} value='lower'> Float más bajo</option>
                         <option style={{ background: '#1e2227' }} value='higher'>Float más alto</option>
