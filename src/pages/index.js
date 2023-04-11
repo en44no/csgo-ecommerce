@@ -28,6 +28,7 @@ export default function Home() {
   const [selectedSkin, setSelectedSkin] = useState({});
   const [contactLinks, setContactLinks] = useState([]);
   const [info, setInfo] = useState([]);
+  const [paginatorItems, setPaginatorItems] = useState(25);
   const [loading, setLoading] = useState([]);
   const [skinsAreLoading, setSkinsAreLoading] = useState([]);
   const [filteredSkins, setFilteredSkins] = useState([]);
@@ -42,7 +43,6 @@ export default function Home() {
   const [showLockedItemsFilter, setShowLockedItemsFilter] = useState(false);
 
   const [isMobile] = useMediaQuery('(max-width: 479px)');
-  const PAGINATOR_ITEMS = isMobile ? 20 : 25;
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -57,6 +57,10 @@ export default function Home() {
 
     setLoading(true);
     setSkinsAreLoading(true);
+
+    if (isMobile) {
+      setPaginatorItems(20);
+    }
 
     fetchData();
   }, []);
@@ -106,7 +110,7 @@ export default function Home() {
 
   function generatePaginator(skins) {
     const paginator = [];
-    for (let i = 0; i < skins.length / PAGINATOR_ITEMS; i++) {
+    for (let i = 0; i < skins.length / paginatorItems; i++) {
       paginator.push(i + 1);
     }
     setPaginator(paginator);
@@ -262,9 +266,9 @@ export default function Home() {
   function setSkinsBasedOnPage(page, skinsToFilter) {
     let skinsForPage = [];
     if (skinsToFilter) {
-      skinsForPage = skinsToFilter.slice((page - 1) * PAGINATOR_ITEMS, page * PAGINATOR_ITEMS);
+      skinsForPage = skinsToFilter.slice((page - 1) * paginatorItems, page * paginatorItems);
     } else {
-      skinsForPage = filteredSkins.slice((page - 1) * PAGINATOR_ITEMS, page * PAGINATOR_ITEMS);
+      skinsForPage = filteredSkins.slice((page - 1) * paginatorItems, page * paginatorItems);
     }
 
     if (skinsForPage.length == 0) {
@@ -272,9 +276,9 @@ export default function Home() {
       while (currentPageToCheck >= 0) { // mientras no lleguemos a la primera página
         let skinsOnCurrentPage = [];
         if (skinsToFilter) {
-          skinsOnCurrentPage = skinsToFilter.slice((currentPageToCheck - 1) * PAGINATOR_ITEMS, currentPageToCheck * PAGINATOR_ITEMS);
+          skinsOnCurrentPage = skinsToFilter.slice((currentPageToCheck - 1) * paginatorItems, currentPageToCheck * paginatorItems);
         } else {
-          skinsOnCurrentPage = filteredSkins.slice((currentPageToCheck - 1) * PAGINATOR_ITEMS, currentPageToCheck * PAGINATOR_ITEMS);
+          skinsOnCurrentPage = filteredSkins.slice((currentPageToCheck - 1) * paginatorItems, currentPageToCheck * paginatorItems);
         }
         if (skinsOnCurrentPage.length > 0) { // si hay skins en la página actual
           skinsForPage = skinsOnCurrentPage;
@@ -480,7 +484,7 @@ export default function Home() {
                   {paginator.length > 0 && skinsForCurrentPage != 0 && (
                     <Box display='flex' justifyContent='center' alignItems='center' w='100%' gap={3} position='absolute' bottom='1rem'>
                       <>
-                        <Text display={{ sm: 'none', md: 'flex' }} color='grey'>Mostrando {(((currentPage - 1) * PAGINATOR_ITEMS) + 1) == 1 ? '01' : ((currentPage - 1) * PAGINATOR_ITEMS) + 1}-{(currentPage * PAGINATOR_ITEMS) > skins.length ? skins.length : (currentPage * PAGINATOR_ITEMS)} de {skins.length} artículos</Text>
+                        <Text display={{ sm: 'none', md: 'flex' }} color='grey'>Mostrando {(((currentPage - 1) * paginatorItems) + 1) == 1 ? '01' : ((currentPage - 1) * paginatorItems) + 1}-{(currentPage * paginatorItems) > skins.length ? skins.length : (currentPage * paginatorItems)} de {skins.length} artículos</Text>
                         {currentPage > 3 && (
                           <>
                             <Button
@@ -500,16 +504,10 @@ export default function Home() {
                           </>
                         )}
                         {paginator.map((page, index) => {
-                          if (isMobile && page > currentPage + 1) {
+                          if (page > currentPage + 2) {
                             return null;
                           }
-                          if (isMobile && page < currentPage - 1) {
-                            return null;
-                          }
-                          if (!isMobile && page > currentPage + 2) {
-                            return null;
-                          }
-                          if (!isMobile && page < currentPage - 2) {
+                          if (page < currentPage - 2) {
                             return null;
                           }
                           return (
