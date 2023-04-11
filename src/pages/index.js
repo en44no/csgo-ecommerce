@@ -371,25 +371,15 @@ export default function Home() {
                                   <TiArrowSortedDown fontSize='1.3rem' />
                                 </Box>
 
-                                <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Factory New'>
-                                  <Box w={'7%'} bg='#3d818f' borderRadius='50px 0 0 50px'></Box>
-                                </TooltipP>
+                                <Box w={'7%'} bg='#3d818f' borderRadius='50px 0 0 50px'></Box>
 
-                                <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Minimal Wear'>
-                                  <Box w={'8%'} bg='#84b235'></Box>
-                                </TooltipP>
+                                <Box w={'8%'} bg='#84b235'></Box>
 
-                                <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Field Tested'>
-                                  <Box w={'23%'} bg='#dfc04a'></Box>
-                                </TooltipP>
+                                <Box w={'23%'} bg='#dfc04a'></Box>
 
-                                <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Well Worn'>
-                                  <Box w={'7%'} bg='#ef8641'></Box>
-                                </TooltipP>
+                                <Box w={'7%'} bg='#ef8641'></Box>
 
-                                <TooltipP backgroundColor='#2d3748' textColor='#ffffff' label='Battle Scarred'>
-                                  <Box w={'55%'} bg='#eb5757' borderRadius='0 50px 50px 0'></Box>
-                                </TooltipP>
+                                <Box w={'55%'} bg='#eb5757' borderRadius='0 50px 50px 0'></Box>
                               </>
 
                             )}
