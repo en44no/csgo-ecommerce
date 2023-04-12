@@ -268,6 +268,50 @@ export default function Home() {
     return skinsForPage;
   }
 
+  function getStyleForImageOnModal(skin) {
+    if (!skin?.Nombre) return;
+
+    let style = {
+      objectFit: 'cover',
+    }
+
+    if (!skin.Float && skin.Stickers?.length == 0) {
+      return {
+        ...style,
+        marginTop: '2rem',
+        marginBottom: '-1rem'
+      }
+    }
+    else {
+      return style;
+    }
+  }
+
+  function getWidthForImageOnModal(skin, size) {
+    if (skin.Nombre.includes('Music Kit')) {
+      if (size == 'sm') {
+        return '12rem';
+      } else {
+        return '16rem';
+      }
+    }
+    else if (skin.Nombre.includes('Sticker')) {
+      if (size == 'sm') {
+        return '12rem';
+      } else {
+        return '16rem';
+      }
+    }
+
+    else {
+      if (size == 'sm') {
+        return '14rem';
+      } else {
+        return '18rem';
+      }
+    }
+  }
+
   return (
     <>
       <Head>
@@ -562,7 +606,7 @@ export default function Home() {
                     <Box key={selectedSkin.Nombre} w='100%' position='relative' mt='-0.2rem' p='0.5rem' bg='#23272e' borderRadius='9px'>
                       <Box position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
                         <Box className={isMobile ? 'skin-image-container' : 'scale-image'} display='flex' justifyContent='center' w='100%' maxH='15rem' h='auto'>
-                          <Img layout='responsive' className="shadow-for-skin-image" alt={selectedSkin.Nombre} width={{ sm: '14rem', md: '18rem' }} height='auto' style={{ 'objectFit': "cover" }} src={selectedSkin.ImagenURL}></Img>
+                          <Img layout='responsive' style={getStyleForImageOnModal(selectedSkin)} className="shadow-for-skin-image" alt={selectedSkin.Nombre} width={{ sm: () => getWidthForImageOnModal(selectedSkin, 'sm'), md: () => getWidthForImageOnModal(selectedSkin, 'md') }} height='auto' src={selectedSkin.ImagenURL}></Img>
                         </Box>
 
                         <Box display='flex' pb='0.5rem' mt='-0.5rem'>
@@ -682,7 +726,7 @@ export default function Home() {
           )}
 
         </Container>
-      </main>
+      </main >
     </>
   )
 }
