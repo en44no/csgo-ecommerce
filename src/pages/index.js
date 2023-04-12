@@ -198,7 +198,10 @@ export default function Home() {
 
     if (textFilterPrivate) {
       skinsWithFilters = allSkinsCopy.filter(skin => {
-        return skin.Nombre.toLowerCase().includes(textFilterPrivate.toLowerCase()) ? skin : null;
+        let name = skin.Nombre.toLowerCase().normalize('NFD').replace(/[^\w\s]/gi, '').replace(/\s+/g, '').replace(/[\u0300-\u036f]/g, '').replace(/ /g, '');
+        let text = textFilterPrivate.toLowerCase().normalize('NFD').replace(/[^\w\s]/gi, '').replace(/\s+/g, '').replace(/[\u0300-\u036f]/g, '').replace(/ /g, '');
+
+        return name.includes(text) ? skin : null;
       });
     }
 
@@ -209,7 +212,10 @@ export default function Home() {
     } else if (tradeLockFilterPrivate == true) {
       if (textFilterPrivate) {
         skinsWithFilters = allSkinsCopy.filter(skin => {
-          return skin.Nombre.toLowerCase().includes(textFilterPrivate.toLowerCase()) ? skin : null;
+          let name = skin.Nombre.toLowerCase().normalize('NFD').replace(/[^\w\s]/gi, '').replace(/\s+/g, '').replace(/[\u0300-\u036f]/g, '').replace(/ /g, '');
+          let text = textFilterPrivate.toLowerCase().normalize('NFD').replace(/[^\w\s]/gi, '').replace(/\s+/g, '').replace(/[\u0300-\u036f]/g, '').replace(/ /g, '');
+
+          return name.includes(text) ? skin : null;
         });
         skinsWithFilters = skinsWithFilters;
       } else {
