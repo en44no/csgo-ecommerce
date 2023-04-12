@@ -41,6 +41,10 @@ export default function Home() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {
+    if (isMobile) {
+      setPaginatorItems(18);
+    }
+
     setAwpScopeAudio(new Audio('/sounds/awp-zoom.mp3'));
     setAwpShootAudio(new Audio('/sounds/awp-shoot.mp3'));
     setGoGoGoAudio(new Audio('/sounds/go-go-go.mp3'));
@@ -52,10 +56,6 @@ export default function Home() {
     setLoading(true);
     setSkinsAreLoading(true);
 
-    if (isMobile) {
-      setPaginatorItems(20);
-    }
-
     fetchData();
   }, []);
 
@@ -65,6 +65,7 @@ export default function Home() {
     //reset filters
     setShowLockedItemsFilter(true);
     setSearchText('');
+    setOrderFilter('default');
 
     setSkins(skins);
     setFilteredSkins(skins);
