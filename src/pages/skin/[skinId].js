@@ -200,7 +200,7 @@ export default function SkinPage() {
               <Button onClick={() => router.push("/")} w='100%' leftIcon={<FaAngleLeft fontSize='1.1rem' style={{ marginRight: '-0.3rem' }} />} fontSize='sm' mb='1rem' bg='transparent' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} borderRadius='9px'>VOLVER AL INICIO</Button>
 
               <Box id='skins-container' w='100%' display='flex' flexDir={{ sm: 'column', md: 'row', lg: 'row' }} alignItems='center' justifyContent='space-between'>
-                <Text fontWeight="800" lineHeight="normal" bgGradient="linear(to-r, red.500, red.600, red.500)" bgClip="text" mr='0.5rem' fontSize={'3xl'}>{skin?.Nombre}</Text>
+                <Text fontWeight="800" lineHeight="normal" bgGradient="linear(to-r, red.500, red.600, red.500)" bgClip="text" mr='0.5rem' fontSize={{ sm: '1.3rem', md: '3xl' }}>{skin?.Nombre}</Text>
 
                 <Box display={{ sm: 'none', md: 'flex' }} alignItems='center'>
                   <Box mr='0.8rem'>
@@ -223,10 +223,10 @@ export default function SkinPage() {
 
               </Box>
 
-              <Box w='100%' pb='1.5rem' mt='1rem' display='flex' alignItems={{ sm: 'center', md: '' }} justifyContent={{ sm: 'center', md: '' }} position='relative' p='1.5rem' bg='#23272e' borderRadius='9px' px='10rem'>
+              <Box w='100%' pb='1.5rem' mt='1rem' display='flex' alignItems={{ sm: 'center', md: '' }} justifyContent={{ sm: 'center', md: '' }} position='relative' p='1.5rem' bg='#23272e' borderRadius='9px' px={{ sm: '1rem', md: '10rem' }}>
 
-                <Box w='100%' display='flex' bg='#1e2227' p='1.5rem' borderRadius='9px'>
-                  <Box w='60%'>
+                <Box w='100%' gap={{ sm: null, md: '3rem' }} justifyContent='center' display='flex' flexDirection={{ sm: 'column', md: 'row' }} bg='#1e2227' p='1.5rem' borderRadius='9px'>
+                  <Box w={{ sm: '100%', md: 'fit-content' }}>
                     <Box key={skin?.Nombre}>
 
                       <Box position='relative' display='flex' justifyContent='center' flexDirection='column' w='100%' alignItems='center' gap={2} mt={skin?.Stickers?.length > 0 && '-1.5rem'}>
@@ -253,7 +253,7 @@ export default function SkinPage() {
 
                   </Box>
 
-                  <Box w='40%' background='#23272e' position='relative'
+                  <Box w={{ sm: '100%', md: '40%' }} background='#23272e' position='relative'
                     padding='1rem' borderRadius='9px' display='flex' flexDirection='column'>
 
                     <Box w='100%' display='flex' justifyContent='space-between'>
