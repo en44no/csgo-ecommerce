@@ -223,10 +223,10 @@ export default function SkinPage() {
 
               </Box>
 
-              <Box w='100%' pb='1.5rem' mt='1rem' display='flex' alignItems={{ sm: 'center', md: '' }} justifyContent={{ sm: 'center', md: '' }} position='relative' p='1.5rem' bg='#23272e' borderRadius='9px' px={{ sm: '1rem', md: '10rem' }}>
+              <Box w='100%' pb='1.5rem' mt='1rem' display='flex' alignItems={{ sm: 'center', md: '' }} justifyContent={{ sm: 'center', md: '' }} position='relative' p='1.5rem' bg='#23272e' borderRadius='9px' px='1rem'>
 
-                <Box w='100%' gap={{ sm: null, md: '3rem' }} justifyContent='center' display='flex' flexDirection={{ sm: 'column', md: 'row' }} bg='#1e2227' p='1.5rem' borderRadius='9px'>
-                  <Box w={{ sm: '100%', md: 'fit-content' }}>
+                <Box gap={{ sm: null, md: '0.5rem' }} w={{ sm: '100%', md: '25rem' }} justifyContent='center' display='flex' flexDirection='column' bg='#1e2227' p='1.5rem' borderRadius='9px'>
+                  <Box w='100%'>
                     <Box key={skin?.Nombre}>
 
                       <Box position='relative' display='flex' justifyContent='center' flexDirection='column' w='100%' alignItems='center' gap={2} mt={skin?.Stickers?.length > 0 && '-1.5rem'}>
@@ -253,37 +253,43 @@ export default function SkinPage() {
 
                   </Box>
 
-                  <Box w={{ sm: '100%', md: '40%' }} background='#23272e' position='relative'
+                  <Box w='100%' background='#23272e' position='relative'
                     padding='1rem' borderRadius='9px' display='flex' flexDirection='column'>
 
                     <Box w='100%' display='flex' justifyContent='space-between'>
-                      <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label="Este artículo registra el número de víctimas" aria-label="Este artículo registra el número de víctimas">
-                        <Box display='flex' alignItems='center' gap={2}>
-                          <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(188, 115, 77, .15)' borderRadius='9px'>
-                            <Text color='#bc734d' fontWeight='600' fontSize='sm'>StatTrack</Text>
-                          </Box>
-                        </Box>
-                      </Tooltip>
+                      <Box>
+                        {skin?.StatTrack && (
+                          <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label="Este artículo registra el número de víctimas" aria-label="Este artículo registra el número de víctimas">
+                            <Box display='flex' alignItems='center' gap={2}>
+                              <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(188, 115, 77, .15)' borderRadius='9px'>
+                                <Text color='#bc734d' fontWeight='600' fontSize='sm'>StatTrack</Text>
+                              </Box>
+                            </Box>
+                          </Tooltip>
+                        )}
+                      </Box>
 
-                      {skin?.TradeLock ? (
-                        <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label="Este artículo tiene un bloqueo de intercambio por parte de Steam" aria-label="Este artículo tiene un bloqueo de intercambio por parte de Steam">
-                          <Box display='flex' alignItems='center' gap={2}>
-                            <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(208, 56, 56, .15)' borderRadius='9px'>
-                              <Text color='#cd6060' fontWeight='600' fontSize='sm'>TradeLock {skin.TradeLock}</Text>
-                              <HiLockClosed color='#cd6060' fontSize='1.2rem' />
+                      <Box>
+                        {skin?.TradeLock ? (
+                          <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label="Este artículo tiene un bloqueo de intercambio por parte de Steam" aria-label="Este artículo tiene un bloqueo de intercambio por parte de Steam">
+                            <Box display='flex' alignItems='center' gap={2}>
+                              <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(208, 56, 56, .15)' borderRadius='9px'>
+                                <Text color='#cd6060' fontWeight='600' fontSize='sm'>TradeLock {skin.TradeLock}</Text>
+                                <HiLockClosed color='#cd6060' fontSize='1.2rem' />
+                              </Box>
                             </Box>
-                          </Box>
-                        </Tooltip>
-                      ) : (
-                        <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label="Este artículo está disponible para ser enviado inmediatamente">
-                          <Box display='flex' alignItems='center' gap={2}>
-                            <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(81, 161, 81, .15)' borderRadius='9px'>
-                              <Text color='#5fad68' fontWeight='600' fontSize='sm'>Desbloqueado</Text>
-                              <HiLockOpen color="#5fad68" fontSize='1.2rem' />
+                          </Tooltip>
+                        ) : (
+                          <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label="Este artículo está disponible para ser enviado inmediatamente">
+                            <Box display='flex' alignItems='center' gap={2}>
+                              <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(81, 161, 81, .15)' borderRadius='9px'>
+                                <Text color='#5fad68' fontWeight='600' fontSize='sm'>Desbloqueado</Text>
+                                <HiLockOpen color="#5fad68" fontSize='1.2rem' />
+                              </Box>
                             </Box>
-                          </Box>
-                        </Tooltip>
-                      )}
+                          </Tooltip>
+                        )}
+                      </Box>
 
                     </Box>
 
