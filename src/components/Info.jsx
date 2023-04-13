@@ -1,57 +1,78 @@
-import { Box, Image, Text } from "@chakra-ui/react";
+import { Box, Image, Text, useMediaQuery } from "@chakra-ui/react";
 import Link from "next/link";
 import { BsDiscord, BsSteam } from 'react-icons/bs';
 import { Tooltip } from '@chakra-ui/react'
+import { useEffect, useState } from "react";
+import api from "../pages/api/api";
 
-const Info = (props) => {
-  const { isMobile, info, contactLinks } = props;
+const Info = ({ onInfoIsLoaded }) => {
+  const [isMobile] = useMediaQuery('(max-width: 479px)');
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [info, setInfo] = useState([]);
+  const [contactLinks, setContactLinks] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setContactLinks(await api.contact.get());
+    setInfo(await api.info.get());
+
+    setIsLoading(false);
+    onInfoIsLoaded();
+  };
 
   return (
-    <Box as="section" textAlign="center" position="relative" w="100%" mb={'1rem'} mt={{ sm: '1rem', md: '2rem' }} >
-      <Box display='flex' flexDir='column' alignItems='center' gap={2}>
-        <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
-          {info?.FotoURL && (
-            <Image className="shadow-for-skin-image" width={90} height={90} style={{ 'borderRadius': '50%' }} src={info.FotoURL}></Image>
-          )}
-        </Box>
+    !isLoading && (
+      <Box as="section" textAlign="center" position="relative" w="100%" mb={'1rem'} mt={{ sm: '1rem', md: '2rem' }} >
+        <Box display='flex' flexDir='column' alignItems='center' gap={2}>
+          <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
+            {info?.FotoURL && (
+              <Image className="shadow-for-skin-image" width={90} height={90} style={{ 'borderRadius': '50%' }} src={info.FotoURL}></Image>
+            )}
+          </Box>
 
-        <Box display='flex' flexDir='column' alignItems='center' gap='0.5rem'>
-          <Text fontWeight="bold" w='100%' fontSize='xl' borderBottom='1px solid #d13535' pb={2}>{info.Nombre}</Text>
+          <Box display='flex' flexDir='column' alignItems='center' gap='0.5rem'>
+            <Text fontWeight="bold" w='100%' fontSize='xl' borderBottom='1px solid #d13535' pb={2}>{info.Nombre}</Text>
 
-          <Text color="grey" fontWeight="normal" fontSize='md'>Puedes contactarme mediante</Text>
+            <Text color="grey" fontWeight="normal" fontSize='md'>Puedes contactarme mediante</Text>
 
-          <Box display='flex' gap={3}>
+            <Box display='flex' gap={3}>
 
-            {contactLinks.map((contact) => (
-              <Box key={contact.Nombre} _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+              {contactLinks.map((contact) => (
+                <Box key={contact.Nombre} _hover={{ 'transform': 'scale(1.2)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
 
-                {contact.Nombre == 'Steam' && contact.Ocultar == 'FALSE' && (
-                  <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='bottom' label="Contáctame por Steam" aria-label="Contáctame por Steam">
-                    <Box boxShadow='md' _hover={{ 'transform': isMobile ? '' : 'scale(1.05)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
-                      <Link href={contact.Link} rel="noopener noreferrer" target="_blank">
-                        <BsSteam fontSize='1.5rem' />
-                      </Link>
-                    </Box>
-                  </Tooltip>
-                )}
+                  {contact.Nombre == 'Steam' && contact.Ocultar == 'FALSE' && (
+                    <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='bottom' label="Contáctame por Steam" aria-label="Contáctame por Steam">
+                      <Box boxShadow='md' _hover={{ 'transform': isMobile ? '' : 'scale(1.05)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+                        <Link href={contact.Link} rel="noopener noreferrer" target="_blank">
+                          <BsSteam fontSize='1.5rem' />
+                        </Link>
+                      </Box>
+                    </Tooltip>
+                  )}
 
-                {contact.Nombre == 'Discord' && contact.Ocultar == 'FALSE' && (
-                  <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='bottom' label="Contáctame por Discord" aria-label="Contáctame por Discord">
-                    <Box boxShadow='md' _hover={{ 'transform': isMobile ? '' : 'scale(1.05)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
-                      <Link href={contact.Link} rel="noopener noreferrer" target="_blank">
-                        <BsDiscord fontSize='1.5rem' />
-                      </Link>
-                    </Box>
-                  </Tooltip>
-                )}
+                  {contact.Nombre == 'Discord' && contact.Ocultar == 'FALSE' && (
+                    <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='bottom' label="Contáctame por Discord" aria-label="Contáctame por Discord">
+                      <Box boxShadow='md' _hover={{ 'transform': isMobile ? '' : 'scale(1.05)', 'msTransformOrigin': '50% 50%' }} transition='transform .4s'>
+                        <Link href={contact.Link} rel="noopener noreferrer" target="_blank">
+                          <BsDiscord fontSize='1.5rem' />
+                        </Link>
+                      </Box>
+                    </Tooltip>
+                  )}
 
-              </Box>
-            ))}
+                </Box>
+              ))}
 
+            </Box>
           </Box>
         </Box>
       </Box>
-    </Box>
+    )
+
   )
 }
 

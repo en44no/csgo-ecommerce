@@ -22,6 +22,30 @@ const api = {
       orderByLowerFloat(parsed.data);
 
       return parsed.data;
+    },
+    getSkinById: async (id) => {
+      if (id) {
+        const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRklk0av-7Tz2X8dSMawN17jGNL_KTpkkcFMKaXGG3n4mlobxtG--GG_KaaXw7sEPLymoTMyd-fMc9-/pub?gid=0&output=csv';
+
+        const res = await fetch(url);
+        const data = await res.text();
+
+        const parsed = await new Promise((resolve, reject) => {
+          Papa.parse(data, {
+            header: true,
+            complete: resolve,
+            error: reject,
+          });
+        });
+
+        const skin = parsed.data.find(skin => skin.Id === id); // Buscar la skin con el id proporcionado en los datos obtenidos
+
+        if (skin) {
+          return skin; // Retornar la skin encontrada
+        } else {
+          throw new Error(`Skin with id ${id} not found`); // Lanzar un error si no se encuentra la skin
+        }
+      }
     }
   },
   contact: {
