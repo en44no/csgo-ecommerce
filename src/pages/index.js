@@ -1,4 +1,4 @@
-import { Box, Button, Container, Divider, Input, InputGroup, Img, InputRightElement, Spinner, Text, useDisclosure, useMediaQuery, Select, FormControl, FormLabel, Switch, filter } from "@chakra-ui/react";
+import { Box, Button, Container, Divider, Input, InputGroup, Img, InputRightElement, Spinner, Text, useDisclosure, useMediaQuery, Select, FormControl, FormLabel, Switch, filter, useToast } from "@chakra-ui/react";
 import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -16,6 +16,7 @@ import HeaderText from "../components/HeaderText";
 import TooltipP from "../components/Tooltip";
 import ReactModal from 'react-modal';
 import { useRouter } from "next/router";
+import { TbShare3 } from "react-icons/tb";
 
 ReactModal.setAppElement('#__next');
 
@@ -43,6 +44,9 @@ export default function Home() {
   const [isMobile] = useMediaQuery('(max-width: 479px)');
 
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const toast = useToast()
+  const toastId = 'urlCopiedToast'
 
   useEffect(() => {
     if (isMobile) {
@@ -318,6 +322,21 @@ export default function Home() {
     }
   }
 
+  function onShare() {
+    let url = window.location.href;
+    navigator.clipboard.writeText(url);
+
+    if (!toast.isActive(toastId)) {
+      toast({
+        id: toastId,
+        title: "URL copiada al portapapeles",
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
+  }
+
   return (
     <>
       <Head>
@@ -470,6 +489,9 @@ export default function Home() {
                       <Button w='100%' leftIcon={<FiExternalLink fontSize='1.1rem' />} fontSize='sm' mt='1rem' mb='0.5rem' bg='transparent' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} borderRadius='9px'>Inspeccionar en el juego</Button>
                     </Link>
                   )}
+
+                  <Button onClick={() => onShare()} w='100%' leftIcon={<TbShare3 fontSize='1.2rem' />} fontSize='sm' mt='0.3rem' mb='0.5rem' bg='transparent' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} borderRadius='9px'>Compartir</Button>
+
                 </Box>
               </Box>
 

@@ -7,17 +7,21 @@ import { useEffect, useState } from "react";
 import { HiLockClosed, HiLockOpen } from 'react-icons/hi';
 import { TiArrowSortedDown } from 'react-icons/ti';
 import { FiExternalLink } from 'react-icons/fi';
-import { IoClose } from 'react-icons/io5';
+import { TbShare3 } from 'react-icons/tb';
 import { Tooltip } from '@chakra-ui/react'
 import Info from "../../components/Info";
 import TooltipP from "../../components/Tooltip";
 import api from "../api/api";
 import { RiVolumeMuteLine, RiVolumeUpLine } from "react-icons/ri";
 import { FaAngleLeft } from "react-icons/fa";
+import { useToast } from '@chakra-ui/react'
 
 export default function SkinPage() {
   const [isMobile] = useMediaQuery('(max-width: 479px)');
   const router = useRouter()
+  const toast = useToast()
+  const toastId = 'urlCopiedToast'
+
   const { skinId } = router.query;
 
   const [skin, setSkin] = useState({});
@@ -151,6 +155,21 @@ export default function SkinPage() {
     setSoundIsEnabled(!soundIsEnabled);
   };
 
+  function onShare() {
+    let url = window.location.href;
+    navigator.clipboard.writeText(url);
+
+    if (!toast.isActive(toastId)) {
+      toast({
+        id: toastId,
+        title: "URL copiada al portapapeles",
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
+  }
+
 
   return (
     <>
@@ -178,7 +197,7 @@ export default function SkinPage() {
 
             <Box display="flex" flexDirection="column" width="100%">
 
-              <Button onClick={() => router.push("/")} w='100%' leftIcon={<FaAngleLeft fontSize='1.1rem' style={{ marginRight: '-0.3rem' }} />} fontSize='sm' mt='1rem' mb='0.5rem' bg='transparent' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} borderRadius='9px'>VOLVER AL INICIO</Button>
+              <Button onClick={() => router.push("/")} w='100%' leftIcon={<FaAngleLeft fontSize='1.1rem' style={{ marginRight: '-0.3rem' }} />} fontSize='sm' mb='1rem' bg='transparent' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} borderRadius='9px'>VOLVER AL INICIO</Button>
 
               <Box id='skins-container' w='100%' display='flex' flexDir={{ sm: 'column', md: 'row', lg: 'row' }} alignItems='center' justifyContent='space-between'>
                 <Text fontWeight="800" lineHeight="normal" bgGradient="linear(to-r, red.500, red.600, red.500)" bgClip="text" mr='0.5rem' fontSize={'3xl'}>{skin?.Nombre}</Text>
@@ -204,110 +223,126 @@ export default function SkinPage() {
 
               </Box>
 
-              <Box pb='1.5rem' mt='1rem' display={{ sm: 'flex', md: 'block' }} alignItems={{ sm: 'center', md: '' }} justifyContent={{ sm: 'center', md: '' }}>
+              <Box w='100%' pb='1.5rem' mt='1rem' display='flex' alignItems={{ sm: 'center', md: '' }} justifyContent={{ sm: 'center', md: '' }} position='relative' p='1.5rem' bg='#23272e' borderRadius='9px' px='10rem'>
 
-                <Box key={skin?.Nombre} position='relative' mt='-0.2rem' p='0.5rem' bg='#23272e' borderRadius='9px'>
-                  <Box position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
-                    <Box className={isMobile ? 'skin-image-container' : 'scale-image'} display='flex' justifyContent='center' maxH='15rem' h='auto'>
-                      <Img layout='responsive' style={getStyleForImageOnModal(skin)} className="shadow-for-skin-image" alt={skin?.Nombre} width={{ sm: () => getWidthForImageOnModal(skin, 'sm'), md: () => getWidthForImageOnModal(skin, 'md') }} height='auto' src={skin?.ImagenURL}></Img>
-                    </Box>
+                <Box w='100%' display='flex' bg='#1e2227' p='1.5rem' borderRadius='9px'>
+                  <Box w='60%'>
+                    <Box key={skin?.Nombre}>
 
-                    <Box display='flex' pb='0.5rem' mt='-0.5rem'>
+                      <Box position='relative' display='flex' justifyContent='center' flexDirection='column' w='100%' alignItems='center' gap={2} mt={skin?.Stickers?.length > 0 && '-1.5rem'}>
+                        <Box className={isMobile ? 'skin-image-container' : 'scale-image'} display='flex' justifyContent='center' maxH='15rem' h='auto'>
+                          <Img layout='responsive' style={getStyleForImageOnModal(skin)} className="shadow-for-skin-image" alt={skin?.Nombre} width={{ sm: () => getWidthForImageOnModal(skin, 'sm'), md: () => getWidthForImageOnModal(skin, 'md') }} height='auto' src={skin?.ImagenURL}></Img>
+                        </Box>
 
-                      {skin?.Stickers?.map((sticker, index) => (
-                        <TooltipP key={sticker?.Nombre + `sticker ${index}`} label={sticker?.Nombre}>
-                          <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
-                            <Img layout='responsive' className="shadow-for-skin-image" alt={sticker?.Nombre + `sticker ${index}`} width='6rem' height='6rem' style={{ objectFit: "cover", scale: isMobile ? '1.3' : '1.4' }} src={sticker?.Link}></Img>
-                          </Box>
-                        </TooltipP>
-                      ))}
+
+                        <Box display='flex' mt='-1rem'>
+
+                          {skin?.Stickers?.map((sticker, index) => (
+                            <TooltipP key={sticker?.Nombre + `sticker ${index}`} label={sticker?.Nombre}>
+                              <Box className={isMobile ? 'skin-image-container' : 'scale-image'}>
+                                <Img layout='responsive' className="shadow-for-skin-image" alt={sticker?.Nombre + `sticker ${index}`} width='5.5rem' height='5.5rem' style={{ objectFit: "cover", scale: isMobile ? '1.3' : '1.4' }} src={sticker?.Link}></Img>
+                              </Box>
+                            </TooltipP>
+                          ))}
+
+                        </Box>
+
+                      </Box>
 
                     </Box>
 
                   </Box>
 
-                  <Box w='100%' px={3} display='flex' flexDir='column'>
+                  <Box w='40%' background='#23272e' position='relative'
+                    padding='1rem' borderRadius='9px' display='flex' flexDirection='column'>
 
-                    {skin?.Float && skin?.Wear && (
-                      <Box display='flex' flexDir='column' justifyContent='space-between' w='100%' pt={1}>
-
-                        <Box display='flex' w='100%' h='8px' position='relative'>
-
-                          <Box position='absolute' top='-1.1rem' ml='-9px' left={`${skin?.Float * 100}%`}>
-                            <TiArrowSortedDown fontSize='1.3rem' />
-                          </Box>
-
-                          <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Factory New' aria-label='Factory New'>
-                            <Box w='7%' bg='#3d818f' borderRadius='50px 0 0 50px'></Box>
-                          </Tooltip>
-
-                          <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Minimal Wear' aria-label='Minimal Wear'>
-                            <Box w='8%' bg='#84b235'></Box>
-                          </Tooltip>
-
-                          <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Field Tested' aria-label='Field Tested'>
-                            <Box w='23%' bg='#dfc04a'></Box>
-                          </Tooltip>
-
-                          <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Well Worn' aria-label='Well Worn'>
-                            <Box w='7%' bg='#ef8641'></Box>
-                          </Tooltip>
-
-                          <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Battle Scarred' aria-label='Battle Scarred'>
-                            <Box w='55%' bg='#eb5757' borderRadius='0 50px 50px 0'></Box>
-                          </Tooltip>
-
-                        </Box>
-
-                        <Box display='flex' justifyContent='space-between' pt={1}>
-
-                          <Box display='flex' alignItems='center' gap={1}>
-                            <Text color='grey' fontWeight="500" fontSize='sm'>Float</Text>
-                            <Divider orientation="vertical" h='70%' alignSelf='center' borderLeftWidth='2px' borderColor='#808080' />
-                            <Text color='grey' fontWeight="500" fontSize='sm'>{skin?.Float?.slice(0, 5)}</Text>
-                          </Box>
-
-                          <Text color='grey' fontWeight="500" fontSize='sm'>{skin?.Wear}</Text>
-                        </Box>
-
-                      </Box>
-                    )}
-
-                    {skin?.StatTrak == 'TRUE' && (
-                      <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='left' label="Este artículo registra el número de víctimas" aria-label="Este artículo registra el número de víctimas">
-                        <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' left='1.1rem'>
+                    <Box w='100%' display='flex' justifyContent='space-between'>
+                      <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label="Este artículo registra el número de víctimas" aria-label="Este artículo registra el número de víctimas">
+                        <Box display='flex' alignItems='center' gap={2}>
                           <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(188, 115, 77, .15)' borderRadius='9px'>
                             <Text color='#bc734d' fontWeight='600' fontSize='sm'>StatTrack</Text>
                           </Box>
                         </Box>
                       </Tooltip>
-                    )}
 
-                    {skin?.TradeLock ? (
-                      <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='right' label="Este artículo tiene un bloqueo de intercambio por parte de Steam" aria-label="Este artículo tiene un bloqueo de intercambio por parte de Steam">
-                        <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' right={isMobile ? '0.7rem' : '0.8rem'}>
-                          <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(208, 56, 56, .15)' borderRadius='9px'>
-                            <Text color='#cd6060' fontWeight='600' fontSize='sm'>TradeLock {skin.TradeLock}</Text>
-                            <HiLockClosed color='#cd6060' fontSize='1.2rem' />
+                      {skin?.TradeLock ? (
+                        <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label="Este artículo tiene un bloqueo de intercambio por parte de Steam" aria-label="Este artículo tiene un bloqueo de intercambio por parte de Steam">
+                          <Box display='flex' alignItems='center' gap={2}>
+                            <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(208, 56, 56, .15)' borderRadius='9px'>
+                              <Text color='#cd6060' fontWeight='600' fontSize='sm'>TradeLock {skin.TradeLock}</Text>
+                              <HiLockClosed color='#cd6060' fontSize='1.2rem' />
+                            </Box>
                           </Box>
-                        </Box>
-                      </Tooltip>
-                    ) : (
-                      <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='right' label="Este artículo está disponible para ser enviado inmediatamente">
-                        <Box display='flex' alignItems='center' position='absolute' gap={2} top='0.7rem' right={isMobile ? '0.7rem' : '0.8rem'}>
-                          <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(81, 161, 81, .15)' borderRadius='9px'>
-                            <Text color='#5fad68' fontWeight='600' fontSize='sm'>Desbloqueado</Text>
-                            <HiLockOpen color="#5fad68" fontSize='1.2rem' />
+                        </Tooltip>
+                      ) : (
+                        <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label="Este artículo está disponible para ser enviado inmediatamente">
+                          <Box display='flex' alignItems='center' gap={2}>
+                            <Box display='flex' gap={1} w='fit-content' px='0.5rem' py='0.2rem' alignItems='center' bg='rgb(81, 161, 81, .15)' borderRadius='9px'>
+                              <Text color='#5fad68' fontWeight='600' fontSize='sm'>Desbloqueado</Text>
+                              <HiLockOpen color="#5fad68" fontSize='1.2rem' />
+                            </Box>
                           </Box>
-                        </Box>
-                      </Tooltip>
-                    )}
+                        </Tooltip>
+                      )}
 
-                    {skin?.InspeccionarLink && !isMobile && (
-                      <Link onClick={() => playGoGoGoSound()} w='100%' href={skin?.InspeccionarLink} rel="noopener noreferrer" target="_blank">
-                        <Button w='100%' leftIcon={<FiExternalLink fontSize='1.1rem' />} fontSize='sm' mt='1rem' mb='0.5rem' bg='transparent' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} borderRadius='9px'>Inspeccionar en el juego</Button>
-                      </Link>
-                    )}
+                    </Box>
+
+                    <Box w='100%' h='100%' justifyContent='flex-end' display='flex' flexDir='column' mt='1.5rem'>
+
+                      {skin?.Float && skin?.Wear && (
+                        <Box display='flex' flexDir='column' justifyContent='space-between' w='100%' pt={1}>
+
+                          <Box display='flex' w='100%' h='8px' position='relative'>
+
+                            <Box position='absolute' top='-1.1rem' ml='-9px' left={`${skin?.Float * 100}%`}>
+                              <TiArrowSortedDown fontSize='1.3rem' />
+                            </Box>
+
+                            <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Factory New' aria-label='Factory New'>
+                              <Box w='7%' bg='#3d818f' borderRadius='50px 0 0 50px'></Box>
+                            </Tooltip>
+
+                            <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Minimal Wear' aria-label='Minimal Wear'>
+                              <Box w='8%' bg='#84b235'></Box>
+                            </Tooltip>
+
+                            <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Field Tested' aria-label='Field Tested'>
+                              <Box w='23%' bg='#dfc04a'></Box>
+                            </Tooltip>
+
+                            <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Well Worn' aria-label='Well Worn'>
+                              <Box w='7%' bg='#ef8641'></Box>
+                            </Tooltip>
+
+                            <Tooltip bg='#2d3748' color='#ffffff' borderRadius='9px' placement='top' label='Battle Scarred' aria-label='Battle Scarred'>
+                              <Box w='55%' bg='#eb5757' borderRadius='0 50px 50px 0'></Box>
+                            </Tooltip>
+
+                          </Box>
+
+                          <Box display='flex' justifyContent='space-between' pt={1}>
+
+                            <Box display='flex' alignItems='center' gap={1}>
+                              <Text color='grey' fontWeight="500" fontSize='sm'>Float</Text>
+                              <Divider orientation="vertical" h='70%' alignSelf='center' borderLeftWidth='2px' borderColor='#808080' />
+                              <Text color='grey' fontWeight="500" fontSize='sm'>{skin?.Float?.slice(0, 5)}</Text>
+                            </Box>
+
+                            <Text color='grey' fontWeight="500" fontSize='sm'>{skin?.Wear}</Text>
+                          </Box>
+
+                        </Box>
+                      )}
+
+                      {skin?.InspeccionarLink && !isMobile && (
+                        <Link onClick={() => playGoGoGoSound()} w='100%' href={skin?.InspeccionarLink} rel="noopener noreferrer" target="_blank">
+                          <Button w='100%' leftIcon={<FiExternalLink fontSize='1.1rem' />} fontSize='sm' mt='1rem' mb='0.5rem' bg='transparent' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} borderRadius='9px'>Inspeccionar en el juego</Button>
+                        </Link>
+                      )}
+
+                      <Button onClick={() => onShare()} w='100%' leftIcon={<TbShare3 fontSize='1.2rem' />} fontSize='sm' mt='0.3rem' bg='transparent' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} borderRadius='9px'>Compartir</Button>
+                    </Box>
+
                   </Box>
                 </Box>
 
@@ -324,7 +359,7 @@ export default function SkinPage() {
           )}
 
         </Container>
-      </main>
+      </main >
     </>
   )
 }

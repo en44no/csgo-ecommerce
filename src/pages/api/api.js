@@ -41,6 +41,9 @@ const api = {
         const skin = parsed.data.find(skin => skin.Id === id); // Buscar la skin con el id proporcionado en los datos obtenidos
 
         if (skin) {
+          setSkinWear([skin]);
+          setTradeLockDays([skin]);
+          setStickers([skin]);
           return skin; // Retornar la skin encontrada
         } else {
           throw new Error(`Skin with id ${id} not found`); // Lanzar un error si no se encuentra la skin
