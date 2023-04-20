@@ -1,4 +1,4 @@
-import { Box, Button, Container, Divider, Input, InputGroup, Img, InputRightElement, Spinner, Text, useDisclosure, useMediaQuery, Select, FormControl, FormLabel, Switch, filter, useToast } from "@chakra-ui/react";
+import { Box, Button, Container, Divider, Input, InputGroup, Img, InputRightElement, Spinner, Text, useDisclosure, useMediaQuery, Select, FormControl, FormLabel, Switch, useToast } from "@chakra-ui/react";
 import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -8,7 +8,6 @@ import { TiArrowSortedDown } from 'react-icons/ti';
 import { RiVolumeUpLine, RiVolumeMuteLine } from 'react-icons/ri';
 import { FiExternalLink } from 'react-icons/fi';
 import { IoSearch, IoClose } from 'react-icons/io5';
-import { Skeleton } from '@chakra-ui/react'
 import { Tooltip } from '@chakra-ui/react'
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react'
 import Info from "../components/Info";
@@ -59,15 +58,20 @@ export default function Home() {
 
     setSoundIsEnabled(false);
     setSearchText('');
-    setCurrentPage(1);
 
     setLoading(true);
     setSkinsAreLoading(true);
-
-    fetchData();
   }, []);
 
-  const fetchData = async () => {
+  useEffect(() => {
+    const page = Number(router.query.page) || 1;
+
+    setCurrentPage(page);
+    fetchData(page);
+
+  }, [router.query]);
+
+  const fetchData = async (page) => {
     const skins = await api.skins.get();
 
     //reset filters
@@ -78,7 +82,8 @@ export default function Home() {
     setSkins(skins);
     setFilteredSkins(skins);
     generatePaginator(skins);
-    setSkinsBasedOnPage(1, skins);
+
+    setSkinsBasedOnPage(page ? page : 1, skins);
 
     setSkinsAreLoading(false);
     setLoading(false);
@@ -119,6 +124,7 @@ export default function Home() {
   }
 
   function onPageChange(newPage) {
+    router.push(`/?page=${newPage}`, undefined, { scroll: false });
     setCurrentPage(newPage);
     setSkinsBasedOnPage(newPage);
     //document.getElementById('skins-container').scrollIntoView();
@@ -556,7 +562,7 @@ export default function Home() {
               </Box>
               <Box position='relative' display='flex' flexWrap='wrap' alignContent='flex-start' justifyContent='center' mt='1rem' gap={{ sm: 2, md: 6 }} bg='#23272e' py={4} px={0} borderRadius='9px' pb='4.5rem' minH='max-content'>
 
-                <Box display='flex' flexDirection={{ sm: 'column', md: 'row' }} alignItems='center' gap={{ sm: 0, md: 3 }} justifyContent={{ sm: '', md: 'space-between' }} w='100%' mx='3.5rem' mb='-0.5rem'>
+                <Box display='flex' flexDirection={{ sm: 'column', md: 'row' }} alignItems='center' gap={{ sm: 0, md: 3 }} justifyContent={{ sm: '', md: 'space-between' }} w='100%' mx={{ sm: 0, md: '3.5rem' }} mb='-0.5rem'>
 
                   <InputGroup w='fit-content'>
                     {searchText.length == 0 && (
