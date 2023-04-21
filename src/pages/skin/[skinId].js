@@ -39,6 +39,14 @@ export default function SkinPage() {
     fetchData();
   }, [skinId]);
 
+  useEffect(() => {
+    // remove 'page' parameter from URL
+    const url = new URL(window.location.href);
+    url.searchParams.delete('page');
+    router.replace(url.toString());
+  }, []);
+
+
   const fetchData = async () => {
     const skin = await api.skins.getSkinById(skinId);
     setSkin(skin);
@@ -157,6 +165,7 @@ export default function SkinPage() {
 
   function onShare() {
     let url = window.location.href;
+
     navigator.clipboard.writeText(url);
 
     if (!toast.isActive(toastId)) {

@@ -64,6 +64,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    debugger;
     const page = Number(router.query.page) || 1;
 
     setCurrentPage(page);
@@ -328,9 +329,12 @@ export default function Home() {
     }
   }
 
-  function onShare() {
-    let url = window.location.href;
-    navigator.clipboard.writeText(url);
+  function onShare(selectedSkin) {
+    const origin = window.location.origin;
+    const pathname = window.location.pathname;
+    const urlWithoutPage = `${origin}${pathname}`;
+
+    navigator.clipboard.writeText(urlWithoutPage);
 
     if (!toast.isActive(toastId)) {
       toast({
@@ -355,7 +359,7 @@ export default function Home() {
 
         <ReactModal
           isOpen={!!router.query.skinId}
-          onRequestClose={() => router.push("/")}
+          onRequestClose={() => router.push(`/?page=${currentPage}`)}
           style={{
             overlay: {
               position: 'fixed',
@@ -386,7 +390,7 @@ export default function Home() {
 
             <Box mt='1rem' pb='0.5rem' display='flex' justifyContent='space-between' alignItems='center'>
               <Box fontWeight='semibold'>{selectedSkin.Nombre}</Box>
-              <Box onClick={() => router.push("/")} cursor='pointer' p='0.25rem' borderRadius='9px' _hover={{ background: 'rgb(15, 17, 20, 30%)' }}>
+              <Box onClick={() => router.push(`/?page=${currentPage}`)} cursor='pointer' p='0.25rem' borderRadius='9px' _hover={{ background: 'rgb(15, 17, 20, 30%)' }}>
                 <IoClose fontSize='1.4rem' />
               </Box>
             </Box>
@@ -509,7 +513,7 @@ export default function Home() {
                       </Link>
                     )}
 
-                    <Button onClick={() => onShare()} w='100%' leftIcon={<TbShare3 fontSize='1.2rem' />} fontSize='sm' mt='0.3rem' bg='transparent' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} borderRadius='9px'>Compartir</Button>
+                    <Button onClick={() => onShare(selectedSkin)} w='100%' leftIcon={<TbShare3 fontSize='1.2rem' />} fontSize='sm' mt='0.3rem' bg='transparent' border='1px solid #d13535' _hover={{ 'bg': '#d13535', 'color': '#fff' }} borderRadius='9px'>Compartir</Button>
                   </Box>
 
                 </Box>
@@ -595,7 +599,7 @@ export default function Home() {
                 </Box>
 
                 {!skinsAreLoading && skinsForCurrentPage.map((skin, index) => (
-                  <Link href={`/?skinId=${skin.Id}`} as={`/skin/${skin.Id}`}>
+                  <Link href={`/?skinId=${skin.Id}&page=${currentPage}`} as={`/skin/${skin.Id}/?page=${currentPage}`}>
                     <Box onMouseOver={playScopeSound} onMouseLeave={pauseScopeSound} onClick={() => onOpenModal(skin)} key={skin.Nombre + skin.Float + index} position='relative' bg='#1e2227' h={{ sm: 'auto', md: '10.5rem' }} minW={{ sm: '11rem', md: '13rem' }} w={{ sm: '11rem', md: '13rem' }} _hover={{ 'bg': '#3f3f45' }} cursor='pointer' borderRadius='9px'>
                       <Box className={isMobile ? 'skin-image-container' : 'scale-image'} position='relative' display='flex' flexDir='column' alignItems='center' gap={2} py={3} px={1}>
                         <Box h={{ sm: '6.5rem', md: '5.5rem' }} mt={{ sm: '-2rem', md: '-0.7rem' }} p={{ sm: 6, md: 0 }}>
